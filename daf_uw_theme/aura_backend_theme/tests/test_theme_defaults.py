@@ -75,8 +75,10 @@ class TestThemeDefaults(TransactionCase):
         stale_by_field = {
             # '#FAA140' was a short-lived orange primary, '#000000' the black
             # primary of the warm palette superseded in 19.0.1.7.0.
-            'tbt_brand_color': ('#242424', '#FAA140', '#000000'),
-            'tbt_brand_color_rgb': ('36,36,36', '250,161,64', '0,0,0'),
+            # '#0A8FDC' = the owner blue, superseded by the logo blue in
+            # 19.0.1.8.0.
+            'tbt_brand_color': ('#242424', '#FAA140', '#000000', '#0A8FDC'),
+            'tbt_brand_color_rgb': ('36,36,36', '250,161,64', '0,0,0', '10,143,220'),
             # '#E9DBCA' = the short-lived warm navbar, before it became clear
             # Odoo's stock bar renders black from $o-brand-odoo regardless.
             'tbt_topbar_bg': ('#ffffff', '#E9DBCA'),
@@ -95,11 +97,11 @@ class TestThemeDefaults(TransactionCase):
                 )
 
     def test_secondary_is_not_the_brand_primary(self):
-        """The secondary (#F04F47) must never drive --bs-primary.
+        """The secondary (#6D3BFF) must never drive --bs-primary.
 
-        Primary is the palette blue; the secondary is applied per-component for
-        emphasis. Wiring it into the brand colour would tint every button, link
-        and focus ring in the backend coral — next to a red danger colour.
+        Primary is the logo blue; the secondary violet is applied per-component
+        for emphasis. Wiring it into the brand colour would tint every button,
+        link and focus ring in the backend violet instead of the client's blue.
         """
         self.assertNotEqual(DEFAULT_BRAND, METHODE_SECONDARY)
         company = self.env['res.company'].create({'name': 'Accent Probe'})

@@ -1,6 +1,6 @@
 {
     'name': 'Méthode Theme',
-    'version': '19.0.1.1.0',
+    'version': '19.0.1.2.0',
     'category': 'Themes/Backend',
     'summary': 'Méthode brand identity for the Odoo backend',
     # Set explicitly, and keep it set.  Odoo's load_manifest() falls back to
@@ -32,10 +32,10 @@
         # The Odoo-rendered 404 (NOT nginx's — see the file header).  Frontend
         # QWeb, same brand surface as the login page.
         'views/error_templates.xml',
-        # The animated mark itself, t-called by the boot loader below and by
-        # qcm_guest_walkthrough's waiting state. Listed first so the one copy
-        # is registered before anything calls it.
-        'views/tree_mark_templates.xml',
+        # The animated DAF Under Writing mark ("Assemble"), t-called by the
+        # boot loader below. Listed first so the one copy is registered before
+        # anything calls it.
+        'views/daf_mark_templates.xml',
         # Must be server-side QWeb: it has to paint before OWL exists (P8e).
         'views/boot_loader_templates.xml',
         # --- Home dashboard, P8a ------------------------------------------
@@ -50,8 +50,8 @@
         # static/src/dashboard/dashboard.js.  No menu points at it any more —
         # DAF is the landing app; see the note in the file.
         'views/dashboard_actions.xml',
-        # MuK's sidebar footer: the Méthode lockup instead of Odoo's "Your
-        # logo" placeholder.  Runs on every update; never overwrites a logo an
+        # MuK's sidebar footer: the DAF Under Writing lockup instead of Odoo's
+        # "Your logo" placeholder.  Runs on every update; never overwrites a logo an
         # admin chose (see res_company.py::_m_seed_appbar_image).
         'data/appbar_image_data.xml',
     ],
@@ -166,10 +166,10 @@
             'daf_uw_theme/static/src/scss/css_tokens.scss',
             'daf_uw_theme/static/src/scss/typography.scss',
             'daf_uw_theme/static/src/scss/buttons.scss',
-            # .m-tree-loader + its keyframes, for qcm_guest_walkthrough's final
-            # step to reuse the same animated mark as the backend boot loader.
-            # The rest of this sheet (.m-boot-loader, .o_loading_indicator)
-            # matches nothing on the login page — inert there, not dead code.
+            # .m-daf-loader + its keyframes, so a frontend page can show the
+            # same animated mark as the backend boot loader.  The rest of this
+            # sheet (.m-boot-loader, .o_loading_indicator) matches nothing on
+            # the login page — inert there, not dead code.
             'daf_uw_theme/static/src/scss/loader.scss',
             # Frontend-ONLY, deliberately — its selectors exist only on the
             # login page, so shipping it to the backend too would be dead CSS.

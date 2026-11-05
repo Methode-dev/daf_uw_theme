@@ -122,7 +122,7 @@
 // --- Back link ("← Previous page") ----------------------------------------------
 // Secondary text, not the stock bold link blue: it is navigation chrome, and
 // the current page name right under it must stay the visual anchor.  Primary
-// dark on hover (never --m-accent for text — 3.28:1, see css_tokens.scss).
+// dark on hover (never --m-accent for text — see css_tokens.scss).
 .o_breadcrumb .m-breadcrumb-back {
     // ⚠ Transparent, and as wide as its link.  Bootstrap's `.breadcrumb`
     // paints `--breadcrumb-bg`, which Odoo compiles to $body-bg (#F4F7FE here)

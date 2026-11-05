@@ -44,15 +44,15 @@
         <xpath expr="//div[hasclass('border-bottom')]/img" position="replace">
             <!--
                 ⚠ The inline style is deliberate, and mirrors the stock markup it
-                replaces.  logo_methode.svg carries width="700" height="700"
+                replaces.  daf_uw_logo.svg carries width="358" height="160"
                 attributes, so if this element ever renders before login.scss is
-                available it would paint at 700px and blow the card apart.  The
+                available it would paint at full size and crowd the card.  The
                 sizing constraint has to travel with the element, not live only
                 in a stylesheet — this is the first screen a prospect sees.
                 Refinements beyond "do not explode" belong in login.scss.
             -->
-            <img src="/daf_uw_theme/static/description/brand/logo_methode.svg"
-                 alt="Méthode"
+            <img src="/daf_uw_theme/static/src/img/brand/daf_uw_logo.svg"
+                 alt="DAF Under Writing"
                  class="o_methode_login_logo"
                  style="max-height:120px; max-width: 100%; width:auto"/>
         </xpath>

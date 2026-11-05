@@ -1,161 +1,128 @@
-.m-tree-loader {
-    --m-tree-face:      #FFFFFF;
-    --m-tree-shade:     var(--m-text);
-    --m-tree-shade-top: var(--m-ink-border);
-    --m-tree-seam:      rgba(25, 26, 34, 0.55);
-    --m-tree-cycle:     2.4s;
+// --- The DAF Under Writing mark, assembling ("Assemble") --------------------
+// Markup: views/daf_mark_templates.xml.  The intro plays once (~2.3s), then
+// the light sweep and the track loop for as long as the wait lasts — a boot
+// that finishes early simply tears down mid-intro, which reads as intended.
+//
+// ⚠ Every animated node is a <use> (or a top-level path), never a path inside
+// <defs> — see the warning in the template for the Gecko reason.
+.m-daf-loader {
+    --m-daf-ease-out: cubic-bezier(.16, 1, .3, 1);
+    --m-daf-ease-io:  cubic-bezier(.65, 0, .35, 1);
+    --m-daf-spring:   cubic-bezier(.34, 1.56, .64, 1);
 
-    position: relative;
+    display: grid;
+    justify-items: center;
+    gap: clamp(18px, 4vw, 30px);
     // Overridable per surface: the boot overlay wants it large, a dashboard
-    // panel (P8a) will want it smaller.  aspect-ratio comes from the viewBox.
-    width: var(--m-tree-size, clamp(180px, 42vw, 320px));
-    aspect-ratio: 694 / 653;
+    // panel will want it smaller.
+    width: var(--m-daf-size, clamp(220px, 40vw, 420px));
 
-    > svg {
+    .m-daf-mark {
+        display: block;
         width: 100%;
-        height: 100%;
-        // The extrusion <use> layers are offset up to 21 units below the shapes,
-        // which puts them outside the viewBox.  Without this they are clipped
-        // and the solid loses its bottom edge.
+        height: auto;
+        // The sweep and the springs overshoot the viewBox for a few frames.
         overflow: visible;
-    }
 
-    .m-tree-extrude { color: var(--m-tree-shade); }
-    // The wall nearest the top face, tinted lighter so the solid reads as lit.
-    // A GROUP, not a `use:last-child`: each wall is now nineteen <use> elements
-    // (one per shape) rather than one <use> of a shape group — see the comment
-    // on the SVG in views/boot_loader_templates.xml for why the shapes cannot
-    // be animated inside <defs>. Against the old markup this selector would
-    // have lit the last shape of every wall instead of the last wall.
-    .m-tree-extrude > g:last-child { color: var(--m-tree-shade-top); }
-
-    .m-tree-face-outline {
-        color: var(--m-tree-face);
-        stroke: var(--m-tree-seam);
-        // Half the stroke sits outside the union, so ~2.5 shows.  The fill-only
-        // copy above it hides the inner half, including where a stroke falls
-        // inside a neighbouring shape — that is what merges the seams.
-        stroke-width: 5;
-        stroke-linejoin: round;
-    }
-
-    .m-tree-face { color: var(--m-tree-face); }
-
-    .m-tree-node,
-    .m-tree-edge {
-        opacity: 0;
-        // fill-box, not the default view-box: each shape must scale about its
-        // own centre/corner, not the whole 694x653 canvas.
-        transform-box: fill-box;
-        animation-duration: var(--m-tree-cycle);
-        animation-iteration-count: infinite;
-    }
-
-    .m-tree-node {
-        transform-origin: center;
-        animation-timing-function: cubic-bezier(.3, 1.4, .6, 1);
-    }
-
-    .m-tree-edge {
-        // The parent end.  Every branch runs down-left from its parent, so edges
-        // grow out of the top-right corner; the keyframes re-anchor to the
-        // bottom-left one mid-cycle so they also vanish INTO the child.
-        transform-origin: top right;
-        animation-timing-function: cubic-bezier(.45, 0, .25, 1);
-    }
-
-    // tier 1 — the two nodes at the top of the mark
-    .m-tree-n9  { animation-name: m-tree-node-1; animation-delay: 0s; }
-    .m-tree-n8  { animation-name: m-tree-node-1; animation-delay: calc(var(--m-tree-cycle) * 0.01944); }
-
-    // branches from tier 1
-    .m-tree-e8  { animation-name: m-tree-edge-1; animation-delay: calc(var(--m-tree-cycle) * 0.08889); }  // n9 -> n3
-    .m-tree-e4  { animation-name: m-tree-edge-1; animation-delay: calc(var(--m-tree-cycle) * 0.09444); }  // n8 -> n3
-    .m-tree-e5  { animation-name: m-tree-edge-1; animation-delay: calc(var(--m-tree-cycle) * 0.1); }  // n9 -> n4
-    .m-tree-e2  { animation-name: m-tree-edge-1; animation-delay: calc(var(--m-tree-cycle) * 0.10556); }  // n8 -> n7
-
-    // tier 2 — the three nodes those branches reach
-    .m-tree-n3  { animation-name: m-tree-node-2; animation-delay: calc(var(--m-tree-cycle) * 0.17778); }
-    .m-tree-n4  { animation-name: m-tree-node-2; animation-delay: calc(var(--m-tree-cycle) * 0.18333); }
-    .m-tree-n7  { animation-name: m-tree-node-2; animation-delay: calc(var(--m-tree-cycle) * 0.18889); }
-
-    // branches from tier 2
-    .m-tree-e6  { animation-name: m-tree-edge-2; animation-delay: calc(var(--m-tree-cycle) * 0.26667); }  // n4 -> n5
-    .m-tree-e7  { animation-name: m-tree-edge-2; animation-delay: calc(var(--m-tree-cycle) * 0.27222); }  // n3 -> n6
-    .m-tree-e10 { animation-name: m-tree-edge-2; animation-delay: calc(var(--m-tree-cycle) * 0.27778); }  // n4 -> n6
-    .m-tree-e3  { animation-name: m-tree-edge-2; animation-delay: calc(var(--m-tree-cycle) * 0.27778); }  // n7 -> n2
-    .m-tree-e9  { animation-name: m-tree-edge-2; animation-delay: calc(var(--m-tree-cycle) * 0.28333); }  // n3 -> n2
-    .m-tree-e1  { animation-name: m-tree-edge-2; animation-delay: calc(var(--m-tree-cycle) * 0.28889); }  // n7 -> n1
-
-    // tier 3 — the four leaves
-    .m-tree-n5  { animation-name: m-tree-node-3; animation-delay: calc(var(--m-tree-cycle) * 0.35); }
-    .m-tree-n6  { animation-name: m-tree-node-3; animation-delay: calc(var(--m-tree-cycle) * 0.36111); }
-    .m-tree-n2  { animation-name: m-tree-node-3; animation-delay: calc(var(--m-tree-cycle) * 0.36667); }
-    .m-tree-n1  { animation-name: m-tree-node-3; animation-delay: calc(var(--m-tree-cycle) * 0.37222); }
-
-    // Reduced motion: show the finished mark, standing and still.  NOT
-    // `animation-duration: 0` — that leaves every shape at its 0% keyframe, i.e.
-    // invisible, which is a blank loading screen.
-    @media (prefers-reduced-motion: reduce) {
-        .m-tree-node,
-        .m-tree-edge {
-            animation: none;
-            opacity: 1;
+        * {
+            // fill-box, not the default view-box: each letter must move about
+            // its own centre, not the whole 378x180 canvas.
+            transform-box: fill-box;
+            transform-origin: center;
         }
     }
+
+    // D — the outline is drawn, then the body fills in and the line fades.
+    .m-daf-d-line {
+        fill: none;
+        stroke: #0C0C0C;
+        stroke-width: 1.4;
+        stroke-dasharray: 1;
+        stroke-dashoffset: 1;
+        animation: m-daf-draw 1s var(--m-daf-ease-io) .1s forwards,
+                   m-daf-fade-out .5s ease 1.2s forwards;
+    }
+    .m-daf-d     { opacity: 0; animation: m-daf-fade-in .55s ease .8s forwards; }
+    // A — rises out of a blur.
+    .m-daf-a     { animation: m-daf-rise 1.1s var(--m-daf-ease-out) .3s both; }
+    // F — black arm from the left, blue bar springs in from the right.
+    .m-daf-f     { animation: m-daf-from-left .95s var(--m-daf-ease-out) .45s both; }
+    .m-daf-fbar  { animation: m-daf-from-right 1s var(--m-daf-spring) .6s both; }
+    // Triangle — spins and springs into place.
+    .m-daf-tri   { animation: m-daf-spin-in 1s var(--m-daf-spring) 1s both; }
+    // Tagline — soft wipe.
+    .m-daf-tag   { animation: m-daf-unveil 1.2s var(--m-daf-ease-out) 1.15s both; }
+    // The gloss settles in, then a light sweep loops while loading.
+    .m-daf-gloss { opacity: 0; animation: m-daf-fade-in .8s ease 1.5s forwards; }
+    .m-daf-sweep { animation: m-daf-sweep 3s var(--m-daf-ease-io) 1.8s infinite; }
+
+    &__shadow {
+        width: 62%;
+        height: 14px;
+        margin-top: -14px;
+        border-radius: 50%;
+        background: radial-gradient(closest-side, rgba(12, 12, 12, .12), transparent);
+        animation: m-daf-fade-in 1s ease .9s both,
+                   m-daf-breathe 3s ease-in-out 1.9s infinite;
+    }
+
+    // Indeterminate: Odoo reports no completion fraction for the boot, so a
+    // sweep is the honest form — "working", not "62% done".
+    &__track {
+        width: 45%;
+        max-width: 180px;
+        height: 3px;
+        border-radius: 3px;
+        overflow: hidden;
+        background-color: rgba(12, 12, 12, .07);
+        opacity: 0;
+        animation: m-daf-fade-in .6s ease 1.7s forwards;
+
+        &::after {
+            content: "";
+            display: block;
+            width: 38%;
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, transparent, var(--m-accent, #0E58F0) 30%, #5B8EFF 70%, transparent);
+            animation: m-daf-indeterminate 1.5s var(--m-daf-ease-io) infinite;
+        }
+    }
+
+    // Reduced motion: the finished mark, standing and still, with the track
+    // held full.  NOT `animation-duration: 0` — several shapes start hidden,
+    // so that would leave them at their 0% keyframe: a blank loading screen.
+    @media (prefers-reduced-motion: reduce) {
+        .m-daf-mark *,
+        &__shadow,
+        &__track,
+        &__track::after {
+            animation: none !important;
+            opacity: 1;
+        }
+        .m-daf-d-line,
+        .m-daf-sweep { display: none; }
+        &__track::after { width: 100%; }
+    }
 }
 
-// Entry is identical in all five keyframe sets: hidden, pop or grow in over ~13%
-// of the cycle, hold.  ONLY THE HOLD LENGTH DIFFERS — that is what orders the
-// teardown root-to-leaf without a shared exit window, which would have forced
-// every edge to leave exactly its build delay after its parent.
-@keyframes m-tree-node-1 {
-    0%, 2%    { opacity: 0; transform: scale(.4); }
-    8%        { opacity: 1; transform: scale(1.06); }
-    13%       { transform: scale(1); }
-    65%       { opacity: 1; transform: scale(1); }
-    70%, 100% { opacity: 0; transform: scale(.5); }
+@keyframes m-daf-draw       { to { stroke-dashoffset: 0; } }
+@keyframes m-daf-fade-in    { to { opacity: 1; } }
+@keyframes m-daf-fade-out   { to { opacity: 0; } }
+@keyframes m-daf-rise       { from { opacity: 0; transform: translateY(34px); filter: blur(6px); } }
+@keyframes m-daf-spin-in    { from { opacity: 0; transform: scale(0) rotate(-200deg); } }
+@keyframes m-daf-from-left  { from { opacity: 0; transform: translateX(-28px); } }
+@keyframes m-daf-from-right { from { opacity: 0; transform: translateX(90px); } }
+@keyframes m-daf-unveil {
+    from { opacity: 0; transform: translateY(8px); clip-path: inset(0 100% 0 0); filter: blur(3px); }
+    to   { clip-path: inset(0 0 0 0); }
 }
-
-@keyframes m-tree-node-2 {
-    0%, 2%    { opacity: 0; transform: scale(.4); }
-    8%        { opacity: 1; transform: scale(1.06); }
-    13%       { transform: scale(1); }
-    58%       { opacity: 1; transform: scale(1); }
-    63%, 100% { opacity: 0; transform: scale(.5); }
+@keyframes m-daf-sweep {
+    0%        { transform: translateX(0); }
+    55%, 100% { transform: translateX(520px); }
 }
-
-@keyframes m-tree-node-3 {
-    0%, 2%    { opacity: 0; transform: scale(.4); }
-    8%        { opacity: 1; transform: scale(1.06); }
-    13%       { transform: scale(1); }
-    51%       { opacity: 1; transform: scale(1); }
-    56%, 100% { opacity: 0; transform: scale(.5); }
-}
-
-// ⚠ The transform-origin swap between 20% and 35% is load-bearing, not tidying.
-// It happens where the edge sits at scale(1) — the transform is identity there,
-// so moving the origin has no visible effect — and it is what lets one shape
-// both grow OUT of its parent and shrink INTO its child.
-@keyframes m-tree-edge-1 {
-    0%, 2%    { opacity: 0; transform: scale(0); transform-origin: 100% 0%; }
-    4%        { opacity: 1; }
-    9%        { transform: scale(1); }
-    20%       { transform: scale(1); transform-origin: 100% 0%; }
-    35%       { transform: scale(1); transform-origin: 0% 100%; }
-    60%       { opacity: 1; transform: scale(1); }
-    65%, 100% { opacity: 0; transform: scale(0); transform-origin: 0% 100%; }
-}
-
-@keyframes m-tree-edge-2 {
-    0%, 2%    { opacity: 0; transform: scale(0); transform-origin: 100% 0%; }
-    4%        { opacity: 1; }
-    9%        { transform: scale(1); }
-    20%       { transform: scale(1); transform-origin: 100% 0%; }
-    35%       { transform: scale(1); transform-origin: 0% 100%; }
-    52%       { opacity: 1; transform: scale(1); }
-    57%, 100% { opacity: 0; transform: scale(0); transform-origin: 0% 100%; }
-}
+@keyframes m-daf-breathe       { 50% { transform: scaleX(.9); opacity: .7; } }
+@keyframes m-daf-indeterminate { from { transform: translateX(-110%); } to { transform: translateX(290%); } }
 
 // --- Boot overlay -----------------------------------------------------------
 // Covers the viewport from first paint until the webclient mounts, at which
@@ -176,10 +143,19 @@
     opacity: 1;
     transition: opacity 240ms ease-out;
 
+    .m-daf-loader {
+        transition: transform 320ms cubic-bezier(.16, 1, .3, 1), filter 320ms ease-out;
+    }
+
     &.m-boot-loader__done {
         opacity: 0;
         // The webclient is mounted and must be clickable during the fade.
         pointer-events: none;
+
+        .m-daf-loader {
+            transform: scale(1.05);
+            filter: blur(8px);
+        }
     }
 }
 

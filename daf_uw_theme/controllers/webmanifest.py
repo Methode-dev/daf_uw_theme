@@ -2,13 +2,13 @@ from odoo.addons.web.controllers.webmanifest import WebManifest
 
 
 class WebManifestBrand(WebManifest):
-    """Méthode icons in the PWA manifest.
+    """DAF Under Writing icons in the PWA manifest.
 
     /web/manifest.webmanifest is generated in Python, not QWeb (see
     web/controllers/webmanifest.py), so it is the one icon surface
     views/favicon_templates.xml cannot reach.  Without this override an
     "Add to Home Screen" from the backend installs with Odoo's own purple
-    icon while every browser tab shows the Méthode mark.
+    icon while every browser tab shows the DAF Under Writing mark.
 
     ⚠ ONLY `icons` IS TOUCHED.  Stock also sets name (from the
     web.web_app_name config parameter), background_color and theme_color to

@@ -57,7 +57,7 @@
                   type="text"
                   class="tbt-tsd-hex-input o_input"
                   maxlength="7"
-                  placeholder="#0A8FDC"
+                  placeholder="#0E58F0"
                   t-att-value="state.brandColor"
                   t-on-change="onHexInputChange"/>
                 <button
@@ -394,7 +394,7 @@
                       <input type="color" class="tbt-tsd-color-picker" t-att-value="state.dashboardCard3" t-on-input="(ev) => this.onDashboardCardPickerChange(3, ev)"/>
                       <div class="tbt-tsd-swatch-preview" t-att-style="'background:' + state.dashboardCard3"/>
                     </div>
-                    <input type="text" class="tbt-tsd-hex-input o_input" maxlength="7" placeholder="#0A8FDC" t-att-value="state.dashboardCard3" t-on-change="(ev) => this.onDashboardCardHexInputChange(3, ev)"/>
+                    <input type="text" class="tbt-tsd-hex-input o_input" maxlength="7" placeholder="#0E58F0" t-att-value="state.dashboardCard3" t-on-change="(ev) => this.onDashboardCardHexInputChange(3, ev)"/>
                   </div>
                 </div>
               </div>

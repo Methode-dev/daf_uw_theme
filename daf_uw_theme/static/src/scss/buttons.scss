@@ -16,7 +16,7 @@
 //
 // ⚠ HIERARCHY IS CARRIED BY FILL (guard-rail 4).
 //   primary   solid blue    the one thing to do on this screen
-//   accent    solid coral   secondary emphasis
+//   accent    solid violet  secondary emphasis
 //   secondary clear glass   everything else
 // ---------------------------------------------------------------------------
 %m-raised {
@@ -72,17 +72,17 @@
     }
 }
 
-// White label on a flat blue a step darker than --m-primary: 4.27:1, up from
-// 3.51 on #0A8FDC — the one contrast fix the glass work kept.
+// White label on the logo blue: 5.72:1 at rest, darkening on hover (6.49)
+// and press (7.37).
 .btn-primary {
-    --btn-bg: #0880C6;
-    --btn-border-color: #0880C6;
+    --btn-bg: var(--m-primary);
+    --btn-border-color: var(--m-primary);
     --btn-color: #FFFFFF;
-    --btn-hover-bg: #0778BA;
-    --btn-hover-border-color: #0778BA;
+    --btn-hover-bg: #0D51DD;
+    --btn-hover-border-color: #0D51DD;
     --btn-hover-color: #FFFFFF;
-    --btn-active-bg: #066AA5;
-    --btn-active-border-color: #066AA5;
+    --btn-active-bg: #0C4ACA;
+    --btn-active-border-color: #0C4ACA;
     --btn-active-color: #FFFFFF;
     --btn-disabled-bg: var(--m-primary);
     --btn-disabled-border-color: var(--m-primary);
@@ -163,23 +163,23 @@
 }
 
 // --- The palette's secondary lives here ------------------------------------
-// .btn-info carries the secondary (#F04F47) instead of Odoo's blue, which would
-// now be indistinguishable from primary.  .btn-accent is the same thing under a
-// name that states intent.  Ink text: 5.00:1, where white would be 3.55:1.
+// .btn-info carries the secondary violet (#6D3BFF) instead of Odoo's blue,
+// which would be indistinguishable from primary.  .btn-accent is the same
+// thing under a name that states intent.  White text: 5.65:1 (ink: 3.14).
 .btn-info,
 .btn-accent {
     --btn-bg: var(--m-secondary);
     --btn-border-color: var(--m-secondary);
-    --btn-color: var(--m-text);
-    --btn-hover-bg: #DD4941;
-    --btn-hover-border-color: #DD4941;
-    --btn-hover-color: var(--m-text);
-    --btn-active-bg: #CC433C;
-    --btn-active-border-color: #CC433C;
-    --btn-active-color: var(--m-text);
+    --btn-color: #FFFFFF;
+    --btn-hover-bg: #6436EB;
+    --btn-hover-border-color: #6436EB;
+    --btn-hover-color: #FFFFFF;
+    --btn-active-bg: #5C32D6;
+    --btn-active-border-color: #5C32D6;
+    --btn-active-color: #FFFFFF;
     --btn-disabled-bg: var(--m-secondary);
     --btn-disabled-border-color: var(--m-secondary);
-    --btn-disabled-color: var(--m-text);
+    --btn-disabled-color: #FFFFFF;
 }
 
 .btn-link {

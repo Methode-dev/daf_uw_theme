@@ -49,7 +49,7 @@
     s.setProperty('--tbt-card-bg-dynamic',       theme.card_bg);
     s.setProperty('--tbt-dashboard-card-1',       theme.dashboard_card_1 || '#111827');
     s.setProperty('--tbt-dashboard-card-2',       theme.dashboard_card_2 || '#6B7280');
-    s.setProperty('--tbt-dashboard-card-3',       theme.dashboard_card_3 || '#0A8FDC');
+    s.setProperty('--tbt-dashboard-card-3',       theme.dashboard_card_3 || '#0E58F0');
     s.setProperty('--tbt-dashboard-card-4',       theme.dashboard_card_4 || '#E3E9F6');
     s.setProperty('--tbt-dashboard-card-pattern', theme.dashboard_card_pattern === false ? 'none' : 'pattern');
     root.classList.toggle('tbt-dashboard-card-pattern-off', theme.dashboard_card_pattern === false);

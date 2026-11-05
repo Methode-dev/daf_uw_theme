@@ -12,7 +12,7 @@ import { Dialog }      from '@web/core/dialog/dialog';
 import { useService }  from '@web/core/utils/hooks';
 import { user }        from '@web/core/user';
 
-const DEFAULT_BRAND      = '#0A8FDC';
+const DEFAULT_BRAND      = '#0E58F0';
 const DEFAULT_DARK_COLOR = '#1E2433';
 const DEFAULT_TOPBAR_BG  = '#ffffff';
 const DEFAULT_TOPBAR_TXT = '#0c0f0f';
@@ -20,7 +20,7 @@ const DEFAULT_CONTENT_BG = '#F4F7FE';
 const DEFAULT_CARD_BG    = '#ffffff';
 const DEFAULT_DASHBOARD_CARD_1 = '#111827';
 const DEFAULT_DASHBOARD_CARD_2 = '#6B7280';
-const DEFAULT_DASHBOARD_CARD_3 = '#0A8FDC';
+const DEFAULT_DASHBOARD_CARD_3 = '#0E58F0';
 const DEFAULT_DASHBOARD_CARD_4 = '#E3E9F6';
 const DEFAULT_LOGIN_BRAND_COPY = 'Your all-in-one business platform. Manage sales, inventory,\naccounting, HR, and more — connected in a single ERP built\nto grow with your company.';
 const DEFAULT_LOGIN_BRAND_FOOT = '{company_name}. All rights reserved.';

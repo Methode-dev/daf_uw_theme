@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Seeds MuK's sidebar footer image with the Méthode lockup
+    Seeds MuK's sidebar footer image with the DAF Under Writing lockup
     (static/src/img/brand/appbar_logo.png). See res_company.py::
     _m_seed_appbar_image for the "never overwrite a real logo" rule.
 
@@ -8,8 +8,9 @@
     databases (which already went through MuK's install hook) are fixed by an
     upgrade. It is idempotent, so re-running it is harmless.
 
-    The lockup was rendered from the brand mark (the favicon PNG) and the
-    brand face (Nunito 800, static/lib/nunito), not drawn by hand.
+    The lockup is a render of static/src/img/brand/daf_uw_logo.svg (gloss
+    included), not drawn by hand.  When it is replaced, add the old file's
+    SHA-256 to SUPERSEDED_APPBAR_SHA256 in res_company.py.
 -->
 <odoo>
     <function model="res.company" name="_m_seed_appbar_image"/>

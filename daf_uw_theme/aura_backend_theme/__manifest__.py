@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Aura Backend Theme - Community Edition',
-    # 19.0.1.7.0 moves the stored palette to the owner's blue palette (page,
-    # card, brand, dashboard cards); the migration only fires because this
-    # number moved.
-    'version': '19.0.1.7.0',
+    # 19.0.1.8.0 moves the stored brand colour to the DAF Under Writing logo
+    # blue (#0E58F0); 19.0.1.7.0 had moved it to the owner's blue palette.
+    # Each migration only fires because this number moved.
+    'version': '19.0.1.8.0',
     'category': 'Themes/Backend',
     'summary': 'Premium backend theme for Odoo 19 Community',
     'description': """

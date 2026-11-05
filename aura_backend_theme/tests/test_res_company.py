@@ -9,12 +9,12 @@ class TestResCompany(TransactionCase):
         cls.company = cls.env.company
 
     def test_default_theme_settings(self):
-        """A new company is born with the Méthode palette (THEME_PLAN §9.2)."""
+        """A new company is born with the DAF Under Writing palette (THEME_PLAN §9.2)."""
         # Create a new company to test defaults
         company = self.env['res.company'].create({'name': 'Test Theme Company'})
         # Primary is the palette blue; see res_company.DEFAULT_BRAND.
-        self.assertEqual(company.tbt_brand_color, '#0A8FDC')
-        self.assertEqual(company.tbt_brand_color_dark, '#07649A')
+        self.assertEqual(company.tbt_brand_color, '#0E58F0')
+        self.assertEqual(company.tbt_brand_color_dark, '#093DA8')
         self.assertEqual(company.tbt_sidebar_dark_color, '#1E2433')
         # The navbar renders black (Odoo's stock bar reads $o-brand-odoo, which
         # brand_variables.scss sets to $m-text); the stored value has to agree.

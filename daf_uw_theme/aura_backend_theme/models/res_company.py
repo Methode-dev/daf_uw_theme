@@ -15,13 +15,13 @@ HEX_COLOR_RE = re.compile(r"^#[0-9A-Fa-f]{6}$")
 #
 # Keep in lockstep with the fallbacks in models/ir_http.py and
 # views/web_assets.xml; all three restate these values independently.
-# Owner palette, 2026-11 (matches the React front end).  Brand/primary is the
-# blue; its dark variant is what _compute_tbt_brand_palette derives (factor
-# 0.70 lands exactly on #07649A).
-DEFAULT_BRAND = "#0A8FDC"           # $m-primary — drives --bs-primary, focus
-DEFAULT_BRAND_DARK = "#07649A"      # $m-primary-dark — hover, links
+# DAF Under Writing palette, 2026-11 (from the client's logo).  Brand/primary
+# is the logo blue; its dark variant is what _compute_tbt_brand_palette derives
+# (factor 0.70 lands exactly on #093DA8).
+DEFAULT_BRAND = "#0E58F0"           # $m-primary — drives --bs-primary, focus
+DEFAULT_BRAND_DARK = "#093DA8"      # $m-primary-dark — hover, links
 METHODE_ACCENT = DEFAULT_BRAND      # $m-accent is the primary since 2026-11
-METHODE_SECONDARY = "#F04F47"       # $m-secondary — emphasis fills
+METHODE_SECONDARY = "#6D3BFF"       # $m-secondary — emphasis fills (violet)
 METHODE_BG_PRIMARY = "#F4F7FE"      # $m-bg-primary — page / app background
 METHODE_BG_SECONDARY = "#E3E9F6"    # $m-bg-secondary — raised surfaces, group
                                     # headers, hovers. Not the navbar: see below.

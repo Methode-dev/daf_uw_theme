@@ -125,8 +125,9 @@ Guard-rails, each answering a known criticism of glass UIs:
    the list header. Containers use `@include m-glass-layer` (frost on a
    `::before`); the form sheet is unfrosted for the same reason.
 4. **Colour hierarchy is unchanged.** Buttons are FLAT, 8px (owner call — no
-   capsules, no bevel, no travel): primary = solid blue `#0880C6` (white text
-   4.27:1, up from 3.51), accent = solid coral, secondary = clear glass. Hover
+   capsules, no bevel, no travel): primary = solid logo blue `#0E58F0` (white
+   text 5.72:1), accent = solid violet `#6D3BFF` (white text 5.65:1),
+   secondary = clear glass. Hover
    is a quiet shadow plus the glint, dimmed on solid fills (`--m-glint-alpha`).
 5. **The OS wins.** Reduced transparency / more contrast / no
    `backdrop-filter` → solid panes, no backdrop, no sheen or glint.

@@ -28,12 +28,12 @@
     wanted output — nothing here needs undoing, but the en_US rendering of the
     page becomes French too.  That is the deliberate trade.
 
-    ⚠ WHY THE LOGO IS static/description/brand/logo_methode.svg AND NOT A NEW
-    ASSET.  It is the same mark as the brand's current export (the 694x633 one
-    is the identical geometry with ~170px of empty canvas below it), and it is
-    already the file the login page serves — see login_templates.xml, including
-    why res.company.logo cannot hold an SVG.  Adding a second copy would give
-    the mark two sources of truth for no visual difference.
+    ⚠ WHY THE LOGO IS static/src/img/brand/daf_uw_logo.svg AND NOT A NEW
+    ASSET.  It is the DAF Under Writing logo, and already the file the login
+    page, the empty states and the home dashboard serve — see
+    login_templates.xml, including why res.company.logo cannot hold an SVG.
+    Adding a second copy would give the mark two sources of truth for no
+    visual difference.
 -->
 <odoo>
 
@@ -51,15 +51,15 @@
                     <div class="m-error-page__card text-center">
                         <!--
                             ⚠ The inline max-height is deliberate, and mirrors
-                            login_templates.xml.  logo_methode.svg carries
-                            width="700" height="700", so if this element ever
+                            login_templates.xml.  daf_uw_logo.svg carries
+                            width="358" height="160", so if this element ever
                             paints before web.assets_frontend is available it
-                            renders 700px tall and shoves the copy off screen.
+                            renders at full size and pushes the copy down.
                             The sizing constraint travels with the element;
                             refinements live in error_pages.scss.
                         -->
-                        <img src="/daf_uw_theme/static/description/brand/logo_methode.svg"
-                             alt="Méthode"
+                        <img src="/daf_uw_theme/static/src/img/brand/daf_uw_logo.svg"
+                             alt="DAF Under Writing"
                              class="m-error-page__logo"
                              style="max-height:140px; max-width:100%; width:auto"/>
 

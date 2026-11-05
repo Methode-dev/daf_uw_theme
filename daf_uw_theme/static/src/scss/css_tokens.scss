@@ -50,17 +50,17 @@
     --m-bg-secondary:   #E3E9F6;
     --m-text:           #111827;
     --m-text-secondary: #5F6674;   // was #6B7280 — see brand_variables.scss
-    --m-primary:        #0A8FDC;
-    --m-primary-dark:   #07649A;
-    --m-secondary:      #F04F47;
+    --m-primary:        #0E58F0;
+    --m-primary-dark:   #093DA8;
+    --m-secondary:      #6D3BFF;
     // The accent role is the primary blue now (see brand_variables.scss).
     --m-accent:         var(--m-primary);
 
-    // ⚠ --m-accent is 3.28:1 on --m-bg-primary.  Fills, borders and active
-    // indicators only — never body text.  Use --m-primary-dark for blue text.
+    // --m-accent is 5.33:1 on --m-bg-primary, but keep it to fills, borders
+    // and active indicators; --m-primary-dark is the one blue for text.
     // hover wash, icon chips, required-field fill, selected settings tab
-    --m-accent-soft:    rgba(10, 143, 220, 0.1);
-    --m-accent-border:  rgba(10, 143, 220, 0.45);
+    --m-accent-soft:    rgba(14, 88, 240, 0.1);
+    --m-accent-border:  rgba(14, 88, 240, 0.45);
 
     // --- Semantics (derived in brand_variables.scss; see the table there) ----
     --m-success: #3E7C4F;
@@ -101,8 +101,7 @@
     //      use @include m-glass-layer: the frost lives on a ::before behind
     //      the content, the container itself stays a plain box.
     //   4. COLOUR HIERARCHY IS UNTOUCHED.  Primary is still the blue fill
-    //      (now glossy, and darker at the label: white text 3.51 → ~4.4:1),
-    //      accent the red fill; glass controls rank BELOW them.  Text keeps its
+    //      (glossy; white text 5.72:1 on it), secondary the violet fill; glass controls rank BELOW them.  Text keeps its
     //      three roles: ink / secondary / primary-dark.
     //   5. THE OS WINS.  prefers-reduced-transparency and prefers-contrast:more
     //      turn every pane solid and drop the backdrop (bottom of this file).
@@ -176,9 +175,9 @@
     --m-glass-shadow-2: var(--m-glass-rim), var(--m-glass-outline), var(--m-elev-2);
     --m-glass-shadow-3: var(--m-glass-rim), var(--m-glass-outline), var(--m-elev-3);
 
-    // Focus on an input: the primary edge (3.28:1, clears the 3:1 non-text
+    // Focus on an input: the primary edge (5.33:1, clears the 3:1 non-text
     // bar) plus a soft halo.  The halo is decoration; the edge is the signal.
-    --m-focus-ring: 0 0 0 3px rgba(10, 143, 220, 0.22);
+    --m-focus-ring: 0 0 0 3px rgba(14, 88, 240, 0.22);
 
     // Motion shared by every glass interaction.
     --m-ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
@@ -260,23 +259,26 @@ body,
 }
 
 // --- The glass backdrop -----------------------------------------------------
-// Glass is only visible if something with colour sits behind it.  Three pools
-// of the brand hues (primary blue top-left, a cooler violet-blue top-right,
-// the secondary coral bottom-right) over the configurable page colour (the
-// base, so D3 holds).  Fixed: panes slide over a still light source.
+// Glass is only visible if something with colour sits behind it.  Pools of
+// the brand hues (logo blue top-left, the secondary violet top-right, a lighter
+// periwinkle bottom-right) over the configurable page colour (the base, so D3
+// holds).  Fixed: panes slide over a still light source.
 //
-// ⚠ 26% is a CEILING: every contrast figure in the token block was computed
-// against the page tinted 26% toward each hue.  Raise it and re-run them.
+// ⚠ THE PERCENTAGES ARE CEILINGS, set per hue.  The logo blue is far darker
+// than the old #0A8FDC, so each pool was re-tuned to darken the page by NO MORE
+// than its predecessor did (--m-text-secondary on the tinted page: 4.06 / 4.32
+// / 4.23 / 4.60 vs the old 4.00 / 4.31 / 4.21 / 4.58).  Every contrast figure
+// in the token block therefore still holds.  Raise one and re-run them.
 .o_web_client {
     background-image:
         radial-gradient(48% 55% at 0% 0%,
-            #{"color-mix(in srgb, var(--m-primary) 26%, transparent)"}, transparent 72%),
+            #{"color-mix(in srgb, var(--m-primary) 19%, transparent)"}, transparent 72%),
         radial-gradient(38% 45% at 92% 6%,
-            #{"color-mix(in srgb, #7C5CFF 18%, transparent)"}, transparent 72%),
+            #{"color-mix(in srgb, var(--m-secondary) 15%, transparent)"}, transparent 72%),
         radial-gradient(52% 55% at 100% 100%,
-            #{"color-mix(in srgb, var(--m-secondary) 20%, transparent)"}, transparent 72%),
+            #{"color-mix(in srgb, #5B8EFF 25%, transparent)"}, transparent 72%),
         radial-gradient(40% 40% at 30% 100%,
-            #{"color-mix(in srgb, var(--m-primary) 14%, transparent)"}, transparent 72%);
+            #{"color-mix(in srgb, var(--m-primary) 11%, transparent)"}, transparent 72%);
     background-attachment: fixed;
 }
 

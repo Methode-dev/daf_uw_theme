@@ -75,9 +75,9 @@
     // ⚠ The inks are FILLS, never text — pink and sand have nowhere near text
     // contrast here.  They colour the edge and the border, nothing else.
     // -----------------------------------------------------------------------
-    --m-tile-1-bg: #DAEEFA;  --m-tile-1-ink: var(--m-primary);       // primary
-    --m-tile-2-bg: #FDE5E3;  --m-tile-2-ink: var(--m-secondary);     // secondary
-    --m-tile-3-bg: #DAE8F0;  --m-tile-3-ink: var(--m-primary-dark);  // primary-dark
+    --m-tile-1-bg: #D4E1FC;  --m-tile-1-ink: var(--m-primary);       // primary
+    --m-tile-2-bg: #E5DCFF;  --m-tile-2-ink: var(--m-secondary);     // secondary
+    --m-tile-3-bg: #DAE2F2;  --m-tile-3-ink: var(--m-primary-dark);  // primary-dark
     --m-tile-4-bg: #F4F7FE;  --m-tile-4-ink: var(--m-bg-secondary);  // page tint
 }
 
@@ -330,10 +330,10 @@
     border: 1px solid var(--m-glass-border);
     border-radius: var(--m-radius-control);
     background-color: var(--sc-fill, var(--m-dash-card-bg));
-    // Ink on every fill, never white: all four fills are mid-to-light, so ink
-    // clears AA on each (secondary is the tightest at 5.00:1) while white would
-    // fail on all of them.
-    color: var(--m-text);
+    // Text colour follows the fill (--sc-ink, set with --sc-fill below): white
+    // on the two dark brand fills, ink on the two light ones.  Each pairing
+    // clears AA; the tightest is white on the secondary violet at 5.65:1.
+    color: var(--sc-ink, var(--m-text));
     font: inherit;
     font-size: 0.8125rem;
     font-weight: 600;
@@ -351,10 +351,10 @@
 // installed. Four rather than five: repeating a brand colour is honest, while a
 // fifth invented hue is how a palette turns into a rainbow.
 .m-dash-shortcuts .m-dash-shortcut {
-    &:nth-child(4n + 1) { --sc-fill: var(--m-accent); }
-    &:nth-child(4n + 2) { --sc-fill: var(--m-secondary); }
-    // Not --m-primary-dark: ink on it is 2.79:1.  40% primary over the page.
-    &:nth-child(4n + 3) { --sc-fill: #96CDF0; }
+    &:nth-child(4n + 1) { --sc-fill: var(--m-accent);    --sc-ink: #FFFFFF; }  // 5.72:1
+    &:nth-child(4n + 2) { --sc-fill: var(--m-secondary); --sc-ink: #FFFFFF; }  // 5.65:1
+    // 40% primary over the page; ink on it is 8.84:1.
+    &:nth-child(4n + 3) { --sc-fill: #98B7F8; }
     &:nth-child(4n + 4) { --sc-fill: var(--m-bg-secondary); }
 }
 

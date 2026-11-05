@@ -6,7 +6,7 @@
 // read as a second product.  Here it takes the navbar's material instead: the
 // same glass pane, the same hairline rule, ink text, and the accent used the
 // way the rest of the theme uses it — a soft wash plus an edge, never a fill
-// behind text (--m-accent is 3.28:1 on the page; see css_tokens.scss).
+// behind text (see css_tokens.scss).
 //
 // ⚠ OVERRIDES, NOT EDITS.  muk_web_appsbar is vendored; its stylesheet is left
 // alone so it can be updated from upstream.  These selectors repeat MuK's own

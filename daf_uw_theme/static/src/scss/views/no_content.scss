@@ -69,10 +69,10 @@
     color: var(--m-text-secondary);
 
     // --- The mark ----------------------------------------------------------
-    // logo_methode.svg, the same file the login page and the 404 serve — see
+    // daf_uw_logo.svg, the same file the login page and the 404 serve — see
     // the note in views/error_templates.xml for why there is no second export.
-    // It carries white fills, which is why it needs the card underneath it and
-    // not the page background.
+    // Its letters are near-black, so it needs the light card underneath it,
+    // not whatever the page background happens to be.
     //
     // Decorative, so a pseudo-element is the right carrier: the empty state is
     // already announced by the text (and web.NoContentHelper's role="alert"),
@@ -84,7 +84,7 @@
         margin: 0 auto var(--m-space-5);
 
         background: transparent
-            url(/daf_uw_theme/static/description/brand/logo_methode.svg)
+            url(/daf_uw_theme/static/src/img/brand/daf_uw_logo.svg)
             no-repeat center / contain;
     }
 

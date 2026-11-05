@@ -1,13 +1,14 @@
 /**
  * Boot loader teardown (THEME_PLAN §13.5, P8e)
  *
- * views/boot_loader_templates.xml puts the Méthode mark in the body server-side,
+ * views/boot_loader_templates.xml puts the DAF Under Writing mark in the body
+ * server-side,
  * so it paints before any JavaScript runs.  Nothing in that markup knows when the
  * wait is over, so this removes it once the webclient is actually mounted.
  *
  * ⚠ Removal is JS rather than a CSS state, and the node is DELETED rather than
- * hidden.  The mark is nineteen shapes on infinite animations; leaving it in the
- * DOM behind `display: none` would keep the whole set alive for the session.
+ * hidden.  The mark's light sweep and progress track loop forever; leaving it
+ * in the DOM behind `display: none` would keep them alive for the session.
  *
  * The signal is a main_components entry rather than a timer or a DOMContentLoaded
  * hook: those fire on a schedule that has nothing to do with whether the app is
