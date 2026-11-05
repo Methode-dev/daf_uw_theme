@@ -14,7 +14,7 @@
 
       Dark Sidebar (tbt_sidebar_dark_mode/_color)  — never; the sidebar is gone
                                                      for good (§3.1, Rule 2).
-      Topbar Colors (tbt_topbar_bg/_text)          — P6, once methode_theme
+      Topbar Colors (tbt_topbar_bg/_text)          — P6, once daf_uw_theme
                                                      ships a navbar.scss that
                                                      reads the tbt-topbar-*-dynamic
                                                      custom properties.
@@ -34,7 +34,7 @@
                                                      rebuilt (§13.5) in favour of
                                                      one brand loader — the mark
                                                      building itself, in
-                                                     methode_theme/static/src/scss/
+                                                     daf_uw_theme/static/src/scss/
                                                      loader.scss.  One brand, one
                                                      loader, so there is no longer
                                                      a choice to expose.

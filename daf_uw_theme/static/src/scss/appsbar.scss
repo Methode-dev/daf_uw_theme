@@ -1,0 +1,103 @@
+// ---------------------------------------------------------------------------
+// App sidebar — muk_web_appsbar, reskinned to the Méthode chrome
+//
+// MuK ships a dark slate bar (#111827, light grey text, a solid brand-primary
+// block on hover and on the active app).  Next to the white two-row navbar it
+// read as a second product.  Here it takes the navbar's material instead: the
+// same glass pane, the same hairline rule, ink text, and the accent used the
+// way the rest of the theme uses it — a soft wash plus an edge, never a fill
+// behind text (--m-accent is 3.28:1 on the page; see css_tokens.scss).
+//
+// ⚠ OVERRIDES, NOT EDITS.  muk_web_appsbar is vendored; its stylesheet is left
+// alone so it can be updated from upstream.  These selectors repeat MuK's own
+// (appsbar.scss) at the same specificity and win on order, which the manifest
+// guarantees: this module depends on muk_web_appsbar, so its assets load
+// later.  Do not add !important — if a rule stops winning, MuK's selector
+// changed; match it again.
+//
+// Only colour, weight and shape live here.  Widths, the large/small/invisible
+// modes and the breakpoints stay MuK's.
+// ---------------------------------------------------------------------------
+
+// Same glass pane as the navbar (CHROME weight), so the two bars meet as one
+// frame around the content.
+.mk_apps_sidebar_panel {
+    @include m-glass(var(--m-glass-bg), true, var(--m-glass-rim), $sheen: false);
+    border-right: 1px solid var(--m-glass-hairline);
+
+    .mk_apps_sidebar {
+        padding: var(--m-space-2) 0;
+
+        .mk_apps_sidebar_menu {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            margin: 0;
+
+            > li > a {
+                display: flex;
+                align-items: center;
+                margin: 0 var(--m-space-2);
+                padding: var(--m-space-2);
+                border-radius: var(--m-radius-control);
+                color: var(--m-text);
+                font-weight: 500;
+                transition:
+                    background-color var(--m-dur-fast) var(--m-ease-out),
+                    box-shadow var(--m-dur-fast) var(--m-ease-out);
+
+                .mk_apps_sidebar_icon {
+                    flex: 0 0 auto;
+                    margin-right: var(--m-space-2);
+                    border-radius: var(--m-radius-sm);
+                }
+
+                .mk_apps_sidebar_name {
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+
+            > li:hover > a {
+                background-color: var(--m-glass-bg-strong);
+                background-image: var(--m-glass-glint), var(--m-glass-sheen);
+                box-shadow: var(--m-glass-shadow-1);
+            }
+
+            // Same active language as the notebook tab and the selected
+            // settings tab: the wash, an accent edge, and darker blue text
+            // (--m-primary-dark, the text-safe blue).
+            // The selected app is a raised glass pill — the same "selected"
+            // language as the notebook and statusbar segments — with the
+            // text-safe blue (--m-primary-dark, 6.4:1).
+            > li.active > a {
+                background-color: var(--m-glass-bg-hover);
+                background-image: var(--m-glass-sheen);
+                box-shadow: var(--m-glass-shadow-1);
+                color: var(--m-primary-dark);
+                font-weight: 600;
+            }
+
+            > li > a:focus-visible {
+                outline: 2px solid var(--m-accent-border);
+                outline-offset: -2px;
+            }
+        }
+    }
+}
+
+// Small mode is icon-only (46px): the pill has to fit around a 22px icon, so
+// the side margin goes and the icon centres.
+.mk_sidebar_type_small .mk_apps_sidebar_panel .mk_apps_sidebar .mk_apps_sidebar_menu > li > a {
+    justify-content: center;
+    margin: 0 var(--m-space-1);
+    padding: var(--m-space-2) 0;
+}
+
+@include media-breakpoint-only(md) {
+    .mk_sidebar_type_large .mk_apps_sidebar_panel .mk_apps_sidebar .mk_apps_sidebar_menu > li > a {
+        justify-content: center;
+        margin: 0 var(--m-space-1);
+        padding: var(--m-space-2) 0;
+    }
+}

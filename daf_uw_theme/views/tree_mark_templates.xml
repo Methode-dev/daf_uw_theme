@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The Methode tree mark, as an animated SVG.  THE one copy.
+
+    Two surfaces show this mark while a user waits: the webclient boot overlay
+    (views/boot_loader_templates.xml, injected into web.webclient_bootstrap) and
+    qcm_guest_walkthrough's waiting state, which a lead stares at for the whole
+    time their demo database is being provisioned.
+
+    It lives in its own template because those two were hand-copied, and the
+    copies drifted.  On 2026-08-26 the structure here was rewritten to carry the
+    animation classes on the <use> elements (see the warning inside the SVG for
+    why); the QCM copy was not, so from that day until this one the QCM loading
+    screen was a static, motionless logo on every Gecko browser and, per the
+    bug report this fixes, froze part-way through on the others.  A shared
+    t-call is the only version of this that cannot drift again.
+
+    Callers supply their own wrapper, because the accessible label differs by
+    surface (the QCM is French, the backend is not):
+
+        <div class="m-tree-loader" role="status" aria-label="Chargement">
+            <t t-call="daf_uw_theme.tree_mark"/>
+        </div>
+
+    Sizing comes from .m-tree-loader in static/src/scss/loader.scss, overridable
+    per surface with the m-tree-size custom property.
+
+    The <defs> ids are not namespaced per caller.  Two instances on one page
+    would collide, and that is harmless by construction: both would resolve to
+    the same geometry, which is the whole point of there being one copy.
+-->
+<odoo>
+
+    <template id="tree_mark">
+        <svg viewBox="0 0 694 653" aria-hidden="true">
+            <!--
+                ⚠ THE ANIMATION CLASSES MUST SIT ON THE <use>
+                ELEMENTS, NOT ON THE <path>s IN <defs>.  This used
+                to be one <g id="…-shapes"> of nineteen animated
+                paths, stacked twelve times by <use>.  Chromium
+                reflects an animation on the referenced path into
+                every instance; GECKO DOES NOT — Firefox (and Zen,
+                and every other Firefox fork) painted the finished
+                mark, all nineteen shapes solid and still, because
+                neither the keyframes nor even the `opacity: 0`
+                base rule reached the instances.  The mark was a
+                static logo on every Firefox desktop while it
+                animated correctly on mobile.
+                Inheritance through <use> is fine and is still
+                relied on: `color` and `stroke` set on the layer
+                groups below reach the referenced geometry.  It is
+                only styles matched against the referenced element
+                itself that Gecko drops.
+                So: geometry lives in <defs> ONCE and unstyled, and
+                each of the twelve layers carries one <use> per
+                shape wearing that shape's animation class.
+            -->
+            <defs>
+                <!--
+                    Geometry only — no classes, nothing animated.
+                    Identical `d` values to the brand source; see
+                    the note above this SVG.
+                -->
+                <path id="m-tree-shape-m-tree-e1" d="M529.935 287L550.986 297.87L507.052 382.956L486 372.085L529.935 287Z" fill="currentColor"/>
+                <path id="m-tree-shape-m-tree-e2" d="M608.935 142L629.986 152.87L586.052 237.956L565 227.085L608.935 142Z" fill="currentColor"/>
+                <path id="m-tree-shape-m-tree-e3" d="M503.068 257L510.392 278.935L374.118 324.431L366.795 302.496L503.068 257Z" fill="currentColor"/>
+                <path id="m-tree-shape-m-tree-e4" d="M583.068 113L590.391 134.935L454.118 180.431L446.795 158.496L583.068 113Z" fill="currentColor"/>
+                <path id="m-tree-shape-m-tree-e5" d="M442.068 34L449.392 55.9355L313.118 101.431L305.795 79.496L442.068 34Z" fill="currentColor"/>
+                <path id="m-tree-shape-m-tree-e6" d="M223.068 100L230.391 121.935L94.118 167.431L86.7946 145.496L223.068 100Z" fill="currentColor"/>
+                <path id="m-tree-shape-m-tree-e7" d="M363.069 178L370.392 199.935L234.118 245.431L226.795 223.496L363.069 178Z" fill="currentColor"/>
+                <path id="m-tree-shape-m-tree-e8" d="M467.935 64.0002L488.986 74.8705L445.052 159.956L424 149.086L467.935 64.0002Z" fill="currentColor"/>
+                <path id="m-tree-shape-m-tree-e9" d="M389.935 208L410.986 218.87L367.052 303.956L346 293.085L389.935 208Z" fill="currentColor"/>
+                <path id="m-tree-shape-m-tree-e10" d="M248.935 131L269.986 141.87L226.052 226.956L205 216.085L248.935 131Z" fill="currentColor"/>
+                <path id="m-tree-shape-m-tree-n1" d="M474.129 367.463C505.621 364.171 532.956 378.785 535.185 400.106C537.414 421.426 513.693 441.38 482.202 444.672C450.71 447.964 423.374 433.349 421.145 412.029C418.916 390.708 442.638 370.755 474.129 367.463ZM511.868 403.914C511.181 396.103 495.315 391.114 476.43 392.773C457.545 394.431 442.791 402.109 443.477 409.921C444.163 417.733 460.029 422.721 478.915 421.063C497.8 419.404 512.554 411.726 511.868 403.914Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"/>
+                <path id="m-tree-shape-m-tree-n2" d="M333.129 290.463C364.62 287.171 391.956 301.785 394.185 323.106C396.414 344.426 372.692 364.38 341.201 367.672C309.71 370.964 282.374 356.349 280.145 335.029C277.916 313.708 301.638 293.755 333.129 290.463ZM370.868 326.915C370.182 319.103 354.316 314.114 335.43 315.773C316.545 317.431 301.791 325.109 302.477 332.921C303.163 340.733 319.029 345.721 337.915 344.063C356.8 342.404 371.553 334.727 370.868 326.915Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"/>
+                <path id="m-tree-shape-m-tree-n3" d="M413.128 146.463C444.62 143.17 471.956 157.786 474.185 179.106C476.414 200.427 452.692 220.379 421.201 223.672C389.71 226.964 362.374 212.35 360.145 191.029C357.916 169.709 381.637 149.755 413.128 146.463ZM450.867 182.915C450.181 175.103 434.315 170.115 415.429 171.773C396.544 173.432 381.79 181.109 382.476 188.921C383.162 196.733 399.028 201.721 417.914 200.062C436.799 198.404 451.553 190.727 450.867 182.915Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"/>
+                <path id="m-tree-shape-m-tree-n4" d="M272.129 67.4626C303.621 64.1704 330.956 78.7856 333.185 100.106C335.414 121.427 311.693 141.379 280.202 144.672C248.711 147.964 221.374 133.35 219.145 112.029C216.916 90.7083 240.638 70.755 272.129 67.4626ZM309.868 103.915C309.182 96.1028 293.316 91.1147 274.43 92.7732C255.545 94.4317 240.791 102.109 241.477 109.921C242.163 117.733 258.029 122.722 276.915 121.063C295.8 119.405 310.554 111.727 309.868 103.915Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"/>
+                <path id="m-tree-shape-m-tree-n5" d="M53.1285 133.462C84.6198 130.17 111.956 144.785 114.185 166.106C116.414 187.427 92.692 207.38 61.2007 210.672C29.7096 213.965 2.37421 199.349 0.145076 178.029C-2.08398 156.708 21.6373 136.755 53.1285 133.462ZM90.8668 169.915C90.1805 162.103 74.3147 157.114 55.4293 158.773C36.5438 160.432 21.7901 168.109 22.4761 175.921C23.1628 183.733 39.0286 188.722 57.9136 187.063C76.7992 185.404 91.5528 177.727 90.8668 169.915Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"/>
+                <path id="m-tree-shape-m-tree-n6" d="M193.129 211.463C224.621 208.171 251.956 222.785 254.185 244.106C256.414 265.426 232.693 285.38 201.202 288.672C169.71 291.965 142.374 277.349 140.145 256.029C137.916 234.708 161.638 214.756 193.129 211.463ZM230.868 247.914C230.181 240.103 214.315 235.114 195.43 236.773C176.545 238.431 161.791 246.109 162.477 253.921C163.164 261.733 179.029 266.721 197.915 265.063C216.8 263.404 231.554 255.726 230.868 247.914Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"/>
+                <path id="m-tree-shape-m-tree-n7" d="M553.129 223.463C584.62 220.171 611.956 234.785 614.185 256.106C616.414 277.426 592.692 297.38 561.201 300.672C529.71 303.964 502.374 289.349 500.145 268.029C497.916 246.708 521.638 226.755 553.129 223.463ZM590.868 259.915C590.182 252.103 574.316 247.114 555.43 248.773C536.545 250.431 521.791 258.109 522.477 265.921C523.163 273.733 539.029 278.721 557.915 277.063C576.8 275.404 591.553 267.727 590.868 259.915Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"/>
+                <path id="m-tree-shape-m-tree-n8" d="M632.128 78.4631C663.62 75.1707 690.956 89.7859 693.185 111.107C695.414 132.427 671.692 152.38 640.201 155.672C608.71 158.964 581.375 144.35 579.145 123.029C576.916 101.709 600.637 81.7555 632.128 78.4631ZM669.867 114.915C669.181 107.103 653.315 102.115 634.429 103.774C615.544 105.432 600.79 113.109 601.476 120.921C602.162 128.733 618.028 133.721 636.914 132.063C655.799 130.404 670.553 122.727 669.867 114.915Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"/>
+                <path id="m-tree-shape-m-tree-n9" d="M491.129 0.463052C522.62 -2.82918 549.956 11.786 552.185 33.1066C554.414 54.4271 530.692 74.3795 499.201 77.672C467.71 80.9644 440.374 66.35 438.145 45.0295C435.915 23.7088 459.638 3.75544 491.129 0.463052ZM528.867 36.9152C528.181 29.1033 512.315 24.1151 493.43 25.7736C474.544 27.4321 459.791 35.1092 460.477 42.9211C461.163 50.7331 477.029 55.7222 495.914 54.0636C514.799 52.405 529.553 44.7272 528.867 36.9152Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"/>
+            </defs>
+            <!--
+                Extrude: ten walls, deepest first.  The LAST GROUP
+                is the wall nearest the top face and is tinted
+                lighter (loader.scss's
+                `.m-tree-extrude > g:last-child`), so the solid
+                reads as lit.  One <g> per wall rather than one
+                <use> per wall, because that selector has to reach
+                a whole wall now that each wall is nineteen uses.
+            -->
+            <g class="m-tree-extrude">
+                <g>
+                    <use class="m-tree-edge m-tree-e1" href="#m-tree-shape-m-tree-e1" y="21"/>
+                    <use class="m-tree-edge m-tree-e2" href="#m-tree-shape-m-tree-e2" y="21"/>
+                    <use class="m-tree-edge m-tree-e3" href="#m-tree-shape-m-tree-e3" y="21"/>
+                    <use class="m-tree-edge m-tree-e4" href="#m-tree-shape-m-tree-e4" y="21"/>
+                    <use class="m-tree-edge m-tree-e5" href="#m-tree-shape-m-tree-e5" y="21"/>
+                    <use class="m-tree-edge m-tree-e6" href="#m-tree-shape-m-tree-e6" y="21"/>
+                    <use class="m-tree-edge m-tree-e7" href="#m-tree-shape-m-tree-e7" y="21"/>
+                    <use class="m-tree-edge m-tree-e8" href="#m-tree-shape-m-tree-e8" y="21"/>
+                    <use class="m-tree-edge m-tree-e9" href="#m-tree-shape-m-tree-e9" y="21"/>
+                    <use class="m-tree-edge m-tree-e10" href="#m-tree-shape-m-tree-e10" y="21"/>
+                    <use class="m-tree-node m-tree-n1" href="#m-tree-shape-m-tree-n1" y="21"/>
+                    <use class="m-tree-node m-tree-n2" href="#m-tree-shape-m-tree-n2" y="21"/>
+                    <use class="m-tree-node m-tree-n3" href="#m-tree-shape-m-tree-n3" y="21"/>
+                    <use class="m-tree-node m-tree-n4" href="#m-tree-shape-m-tree-n4" y="21"/>
+                    <use class="m-tree-node m-tree-n5" href="#m-tree-shape-m-tree-n5" y="21"/>
+                    <use class="m-tree-node m-tree-n6" href="#m-tree-shape-m-tree-n6" y="21"/>
+                    <use class="m-tree-node m-tree-n7" href="#m-tree-shape-m-tree-n7" y="21"/>
+                    <use class="m-tree-node m-tree-n8" href="#m-tree-shape-m-tree-n8" y="21"/>
+                    <use class="m-tree-node m-tree-n9" href="#m-tree-shape-m-tree-n9" y="21"/>
+                </g>
+                <g>
+                    <use class="m-tree-edge m-tree-e1" href="#m-tree-shape-m-tree-e1" y="20"/>
+                    <use class="m-tree-edge m-tree-e2" href="#m-tree-shape-m-tree-e2" y="20"/>
+                    <use class="m-tree-edge m-tree-e3" href="#m-tree-shape-m-tree-e3" y="20"/>
+                    <use class="m-tree-edge m-tree-e4" href="#m-tree-shape-m-tree-e4" y="20"/>
+                    <use class="m-tree-edge m-tree-e5" href="#m-tree-shape-m-tree-e5" y="20"/>
+                    <use class="m-tree-edge m-tree-e6" href="#m-tree-shape-m-tree-e6" y="20"/>
+                    <use class="m-tree-edge m-tree-e7" href="#m-tree-shape-m-tree-e7" y="20"/>
+                    <use class="m-tree-edge m-tree-e8" href="#m-tree-shape-m-tree-e8" y="20"/>
+                    <use class="m-tree-edge m-tree-e9" href="#m-tree-shape-m-tree-e9" y="20"/>
+                    <use class="m-tree-edge m-tree-e10" href="#m-tree-shape-m-tree-e10" y="20"/>
+                    <use class="m-tree-node m-tree-n1" href="#m-tree-shape-m-tree-n1" y="20"/>
+                    <use class="m-tree-node m-tree-n2" href="#m-tree-shape-m-tree-n2" y="20"/>
+                    <use class="m-tree-node m-tree-n3" href="#m-tree-shape-m-tree-n3" y="20"/>
+                    <use class="m-tree-node m-tree-n4" href="#m-tree-shape-m-tree-n4" y="20"/>
+                    <use class="m-tree-node m-tree-n5" href="#m-tree-shape-m-tree-n5" y="20"/>
+                    <use class="m-tree-node m-tree-n6" href="#m-tree-shape-m-tree-n6" y="20"/>
+                    <use class="m-tree-node m-tree-n7" href="#m-tree-shape-m-tree-n7" y="20"/>
+                    <use class="m-tree-node m-tree-n8" href="#m-tree-shape-m-tree-n8" y="20"/>
+                    <use class="m-tree-node m-tree-n9" href="#m-tree-shape-m-tree-n9" y="20"/>
+                </g>
+                <g>
+                    <use class="m-tree-edge m-tree-e1" href="#m-tree-shape-m-tree-e1" y="18"/>
+                    <use class="m-tree-edge m-tree-e2" href="#m-tree-shape-m-tree-e2" y="18"/>
+                    <use class="m-tree-edge m-tree-e3" href="#m-tree-shape-m-tree-e3" y="18"/>
+                    <use class="m-tree-edge m-tree-e4" href="#m-tree-shape-m-tree-e4" y="18"/>
+                    <use class="m-tree-edge m-tree-e5" href="#m-tree-shape-m-tree-e5" y="18"/>
+                    <use class="m-tree-edge m-tree-e6" href="#m-tree-shape-m-tree-e6" y="18"/>
+                    <use class="m-tree-edge m-tree-e7" href="#m-tree-shape-m-tree-e7" y="18"/>
+                    <use class="m-tree-edge m-tree-e8" href="#m-tree-shape-m-tree-e8" y="18"/>
+                    <use class="m-tree-edge m-tree-e9" href="#m-tree-shape-m-tree-e9" y="18"/>
+                    <use class="m-tree-edge m-tree-e10" href="#m-tree-shape-m-tree-e10" y="18"/>
+                    <use class="m-tree-node m-tree-n1" href="#m-tree-shape-m-tree-n1" y="18"/>
+                    <use class="m-tree-node m-tree-n2" href="#m-tree-shape-m-tree-n2" y="18"/>
+                    <use class="m-tree-node m-tree-n3" href="#m-tree-shape-m-tree-n3" y="18"/>
+                    <use class="m-tree-node m-tree-n4" href="#m-tree-shape-m-tree-n4" y="18"/>
+                    <use class="m-tree-node m-tree-n5" href="#m-tree-shape-m-tree-n5" y="18"/>
+                    <use class="m-tree-node m-tree-n6" href="#m-tree-shape-m-tree-n6" y="18"/>
+                    <use class="m-tree-node m-tree-n7" href="#m-tree-shape-m-tree-n7" y="18"/>
+                    <use class="m-tree-node m-tree-n8" href="#m-tree-shape-m-tree-n8" y="18"/>
+                    <use class="m-tree-node m-tree-n9" href="#m-tree-shape-m-tree-n9" y="18"/>
+                </g>
+                <g>
+                    <use class="m-tree-edge m-tree-e1" href="#m-tree-shape-m-tree-e1" y="16"/>
+                    <use class="m-tree-edge m-tree-e2" href="#m-tree-shape-m-tree-e2" y="16"/>
+                    <use class="m-tree-edge m-tree-e3" href="#m-tree-shape-m-tree-e3" y="16"/>
+                    <use class="m-tree-edge m-tree-e4" href="#m-tree-shape-m-tree-e4" y="16"/>
+                    <use class="m-tree-edge m-tree-e5" href="#m-tree-shape-m-tree-e5" y="16"/>
+                    <use class="m-tree-edge m-tree-e6" href="#m-tree-shape-m-tree-e6" y="16"/>
+                    <use class="m-tree-edge m-tree-e7" href="#m-tree-shape-m-tree-e7" y="16"/>
+                    <use class="m-tree-edge m-tree-e8" href="#m-tree-shape-m-tree-e8" y="16"/>
+                    <use class="m-tree-edge m-tree-e9" href="#m-tree-shape-m-tree-e9" y="16"/>
+                    <use class="m-tree-edge m-tree-e10" href="#m-tree-shape-m-tree-e10" y="16"/>
+                    <use class="m-tree-node m-tree-n1" href="#m-tree-shape-m-tree-n1" y="16"/>
+                    <use class="m-tree-node m-tree-n2" href="#m-tree-shape-m-tree-n2" y="16"/>
+                    <use class="m-tree-node m-tree-n3" href="#m-tree-shape-m-tree-n3" y="16"/>
+                    <use class="m-tree-node m-tree-n4" href="#m-tree-shape-m-tree-n4" y="16"/>
+                    <use class="m-tree-node m-tree-n5" href="#m-tree-shape-m-tree-n5" y="16"/>
+                    <use class="m-tree-node m-tree-n6" href="#m-tree-shape-m-tree-n6" y="16"/>
+                    <use class="m-tree-node m-tree-n7" href="#m-tree-shape-m-tree-n7" y="16"/>
+                    <use class="m-tree-node m-tree-n8" href="#m-tree-shape-m-tree-n8" y="16"/>
+                    <use class="m-tree-node m-tree-n9" href="#m-tree-shape-m-tree-n9" y="16"/>
+                </g>
+                <g>
+                    <use class="m-tree-edge m-tree-e1" href="#m-tree-shape-m-tree-e1" y="14"/>
+                    <use class="m-tree-edge m-tree-e2" href="#m-tree-shape-m-tree-e2" y="14"/>
+                    <use class="m-tree-edge m-tree-e3" href="#m-tree-shape-m-tree-e3" y="14"/>
+                    <use class="m-tree-edge m-tree-e4" href="#m-tree-shape-m-tree-e4" y="14"/>
+                    <use class="m-tree-edge m-tree-e5" href="#m-tree-shape-m-tree-e5" y="14"/>
+                    <use class="m-tree-edge m-tree-e6" href="#m-tree-shape-m-tree-e6" y="14"/>
+                    <use class="m-tree-edge m-tree-e7" href="#m-tree-shape-m-tree-e7" y="14"/>
+                    <use class="m-tree-edge m-tree-e8" href="#m-tree-shape-m-tree-e8" y="14"/>
+                    <use class="m-tree-edge m-tree-e9" href="#m-tree-shape-m-tree-e9" y="14"/>
+                    <use class="m-tree-edge m-tree-e10" href="#m-tree-shape-m-tree-e10" y="14"/>
+                    <use class="m-tree-node m-tree-n1" href="#m-tree-shape-m-tree-n1" y="14"/>
+                    <use class="m-tree-node m-tree-n2" href="#m-tree-shape-m-tree-n2" y="14"/>
+                    <use class="m-tree-node m-tree-n3" href="#m-tree-shape-m-tree-n3" y="14"/>
+                    <use class="m-tree-node m-tree-n4" href="#m-tree-shape-m-tree-n4" y="14"/>
+                    <use class="m-tree-node m-tree-n5" href="#m-tree-shape-m-tree-n5" y="14"/>
+                    <use class="m-tree-node m-tree-n6" href="#m-tree-shape-m-tree-n6" y="14"/>
+                    <use class="m-tree-node m-tree-n7" href="#m-tree-shape-m-tree-n7" y="14"/>
+                    <use class="m-tree-node m-tree-n8" href="#m-tree-shape-m-tree-n8" y="14"/>
+                    <use class="m-tree-node m-tree-n9" href="#m-tree-shape-m-tree-n9" y="14"/>
+                </g>
+                <g>
+                    <use class="m-tree-edge m-tree-e1" href="#m-tree-shape-m-tree-e1" y="12"/>
+                    <use class="m-tree-edge m-tree-e2" href="#m-tree-shape-m-tree-e2" y="12"/>
+                    <use class="m-tree-edge m-tree-e3" href="#m-tree-shape-m-tree-e3" y="12"/>
+                    <use class="m-tree-edge m-tree-e4" href="#m-tree-shape-m-tree-e4" y="12"/>
+                    <use class="m-tree-edge m-tree-e5" href="#m-tree-shape-m-tree-e5" y="12"/>
+                    <use class="m-tree-edge m-tree-e6" href="#m-tree-shape-m-tree-e6" y="12"/>
+                    <use class="m-tree-edge m-tree-e7" href="#m-tree-shape-m-tree-e7" y="12"/>
+                    <use class="m-tree-edge m-tree-e8" href="#m-tree-shape-m-tree-e8" y="12"/>
+                    <use class="m-tree-edge m-tree-e9" href="#m-tree-shape-m-tree-e9" y="12"/>
+                    <use class="m-tree-edge m-tree-e10" href="#m-tree-shape-m-tree-e10" y="12"/>
+                    <use class="m-tree-node m-tree-n1" href="#m-tree-shape-m-tree-n1" y="12"/>
+                    <use class="m-tree-node m-tree-n2" href="#m-tree-shape-m-tree-n2" y="12"/>
+                    <use class="m-tree-node m-tree-n3" href="#m-tree-shape-m-tree-n3" y="12"/>
+                    <use class="m-tree-node m-tree-n4" href="#m-tree-shape-m-tree-n4" y="12"/>
+                    <use class="m-tree-node m-tree-n5" href="#m-tree-shape-m-tree-n5" y="12"/>
+                    <use class="m-tree-node m-tree-n6" href="#m-tree-shape-m-tree-n6" y="12"/>
+                    <use class="m-tree-node m-tree-n7" href="#m-tree-shape-m-tree-n7" y="12"/>
+                    <use class="m-tree-node m-tree-n8" href="#m-tree-shape-m-tree-n8" y="12"/>
+                    <use class="m-tree-node m-tree-n9" href="#m-tree-shape-m-tree-n9" y="12"/>
+                </g>
+                <g>
+                    <use class="m-tree-edge m-tree-e1" href="#m-tree-shape-m-tree-e1" y="10"/>
+                    <use class="m-tree-edge m-tree-e2" href="#m-tree-shape-m-tree-e2" y="10"/>
+                    <use class="m-tree-edge m-tree-e3" href="#m-tree-shape-m-tree-e3" y="10"/>
+                    <use class="m-tree-edge m-tree-e4" href="#m-tree-shape-m-tree-e4" y="10"/>
+                    <use class="m-tree-edge m-tree-e5" href="#m-tree-shape-m-tree-e5" y="10"/>
+                    <use class="m-tree-edge m-tree-e6" href="#m-tree-shape-m-tree-e6" y="10"/>
+                    <use class="m-tree-edge m-tree-e7" href="#m-tree-shape-m-tree-e7" y="10"/>
+                    <use class="m-tree-edge m-tree-e8" href="#m-tree-shape-m-tree-e8" y="10"/>
+                    <use class="m-tree-edge m-tree-e9" href="#m-tree-shape-m-tree-e9" y="10"/>
+                    <use class="m-tree-edge m-tree-e10" href="#m-tree-shape-m-tree-e10" y="10"/>
+                    <use class="m-tree-node m-tree-n1" href="#m-tree-shape-m-tree-n1" y="10"/>
+                    <use class="m-tree-node m-tree-n2" href="#m-tree-shape-m-tree-n2" y="10"/>
+                    <use class="m-tree-node m-tree-n3" href="#m-tree-shape-m-tree-n3" y="10"/>
+                    <use class="m-tree-node m-tree-n4" href="#m-tree-shape-m-tree-n4" y="10"/>
+                    <use class="m-tree-node m-tree-n5" href="#m-tree-shape-m-tree-n5" y="10"/>
+                    <use class="m-tree-node m-tree-n6" href="#m-tree-shape-m-tree-n6" y="10"/>
+                    <use class="m-tree-node m-tree-n7" href="#m-tree-shape-m-tree-n7" y="10"/>
+                    <use class="m-tree-node m-tree-n8" href="#m-tree-shape-m-tree-n8" y="10"/>
+                    <use class="m-tree-node m-tree-n9" href="#m-tree-shape-m-tree-n9" y="10"/>
+                </g>
+                <g>
+                    <use class="m-tree-edge m-tree-e1" href="#m-tree-shape-m-tree-e1" y="8"/>
+                    <use class="m-tree-edge m-tree-e2" href="#m-tree-shape-m-tree-e2" y="8"/>
+                    <use class="m-tree-edge m-tree-e3" href="#m-tree-shape-m-tree-e3" y="8"/>
+                    <use class="m-tree-edge m-tree-e4" href="#m-tree-shape-m-tree-e4" y="8"/>
+                    <use class="m-tree-edge m-tree-e5" href="#m-tree-shape-m-tree-e5" y="8"/>
+                    <use class="m-tree-edge m-tree-e6" href="#m-tree-shape-m-tree-e6" y="8"/>
+                    <use class="m-tree-edge m-tree-e7" href="#m-tree-shape-m-tree-e7" y="8"/>
+                    <use class="m-tree-edge m-tree-e8" href="#m-tree-shape-m-tree-e8" y="8"/>
+                    <use class="m-tree-edge m-tree-e9" href="#m-tree-shape-m-tree-e9" y="8"/>
+                    <use class="m-tree-edge m-tree-e10" href="#m-tree-shape-m-tree-e10" y="8"/>
+                    <use class="m-tree-node m-tree-n1" href="#m-tree-shape-m-tree-n1" y="8"/>
+                    <use class="m-tree-node m-tree-n2" href="#m-tree-shape-m-tree-n2" y="8"/>
+                    <use class="m-tree-node m-tree-n3" href="#m-tree-shape-m-tree-n3" y="8"/>
+                    <use class="m-tree-node m-tree-n4" href="#m-tree-shape-m-tree-n4" y="8"/>
+                    <use class="m-tree-node m-tree-n5" href="#m-tree-shape-m-tree-n5" y="8"/>
+                    <use class="m-tree-node m-tree-n6" href="#m-tree-shape-m-tree-n6" y="8"/>
+                    <use class="m-tree-node m-tree-n7" href="#m-tree-shape-m-tree-n7" y="8"/>
+                    <use class="m-tree-node m-tree-n8" href="#m-tree-shape-m-tree-n8" y="8"/>
+                    <use class="m-tree-node m-tree-n9" href="#m-tree-shape-m-tree-n9" y="8"/>
+                </g>
+                <g>
+                    <use class="m-tree-edge m-tree-e1" href="#m-tree-shape-m-tree-e1" y="6"/>
+                    <use class="m-tree-edge m-tree-e2" href="#m-tree-shape-m-tree-e2" y="6"/>
+                    <use class="m-tree-edge m-tree-e3" href="#m-tree-shape-m-tree-e3" y="6"/>
+                    <use class="m-tree-edge m-tree-e4" href="#m-tree-shape-m-tree-e4" y="6"/>
+                    <use class="m-tree-edge m-tree-e5" href="#m-tree-shape-m-tree-e5" y="6"/>
+                    <use class="m-tree-edge m-tree-e6" href="#m-tree-shape-m-tree-e6" y="6"/>
+                    <use class="m-tree-edge m-tree-e7" href="#m-tree-shape-m-tree-e7" y="6"/>
+                    <use class="m-tree-edge m-tree-e8" href="#m-tree-shape-m-tree-e8" y="6"/>
+                    <use class="m-tree-edge m-tree-e9" href="#m-tree-shape-m-tree-e9" y="6"/>
+                    <use class="m-tree-edge m-tree-e10" href="#m-tree-shape-m-tree-e10" y="6"/>
+                    <use class="m-tree-node m-tree-n1" href="#m-tree-shape-m-tree-n1" y="6"/>
+                    <use class="m-tree-node m-tree-n2" href="#m-tree-shape-m-tree-n2" y="6"/>
+                    <use class="m-tree-node m-tree-n3" href="#m-tree-shape-m-tree-n3" y="6"/>
+                    <use class="m-tree-node m-tree-n4" href="#m-tree-shape-m-tree-n4" y="6"/>
+                    <use class="m-tree-node m-tree-n5" href="#m-tree-shape-m-tree-n5" y="6"/>
+                    <use class="m-tree-node m-tree-n6" href="#m-tree-shape-m-tree-n6" y="6"/>
+                    <use class="m-tree-node m-tree-n7" href="#m-tree-shape-m-tree-n7" y="6"/>
+                    <use class="m-tree-node m-tree-n8" href="#m-tree-shape-m-tree-n8" y="6"/>
+                    <use class="m-tree-node m-tree-n9" href="#m-tree-shape-m-tree-n9" y="6"/>
+                </g>
+                <g>
+                    <use class="m-tree-edge m-tree-e1" href="#m-tree-shape-m-tree-e1" y="4"/>
+                    <use class="m-tree-edge m-tree-e2" href="#m-tree-shape-m-tree-e2" y="4"/>
+                    <use class="m-tree-edge m-tree-e3" href="#m-tree-shape-m-tree-e3" y="4"/>
+                    <use class="m-tree-edge m-tree-e4" href="#m-tree-shape-m-tree-e4" y="4"/>
+                    <use class="m-tree-edge m-tree-e5" href="#m-tree-shape-m-tree-e5" y="4"/>
+                    <use class="m-tree-edge m-tree-e6" href="#m-tree-shape-m-tree-e6" y="4"/>
+                    <use class="m-tree-edge m-tree-e7" href="#m-tree-shape-m-tree-e7" y="4"/>
+                    <use class="m-tree-edge m-tree-e8" href="#m-tree-shape-m-tree-e8" y="4"/>
+                    <use class="m-tree-edge m-tree-e9" href="#m-tree-shape-m-tree-e9" y="4"/>
+                    <use class="m-tree-edge m-tree-e10" href="#m-tree-shape-m-tree-e10" y="4"/>
+                    <use class="m-tree-node m-tree-n1" href="#m-tree-shape-m-tree-n1" y="4"/>
+                    <use class="m-tree-node m-tree-n2" href="#m-tree-shape-m-tree-n2" y="4"/>
+                    <use class="m-tree-node m-tree-n3" href="#m-tree-shape-m-tree-n3" y="4"/>
+                    <use class="m-tree-node m-tree-n4" href="#m-tree-shape-m-tree-n4" y="4"/>
+                    <use class="m-tree-node m-tree-n5" href="#m-tree-shape-m-tree-n5" y="4"/>
+                    <use class="m-tree-node m-tree-n6" href="#m-tree-shape-m-tree-n6" y="4"/>
+                    <use class="m-tree-node m-tree-n7" href="#m-tree-shape-m-tree-n7" y="4"/>
+                    <use class="m-tree-node m-tree-n8" href="#m-tree-shape-m-tree-n8" y="4"/>
+                    <use class="m-tree-node m-tree-n9" href="#m-tree-shape-m-tree-n9" y="4"/>
+                </g>
+            </g>
+            <!--
+                The face is drawn twice: the lower copy carries the
+                seam stroke, the upper is fill-only and paints over
+                every internal seam, so only the silhouette of the
+                union keeps a hairline.  Both layers list the same
+                shapes wearing the same animation classes, so they
+                stay in lockstep.
+            -->
+            <g class="m-tree-face-outline">
+                <use class="m-tree-edge m-tree-e1" href="#m-tree-shape-m-tree-e1"/>
+                <use class="m-tree-edge m-tree-e2" href="#m-tree-shape-m-tree-e2"/>
+                <use class="m-tree-edge m-tree-e3" href="#m-tree-shape-m-tree-e3"/>
+                <use class="m-tree-edge m-tree-e4" href="#m-tree-shape-m-tree-e4"/>
+                <use class="m-tree-edge m-tree-e5" href="#m-tree-shape-m-tree-e5"/>
+                <use class="m-tree-edge m-tree-e6" href="#m-tree-shape-m-tree-e6"/>
+                <use class="m-tree-edge m-tree-e7" href="#m-tree-shape-m-tree-e7"/>
+                <use class="m-tree-edge m-tree-e8" href="#m-tree-shape-m-tree-e8"/>
+                <use class="m-tree-edge m-tree-e9" href="#m-tree-shape-m-tree-e9"/>
+                <use class="m-tree-edge m-tree-e10" href="#m-tree-shape-m-tree-e10"/>
+                <use class="m-tree-node m-tree-n1" href="#m-tree-shape-m-tree-n1"/>
+                <use class="m-tree-node m-tree-n2" href="#m-tree-shape-m-tree-n2"/>
+                <use class="m-tree-node m-tree-n3" href="#m-tree-shape-m-tree-n3"/>
+                <use class="m-tree-node m-tree-n4" href="#m-tree-shape-m-tree-n4"/>
+                <use class="m-tree-node m-tree-n5" href="#m-tree-shape-m-tree-n5"/>
+                <use class="m-tree-node m-tree-n6" href="#m-tree-shape-m-tree-n6"/>
+                <use class="m-tree-node m-tree-n7" href="#m-tree-shape-m-tree-n7"/>
+                <use class="m-tree-node m-tree-n8" href="#m-tree-shape-m-tree-n8"/>
+                <use class="m-tree-node m-tree-n9" href="#m-tree-shape-m-tree-n9"/>
+            </g>
+            <g class="m-tree-face">
+                <use class="m-tree-edge m-tree-e1" href="#m-tree-shape-m-tree-e1"/>
+                <use class="m-tree-edge m-tree-e2" href="#m-tree-shape-m-tree-e2"/>
+                <use class="m-tree-edge m-tree-e3" href="#m-tree-shape-m-tree-e3"/>
+                <use class="m-tree-edge m-tree-e4" href="#m-tree-shape-m-tree-e4"/>
+                <use class="m-tree-edge m-tree-e5" href="#m-tree-shape-m-tree-e5"/>
+                <use class="m-tree-edge m-tree-e6" href="#m-tree-shape-m-tree-e6"/>
+                <use class="m-tree-edge m-tree-e7" href="#m-tree-shape-m-tree-e7"/>
+                <use class="m-tree-edge m-tree-e8" href="#m-tree-shape-m-tree-e8"/>
+                <use class="m-tree-edge m-tree-e9" href="#m-tree-shape-m-tree-e9"/>
+                <use class="m-tree-edge m-tree-e10" href="#m-tree-shape-m-tree-e10"/>
+                <use class="m-tree-node m-tree-n1" href="#m-tree-shape-m-tree-n1"/>
+                <use class="m-tree-node m-tree-n2" href="#m-tree-shape-m-tree-n2"/>
+                <use class="m-tree-node m-tree-n3" href="#m-tree-shape-m-tree-n3"/>
+                <use class="m-tree-node m-tree-n4" href="#m-tree-shape-m-tree-n4"/>
+                <use class="m-tree-node m-tree-n5" href="#m-tree-shape-m-tree-n5"/>
+                <use class="m-tree-node m-tree-n6" href="#m-tree-shape-m-tree-n6"/>
+                <use class="m-tree-node m-tree-n7" href="#m-tree-shape-m-tree-n7"/>
+                <use class="m-tree-node m-tree-n8" href="#m-tree-shape-m-tree-n8"/>
+                <use class="m-tree-node m-tree-n9" href="#m-tree-shape-m-tree-n9"/>
+            </g>
+        </svg>
+    </template>
+
+</odoo>

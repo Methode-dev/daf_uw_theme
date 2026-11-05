@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Theme settings, surfaced on the Settings page (Settings > General Settings >
+    Theme Settings).  This replaced the systray paint-brush + ThemeSettingsDialog
+    that briefly served as the entry point after Aura's navbar was deleted.
+
+    DELIBERATELY TRIMMED.  Aura's original version of this file exposed eight
+    setting groups.  Most of them no longer do anything, because the stylesheets
+    that consumed them were deleted in THEME_PLAN §3.1/§3.4 — a control that is
+    stored, injected and displayed but has no visible effect is a bug, so those
+    groups are removed rather than left to lie.
+
+    Removed, and the phase that earns each one back:
+
+      Dark Sidebar (tbt_sidebar_dark_mode/_color)  — never; the sidebar is gone
+                                                     for good (§3.1, Rule 2).
+      Topbar Colors (tbt_topbar_bg/_text)          — P6, once daf_uw_theme
+                                                     ships a navbar.scss that
+                                                     reads the tbt-topbar-*-dynamic
+                                                     custom properties.
+      Content & Surface (tbt_content_bg/_card_bg)  — P6, same reason; the page
+                                                     background currently comes
+                                                     from $o-webclient-background-color
+                                                     at compile time, not from
+                                                     this field.
+      Dashboard Card Colors (tbt_dashboard_card_*) — P8, if §13.8 keeps them at
+                                                     all; a monochrome brand has
+                                                     no use for four hues.
+      Login Page / Login Links (tbt_login_*)       — P5, when the login page is
+                                                     rebranded from stock.
+      Loading Indicator (tbt_loading_*)            — RESOLVED in P8e: stays out,
+                                                     permanently.  The six styles
+                                                     were retired rather than
+                                                     rebuilt (§13.5) in favour of
+                                                     one brand loader — the mark
+                                                     building itself, in
+                                                     daf_uw_theme/static/src/scss/
+                                                     loader.scss.  One brand, one
+                                                     loader, so there is no longer
+                                                     a choice to expose.
+                                                     tbt_loading_style keeps its
+                                                     stored column so no migration
+                                                     is needed; loading_style.js
+                                                     was deleted (see the aura
+                                                     manifest for why).
+      High Contrast (tbt_high_contrast)            — never scheduled; consumed by
+                                                     Aura's form_view.scss (deleted).
+
+    The res.config.settings fields for all of the above still exist in
+    models/res_config_settings.py.  They are simply not surfaced yet, so adding
+    a group back is a matter of re-adding markup here.
+-->
+<odoo>
+
+    <record id="res_config_settings_view_form_tbt_branding" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.tbt.branding</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base_setup.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//app[@name='general_settings']/div[@id='companies']" position="after">
+                <div id="tbt_branding">
+                    <block title="Theme Settings" name="tbt_branding_setting_container" groups="base.group_system">
+                        <setting id="tbt_brand_color_setting"
+                                 string="Brand Color"
+                                 company_dependent="1"
+                                 help="Primary brand colour. Drives buttons, links, focus rings and other Bootstrap-derived accents.">
+                            <div class="d-flex align-items-center gap-2">
+                                <field name="tbt_brand_color" widget="color" class="w-auto m-0"/>
+                                <field name="tbt_brand_color" placeholder="#000000" class="w-25"/>
+                                <button name="action_reset_tbt_brand_color"
+                                        type="object"
+                                        string="Reset to Default"
+                                        class="btn btn-secondary"/>
+                            </div>
+                            <div class="text-muted mt8">Use a hex colour code, e.g. #000000.</div>
+                        </setting>
+                    </block>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

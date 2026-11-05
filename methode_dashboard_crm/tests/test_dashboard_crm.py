@@ -3,7 +3,7 @@ from datetime import date, timedelta
 from odoo import fields
 from odoo.tests.common import new_test_user, tagged
 
-from odoo.addons.methode_theme.tests.common import DashboardCase
+from odoo.addons.daf_uw_theme.tests.common import DashboardCase
 
 
 @tagged("post_install", "-at_install")

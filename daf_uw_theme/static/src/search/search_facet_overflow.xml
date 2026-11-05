@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+  <!-- Every active facet, full label, own ×. See search_facet_overflow.js. -->
+  <t t-name="daf_uw_theme.FacetOverflowList">
+    <div class="m-facet-more-menu" role="list">
+      <div t-foreach="facets" t-as="facet" t-key="facet_index"
+           class="m-facet-more-row" role="listitem">
+        <i t-if="facet.icon" class="m-facet-more-icon fa-fw" t-att-class="facet.icon" aria-hidden="true"/>
+        <span class="m-facet-more-label" t-esc="label(facet)"/>
+        <button type="button"
+                class="m-facet-more-remove btn btn-link oi oi-close"
+                title="Remove"
+                aria-label="Remove"
+                t-on-click="() => props.remove(facet)"/>
+      </div>
+    </div>
+  </t>
+
+</templates>

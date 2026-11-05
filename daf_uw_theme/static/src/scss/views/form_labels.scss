@@ -1,0 +1,206 @@
+// ---------------------------------------------------------------------------
+// Form groups: every label ABOVE its input, everywhere.
+//
+// THE CORE STRUCTURE (Odoo 19, read before changing anything here):
+//   web/static/src/views/form/form_group/form_group.xml — web.Form.InnerGroup
+//   renders `.o_inner_group.grid` as ONE flat CSS grid.  Each <field> becomes
+//   two SIBLING cells, `.o_cell.o_wrap_label` then `.o_cell.o_wrap_input`
+//   (there is no per-field wrapper).  Other children (nolabel fields, <div>s,
+//   separators, `<label for>` + widget pairs, `o_td_label` blocks) become
+//   `.o_cell.o_cell_custom`, spanning `--o-grid-column-span` (colspan).
+//   A BooleanField is the one exception: label + checkbox ARE wrapped, in
+//   `.o_wrap_field_boolean.d-flex.d-sm-contents`.
+//   web/static/src/views/form/form_controller.scss then makes that grid
+//   `fit-content(150px) minmax(0, 1fr)` from sm up (label | input), and spans
+//   non-paired cells over both columns.  Below sm it already collapses to one
+//   column via its `form-break-table` mixin — i.e. core ALREADY stacks labels
+//   on phones.  This sheet makes that the rule at every width.
+//
+// THE CHANGE, CSS ONLY:
+//   1. Every cell spans the full row (`1 / -1`).  Label and input are
+//      consecutive siblings, so auto-placement puts the label on one row and
+//      its input on the next — stacked, with no markup change.
+//      ⚠ !important, unavoidable: colspan reaches the DOM as INLINE
+//      `grid-column: span N` styles (form_group.xml), which no selector can
+//      outrank.
+//   2. Two tracks, `auto minmax(0, 1fr)`, though almost everything spans both.
+//      The narrow first track exists only for CHECKBOX pairs (see
+//      "Checkboxes" below); with none in the group it is 0px wide.  Items
+//      spanning the fr track never size the auto track (grid sizing rule for
+//      spanning items that cross a flexible track), so a long label can't
+//      widen it.
+//   3. Rhythm on the 4px scale (§8): label -> its input --m-space-1; field ->
+//      next field --m-space-4.  Done with PADDING, not margins or row-gap:
+//        - a single row-gap cannot tell "label to its own input" from "one
+//          field to the next";
+//        - ⚠ margins lose: form_group.xml stamps `mb-3 mb-sm-0` on the last
+//          cell of each row — every input cell, now — and those Bootstrap
+//          utilities are !important.  Padding is untouched by them, and the
+//          utilities are neutralised below (they would add 16px on phones on
+//          top of ours).
+//      Core's per-widget bottom margin is zeroed as well, exactly as its own
+//      form-break-table mixin does.
+//
+// Outer groups are untouched: `<group><group/><group/></group>` still lays
+// its inner groups side by side (Bootstrap row + col-lg-*), so a two-column
+// form stays two columns — each column is now a stack.  `col="4"` inner
+// groups: core never gave them four grid tracks (the template is two columns
+// whatever `col` says; `col` only decides where rows break), so they stack
+// like the rest.
+//
+// DECISIONS
+//   - Checkboxes: BESIDE their label, box first, at every width.  That is
+//     what core already does on phones (`order-first` on the input), so
+//     desktop now matches mobile.  A caption above a lone 16px box reads as a
+//     heading with nothing under it.  The label is body text there (it reads
+//     as the option's wording), not the small caption other fields get.
+//     Two mechanisms, one look:
+//       a. BooleanField: its `.o_wrap_field_boolean` wrapper becomes a flex row.
+//       b. Any OTHER widget whose input is only a checkbox (core's CheckBox,
+//          `.o-checkbox` — e.g. res.users' res_user_group_ids_privilege, the
+//          "Droits supplémentaires" block) has no wrapper: label and box are
+//          loose grid cells.  The box goes in track 1 and the label in track 2,
+//          and `grid-auto-flow: row dense` backfills the box into its label's
+//          row (dense placement fills the earliest hole; full-width items leave
+//          none, so the only hole is the one beside that label).
+//          many2many_checkboxes is excluded: that is a LIST of checkboxes, a
+//          normal stacked field.
+//   - Empty label cells (string="", or a label whose content renders nothing)
+//     are removed from the flow, so they never leave a blank row.  A `nolabel`
+//     field has no label cell at all — it is one full-width cell.
+//   - Readonly/empty-value labels: core fades them to opacity .66.  On top of
+//     the secondary text colour that drops below AA, so the fade is cancelled
+//     here; the value itself already shows the state.
+//   - Invalid: the caption turns --m-danger with its input (core marks the
+//     label `o_field_invalid` too).  Required is left to forms.scss, which
+//     already marks the input.
+//
+// NOT HERE
+//   - `.oe_subtotal_footer` (sale/invoice totals): a right-aligned
+//     label | amount table that must stay side by side.  Excluded.
+//   - Settings: Odoo 19 settings forms render no `.o_inner_group` at all
+//     (measured: 0 on /odoo/settings), they use `o_setting_box`.  Excluded
+//     anyway (`.o_base_settings_view`) so a module that adds a <group> to a
+//     settings block keeps core's layout there.
+//   - The `.oe_title` name label above the big title field: not a group, and
+//     already above its input in core.
+// ---------------------------------------------------------------------------
+
+$m-label-font-size: $font-size-sm;
+// A checkbox-only input cell: a CheckBox, and no text-like input beside it.
+$m-checkbox-cell: ".o_wrap_input:has(.o-checkbox):not(:has(.o_input, .o_field_many2many_checkboxes))";
+
+.o_form_view:not(.o_base_settings_view) .o_inner_group:not(.oe_subtotal_footer) {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-auto-flow: row dense;
+    gap: 0 var(--m-space-2);
+    // Core zeroes this too when it stacks (form-break-table); otherwise every
+    // widget adds its own bottom margin on top of the cell's padding.
+    --fieldWidget-margin-bottom: 0;
+
+    // ⚠ EVERY direct child, not only `.o_cell`: the group's title (the
+    // `<group string="…">` separator) is a bare div whose span comes from
+    // Bootstrap's `g-col-sm-*` — absent below sm.  Measured at 390px: it sat
+    // alone in track 1 and sized it to 121px, and `dense` placement could then
+    // backfill a checkbox label beside it.
+    > * {
+        grid-column: 1 / -1 !important;  // ⚠ beats inline colspan; header (1).
+    }
+
+    > .o_cell,
+    > .o_wrap_field_boolean {
+        max-width: 100%;
+        // ⚠ Neutralises form_group.xml's `mb-3 mb-sm-0` (!important
+        // utilities); the padding below is the spacing now.  Header (3).
+        margin-bottom: 0 !important;
+        padding-bottom: var(--m-space-4);
+    }
+
+    // --- Label cell -------------------------------------------------------------
+    > .o_wrap_label {
+        padding-bottom: var(--m-space-1);
+        line-height: 1.25;
+
+        .o_form_label {
+            margin: 0;
+            padding: 0;
+            font-size: $m-label-font-size;
+            font-weight: 500;
+            line-height: inherit;
+            color: var(--m-text-secondary);
+            opacity: 1;  // cancels core's readonly/empty fade; see header.
+
+            &.o_field_invalid {
+                color: var(--m-danger);
+            }
+        }
+
+        // The tooltip "?" stays proportional to the small caption.
+        sup {
+            font-size: 0.85em;
+        }
+
+        // `o_td_label` blocks and `<label for>` cells sometimes hold a
+        // selection/radio or buttons instead of a plain label.  They keep their
+        // own sizes; only the gap to the input applies.
+        &:has(.o_field_widget, .btn) .o_form_label {
+            font-size: inherit;
+        }
+    }
+
+    // A label cell with nothing to show is not a row.
+    > .o_wrap_label:not(:has(> *)),
+    > .o_wrap_label:has(> .o_form_label:empty) {
+        display: none;
+    }
+
+    // The last cell closes the group: the group's own margin is the spacing.
+    > .o_cell:last-child,
+    > .o_wrap_field_boolean:last-child {
+        padding-bottom: 0;
+    }
+
+    // --- Checkboxes (a): BooleanField, wrapped ------------------------------------
+    // ⚠ !important x2: `d-sm-contents` (dissolves the wrapper into the grid from
+    // sm up) and `order-sm-0` are Bootstrap utilities, which are !important.
+    > .o_wrap_field_boolean {
+        display: flex !important;
+        align-items: center;
+        gap: var(--m-space-2);
+
+        > .o_wrap_input {
+            order: -1 !important;
+            flex: 0 0 auto;
+            padding-bottom: 0;
+        }
+
+        > .o_wrap_label {
+            flex: 1 1 auto;
+            min-width: 0;
+            padding-bottom: 0;
+        }
+    }
+
+    // --- Checkboxes (b): any other checkbox-only widget, loose cells ----------
+    // Box in track 1, its label in track 2; `row dense` puts them on one row.
+    // ⚠ !important: same inline-colspan reason as the full-width rule above,
+    // which these two must override.
+    > #{$m-checkbox-cell} {
+        grid-column: 1 !important;
+        align-self: center;
+    }
+    > .o_wrap_label:has(+ .o_wrap_input .o-checkbox):not(:has(+ .o_wrap_input :is(.o_input, .o_field_many2many_checkboxes))) {
+        grid-column: 2 !important;
+        align-self: center;
+        // Same bottom spacing as its box, so the two centre on one line.
+        padding-bottom: var(--m-space-4);
+    }
+
+    // Both kinds of checkbox label read as the option's wording: body text.
+    > .o_wrap_field_boolean > .o_wrap_label .o_form_label,
+    > .o_wrap_label:has(+ .o_wrap_input .o-checkbox):not(:has(+ .o_wrap_input :is(.o_input, .o_field_many2many_checkboxes))) .o_form_label {
+        font-size: inherit;
+        color: var(--m-text);
+        cursor: pointer;
+    }
+}

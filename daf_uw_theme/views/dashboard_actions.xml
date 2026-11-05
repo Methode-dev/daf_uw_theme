@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--
+            The dashboard as a client action (THEME_PLAN §13, P8a).
+
+            `path` is what gives it a real URL — /odoo/dashboard — rather than an
+            opaque action id in the address bar. Odoo 19 field, same as
+            mail.action_discuss uses for /odoo/discuss.
+
+            target="main" and not the default "current": this is a landing screen,
+            so it should replace the breadcrumb rather than stack onto it. A user
+            who reaches the dashboard from three levels deep in Sales should not
+            find three crumbs sitting above their home page.
+
+            ⚠ No `params`. It is a computed Binary over params_store and is set
+            from XML as a STRING that gets safe_eval'd
+            (eval="&quot;{'k': 'v'}&quot;"), which is easy to get wrong and buys
+            nothing here — the dashboard reads everything it needs from
+            session_info and the ORM.
+        -->
+        <record id="action_home_dashboard" model="ir.actions.client">
+            <field name="name">Homepage</field>
+            <field name="tag">daf_uw_theme.home_dashboard</field>
+            <field name="path">dashboard</field>
+            <field name="target">main</field>
+        </record>
+
+        <!--
+            ⚠ NO ROOT MENU, deliberately.  There used to be one ("Homepage",
+            "Accueil" in French) and it was dropped: on this build the landing
+            app is DAF (daf_base.menu_daf_root, sequence 1), which carries its
+            own dashboard, and two home screens side by side in the app bar was
+            one too many.  With no menu here, DAF is the first app and is where
+            /odoo lands.  The action stays reachable at /odoo/dashboard.
+        -->
+
+    </data>
+</odoo>

@@ -1,0 +1,182 @@
+// ---------------------------------------------------------------------------
+// App-chrome surfaces (THEME_PLAN §9.2)
+//
+// §9.2 lists six surfaces that render white and "should be the theme".  Most of
+// them are NOT rules — they are `!default` SCSS variables, now set in
+// brand_variables.scss, which is the module's stated "configure, don't
+// override" rule.  Audited against Odoo 19 source, the list resolves as:
+//
+//   .o_control_panel        → $o-control-panel-background-color   [variable]
+//   .o_kanban_renderer      → $o-kanban-background                [variable]
+//   .popover / dropdowns    → $popover-bg                         [variable]
+//   .list-group-item        → $list-group-bg is ALREADY var(--bs-body-bg),
+//                             which $o-webclient-background-color drives.
+//                             Nothing to do — verified, not assumed.
+//   .bg-view                → generated from $o-view-background-color (#FFFFFF)
+//   Discuss                 → hardcodes $white.  THIS FILE.
+//
+// So this file is deliberately short.  If it grows, check whether the thing
+// being added is really a variable first.
+// ---------------------------------------------------------------------------
+
+// --- Discuss ---------------------------------------------------------------
+// mail/…/core/common/core.scss:3 is
+//     .o-mail-discussSidebarBgColor { background-color: $white !important; }
+// Hardcoded, with !important, and $white is not safely settable — Bootstrap
+// uses it for text-on-dark throughout the product, so changing it globally
+// would be far worse than one scoped override.
+//
+// !important is required to beat Odoo's own !important.  Budget (§8): <30 for
+// the module; this is 2 of 4.
+.o-mail-discussSidebarBgColor {
+    background-color: var(--m-bg-primary) !important;
+}
+
+// mail/…/core/public_web/discuss_content.scss:11 sets $white with NO
+// !important, so a plain rule wins: `mail` sorts before `daf_uw_theme` and has
+// no dependency on it, so our sheet lands later in the bundle (§9.1).  No
+// !important needed here — do not add one "for symmetry" with the rule above.
+.o-mail-DiscussContent-header {
+    background-color: var(--m-bg-primary);
+    border-bottom: 1px solid var(--m-glass-hairline);
+}
+
+// --- Liquid glass: chrome ---------------------------------------------------
+// The control panel holds the search pickers, whose autocomplete menus are
+// position:fixed INSIDE it.  Frosting the panel itself (first pass) made it
+// their containing block and a z-auto stacking context: the menus opened under
+// the list's sticky header (z 1).  So the frost is a ::before layer
+// (m-glass-layer, css_tokens.scss) and the panel sits at z 3 — above that
+// header, far below Odoo's overlay container.
+.o_control_panel {
+    @include m-glass-layer(var(--m-glass-bg), 3, var(--m-glass-rim), $sheen: false);
+    border-bottom: 1px solid var(--m-glass-hairline);
+}
+
+// Kanban columns are the page, not a surface: let the backdrop through so the
+// records (glass panes, cards.scss) are what floats.  Grouped columns get a
+// whisper of glass so their header counts (secondary text) never sit on bare
+// backdrop (guard-rail 1).
+.o_kanban_renderer {
+    --Kanban-background: transparent;
+    --KanbanGroup-background: #{"color-mix(in srgb, var(--m-bg-card) 32%, transparent)"};
+}
+
+// --- Liquid glass: floating panels -----------------------------------------
+// Popovers, dropdown menus, autocompletes, the apps launcher.  MENU weight
+// (64%) + frost: what is behind shows through as blurred colour.  These are leaves rendered in Odoo's
+// overlay container, so frosting them directly is safe (guard-rail 3).
+.popover,
+.o-dropdown--menu,
+.o-autocomplete--dropdown-menu {
+    --bs-popover-bg: transparent;
+    --bs-dropdown-bg: transparent;
+    --bs-popover-border-color: var(--m-glass-border);
+    --bs-dropdown-border-color: var(--m-glass-border);
+    @include m-glass(var(--m-glass-bg-menu), true, var(--m-glass-shadow-2));
+    border-color: var(--m-glass-border);
+    border-radius: var(--m-radius-lg);
+}
+
+// Items in floating panels: a glass "chip" under the hovered row.
+.o-dropdown--menu .dropdown-item,
+.o-autocomplete--dropdown-menu .dropdown-item {
+    border-radius: var(--m-radius-control);
+
+    &:hover,
+    &.focus,
+    &:focus {
+        background-color: var(--m-accent-soft);
+    }
+}
+
+// Dialogs hold forms (many2one autocompletes), so the frost is a layer.
+.modal-content {
+    --bs-modal-bg: transparent;
+    --bs-modal-border-color: var(--m-glass-border);
+    @include m-glass-layer(var(--m-glass-bg-float), 0, var(--m-glass-shadow-3));
+    border-radius: var(--m-radius-card);
+}
+
+.modal-backdrop.show {
+    -webkit-backdrop-filter: blur(6px) saturate(120%);
+    backdrop-filter: blur(6px) saturate(120%);
+}
+
+// --- Notification toasts ----------------------------------------------------
+// Odoo states the notification's type TWICE.  notification.xml renders both:
+//
+//   <span class="o_notification_bar bg-{{type}} rounded-start"/>   ← 0.5rem bar
+//   <div  class="o_notification_progress ... bg-{{type}}"/>        ← 3px, bottom
+//
+// Owner call: one is enough, and the bottom one is the one that carries
+// information — notification.js animates its width down to zero as the autoclose
+// timer runs, so it is a countdown as well as a colour.  The left bar only
+// repeats what it already says.
+//
+// ⚠ The bar is COLLAPSED, not `display: none`d, and the toast grows a
+// `border-left` to replace it.  Both halves are required, for reasons that are
+// only visible in the markup:
+//
+//   * the body div next to the bar is `border border-start-0 rounded-end`, so it
+//     deliberately draws no left edge — the bar was the left edge.  Remove the
+//     bar without putting one back and the toast is an open-sided box.
+//   * `border-start-0` is a Bootstrap utility, i.e. `border-left: 0 !important`.
+//     Closing the box on the body itself would cost an !important; closing it on
+//     the parent costs none.  Same tactic as login.scss:146.
+//
+// `overflow: hidden` then lets the wrapper's own `rounded` class clip the
+// children, so the body's now-wrong square left corners round themselves —
+// rather than overriding `rounded-end`/`rounded-start` one corner at a time.
+//
+// The toast is also markup'd `shadow-lg` (a Bootstrap utility, !important).
+// Under the glass material an ambient shadow is the language, so it stays.
+.o_notification_manager .o_notification {
+    --Notification__background-color: transparent;
+    @include m-glass(var(--m-glass-bg-float), true, var(--m-glass-shadow-2));
+    overflow: hidden;
+    border-left: 1px solid var(--m-glass-border);
+
+    .o_notification_bar {
+        width: 0;
+    }
+}
+
+// --- Liquid glass: every sticky surface ---------------------------------------
+// Owner call: anything that sticks while content scrolls under it is the menu
+// weight, frosted.  (The list header is in list_view.scss, the form statusbar
+// in form_view.scss.)
+
+// Kanban column headers (kanban_header.xml: position-sticky top-0 z-1).  They
+// hold the column's config dropdown, so the frost is a layer (guard-rail 3);
+// the header is already a stacking context (z-1).
+.o_kanban_renderer .o_kanban_header {
+    background-color: transparent;
+
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background-color: var(--m-glass-bg-menu);
+        -webkit-backdrop-filter: var(--m-glass-filter);
+        backdrop-filter: var(--m-glass-filter);
+        pointer-events: none;
+    }
+}
+
+// Settings: the sticky app-tab column (settings_page.xml).  Links only, no
+// popups, so it is frosted directly.
+.o_setting_container > .position-sticky {
+    --settings__tab-bg: transparent;
+    background-color: var(--m-glass-bg-menu);
+    -webkit-backdrop-filter: var(--m-glass-filter);
+    backdrop-filter: var(--m-glass-filter);
+}
+
+// The search box that sticks at the top of long select menus.
+.o_select_menu_searchbox {
+    background-color: var(--m-glass-bg-menu);
+    -webkit-backdrop-filter: var(--m-glass-filter);
+    backdrop-filter: var(--m-glass-filter);
+}

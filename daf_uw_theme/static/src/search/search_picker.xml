@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+  <!--
+    One "Filter…" / "Group by…" typeahead. See search_picker.js for what each
+    lists and how picking applies. The leading icon is the facet icon of the same
+    kind (FACET_ICONS), so the input and the chip it produces read as one thing.
+
+    ⚠ `option` is the AutoComplete's optionSlot. It is handed {label, data} only,
+    so the active check and the header icon travel in `data`
+    (search_picker.js::makeOption / makeHeader).
+  -->
+  <t t-name="daf_uw_theme.SearchPicker">
+    <div class="m-search-picker"
+         t-att-class="isFilter ? 'm-search-picker--filter' : 'm-search-picker--groupby'"
+         t-on-pointerdown="onPointerDown">
+      <i class="m-search-picker-icon" t-att-class="icon" aria-hidden="true"/>
+      <AutoComplete
+        sources="sources"
+        placeholder="placeholder"
+        title="placeholder"
+        resetOnSelect="true"
+        inputDebounceDelay="0"
+        onFocus.bind="onFocus"
+        menuCssClass="'m-search-picker-menu'"
+        class="'m-search-picker-ac'"
+      >
+        <t t-set-slot="option" t-slot-scope="opt">
+          <t t-if="opt.data.isHeader">
+            <i t-if="opt.data.icon" class="me-1" t-att-class="opt.data.icon" aria-hidden="true"/>
+            <t t-esc="opt.label"/>
+          </t>
+          <t t-else="">
+            <i class="fa fa-fw m-search-picker-check"
+               t-att-class="{ 'fa-check': opt.data.isActive }"
+               aria-hidden="true"/>
+            <span t-esc="opt.label"/>
+          </t>
+        </t>
+      </AutoComplete>
+    </div>
+  </t>
+
+</templates>

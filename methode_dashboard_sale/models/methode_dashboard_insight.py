@@ -17,7 +17,7 @@ class MethodeDashboardShortcut(models.AbstractModel):
             'icon': 'fa-shopping-cart',
             # So the navbar switches to Sales instead of staying on the
             # Homepage app, which also leaves the Sales menus unmounted --
-            # see _dashboard_app_menu_id in methode_theme for the full trail.
+            # see _dashboard_app_menu_id in daf_uw_theme for the full trail.
             'menu_id': self._dashboard_app_menu_id('sale.sale_menu_root'),
             'action': {
                 'type': 'ir.actions.act_window',

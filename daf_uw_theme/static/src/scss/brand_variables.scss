@@ -1,0 +1,233 @@
+// ---------------------------------------------------------------------------
+// Méthode brand tokens — SCSS variables consumed at COMPILE time
+// Loaded into web._assets_primary_variables, before web's primary_variables.
+//
+// Only put things here that Odoo/Bootstrap read as SCSS ($-vars).  Runtime
+// values belong in css_tokens.scss as CSS custom properties — see THEME_PLAN
+// §5.3, which is explicit that using the wrong injection point silently does
+// nothing.
+// ---------------------------------------------------------------------------
+
+// --- Core palette (owner palette, 2026-11 — matches the React front end) ----
+//   role            value     on page   white on it   ink on it
+//   page bg         #F4F7FE      —
+//   card / paper    #FFFFFF      —
+//   text            #111827   16.54:1
+//   text-secondary  #5F6674    5.38:1   (4.77:1 on the glass backdrop's
+//                                      most tinted corner — see css_tokens)
+//   primary         #0A8FDC    3.28:1      3.51:1        5.05:1
+//   primary-dark    #07649A    5.94:1      6.37:1
+//   secondary       #F04F47    3.31:1      3.55:1        5.00:1
+//   error           #D32F2F    4.64:1      4.98:1
+$m-bg-primary:     #F4F7FE;  // page / app background
+// Not in the owner palette: raised surfaces, group headers and hovers need a
+// step BELOW the page, and #FFFFFF is the step above.  A cool tint of the page
+// keeps the old three-surface structure (page / card / raised) intact.
+$m-bg-secondary:   #E3E9F6;
+$m-text:           #111827;  // default text
+// Was #6B7280 (4.51:1 — AA by 0.01).  The liquid-glass backdrop tints the page
+// up to 10% toward the brand hues, which took that grey to 4.00:1.  Darkened in
+// the SAME hue until it clears 4.5:1 on the most tinted point; it is still
+// 3.07:1 lighter than ink, so primary vs secondary text stays a visible step.
+$m-text-secondary: #5F6674;  // labels, placeholders, muted metadata
+$m-primary:        #0A8FDC;  // primary actions, focus, active indicators
+$m-primary-dark:   #07649A;  // primary hover/pressed, and primary AS TEXT
+$m-secondary:      #F04F47;  // secondary emphasis fill
+
+// ⚠ $m-primary is 3.28:1 against $m-bg-primary — below the 4.5:1 needed for
+// body text.  As a TEXT colour use $m-primary-dark (5.94:1).  As a fill it
+// carries ink text (5.05:1) comfortably; white on it is 3.51:1, which is what
+// the React front end ships for its primary buttons (AA for bold/large text).
+//
+// The accent role keeps its name so the ~40 component rules that read it did
+// not have to change: it is now the primary blue, and its text counterpart is
+// primary-dark.  Same fill-only rule as before.
+$m-accent:         $m-primary;
+$m-accent-text:    $m-primary-dark;
+
+// --- Semantic colours ------------------------------------------------------
+// Danger is the owner's error colour.  Success / info / warning are not in the
+// palette and keep their earlier derivation (each clears 4.5:1 as text on the
+// page and with white on top; re-measured on #F4F7FE).
+// ⚠ $m-secondary (#F04F47) is close to danger in hue.  Keep it for emphasis
+// fills that are obviously not status (tiles, chips) — never for anything that
+// could be read as an error.
+$m-success: #3E7C4F;
+$m-info:    #2E6B8A;
+$m-warning: #9A6510;
+$m-danger:  #D32F2F;
+
+// Outlines in the assets are #191A22, a very dark navy — NOT pure black, which
+// reads harsher.  Pure black stays for fills and shadows.  Restated here from
+// css_tokens.scss's --m-ink-border because the two bundles cannot see each
+// other (§5.3); keep them in lockstep.
+$m-ink-border: #191A22;
+
+// --- Corner radius (measured, THEME_PLAN §6) -------------------------------
+// Odoo ships 4px/3px/6px, which is far squarer than the brand.  These three
+// feed Bootstrap's whole $border-radius family
+// (bootstrap_overridden.scss:99-101), so setting them here rounds buttons,
+// inputs, dropdowns, alerts, modals and popovers in one move — rather than
+// chasing each component with its own rule.
+//
+// Measured off the assets (2x exports, so halved): button 10.5px, input 12px,
+// display plate 12.5px.  10px is the honest centre of that cluster.
+// §4 is explicit that 2000_theme's `border-radius: 0` must NOT be ported —
+// the brand is heavily rounded and erring round is correct.
+// ⚠ OWNER OVERRIDE — these are deliberately BELOW the measured values.
+// Measured gives 10.5-12.5px, which is what shipped first; in the product it
+// read as too round across the board.  The asset measurements were taken from
+// marketing-scale artwork (a 598px card, a large button); the same radius on a
+// 28px-tall inline input approaches a pill, which is not what the brand shows.
+// Radius does not scale linearly with component size, so the measured figure is
+// right for .m-card and too large for controls.
+//
+// 8px is a visible step down while staying clearly rounder than stock Odoo (4px)
+// and Bootstrap (6px) — "less rounded, not edgy".  Tune here and nowhere else:
+// these three feed Bootstrap's whole $border-radius family.
+// --m-radius-card is deliberately NOT reduced with them; see css_tokens.scss.
+$o-border-radius:     8px;
+$o-border-radius-sm:  4px;
+$o-border-radius-lg: 10px;
+
+// --- Odoo surface variables ------------------------------------------------
+$o-webclient-background-color: $m-bg-primary;
+// Card / paper.  Sheets and .m-card share one surface: white on the cool page.
+$o-view-background-color:      #FFFFFF;
+$o-main-text-color:            $m-text;
+
+// Primary is the palette's blue.  This feeds focus rings, checkboxes, radio
+// fills and the primary button in one move.
+$o-brand-primary:              $m-primary;
+$o-brand-odoo:                 $m-primary;
+
+// --- Links: primary-dark, set explicitly (§15.3) ---------------------------
+// Odoo would derive links as darken($o-brand-primary, 5%), which is still too
+// light to read as text on the page.  $o-main-link-color feeds links and
+// nothing else.
+//
+// Set the ODOO variable, not Bootstrap's $link-color, even though §15.3 names
+// the latter.  Odoo defines `$link-color: $o-main-link-color !default`
+// (bootstrap_overridden.scss:76) from `$o-main-link-color: darken($o-brand-primary, 5%)
+// !default` (primary_variables.scss:123) — so this is the upstream lever, and
+// anything else Odoo derives from the semantic name follows it too.  Same
+// configure-don't-override principle as the surface variables below.
+//
+// The VALUE is primary-dark, not $m-primary: #0A8FDC as link text is 3.28:1
+// on the page.
+$o-main-link-color:            $m-accent-text;
+
+$o-success: $m-success;
+$o-info:    $m-info;
+$o-warning: $m-warning;
+$o-danger:  $m-danger;
+
+// --- Surfaces Odoo drives from SCSS variables (THEME_PLAN §9.2) ------------
+// §9.2 lists these as CSS rules to override.  They are not: each is a `!default`
+// SCSS variable, and `web/static/src/**/*.variables.scss` is globbed into
+// web._assets_primary_variables AFTER primary_variables.scss — which is exactly
+// where this file is injected `('before', …)`.  So setting them here wins by
+// construction, and no override rule is needed.  Configure, don't override.
+//
+// Verified definitions (Odoo 19):
+//   search/control_panel/control_panel.variables.scss:1
+//       $o-control-panel-background-color: $o-view-background-color !default;
+//   views/kanban/kanban.variables.scss:1
+//       $o-kanban-background: $o-gray-100 !default;
+//   scss/bootstrap_overridden.scss:241
+//       $popover-bg: $white !default;
+//
+// All three become the PAGE colour, not the card colour.  The owner's §9.2
+// annotations name "the theme" for each, and "the theme" throughout that
+// section is --tbt-content-bg-dynamic / #F4F7FE.  The result is one page-coloured
+// sheet from the topbar down, with white (#FFFFFF) reserved for genuinely raised content —
+// form sheets and kanban records (cards.scss).  Two surfaces, not five.
+$o-control-panel-background-color: $m-bg-primary;
+$o-kanban-background:              $m-bg-primary;
+
+// ⚠ THIS is the white panel behind the apps launcher, not $dropdown-bg.
+// Bootstrap's $dropdown-bg is already `var(--bs-body-bg)`, which our
+// $o-webclient-background-color drives — so the dropdown itself was on-brand.
+// Odoo renders dropdown menus inside a .popover, and the popover paints
+// $popover-bg over it.  Chasing $dropdown-bg would have changed nothing.
+$popover-bg:           $m-bg-primary;
+$popover-border-color: $m-ink-border;
+
+// ⚠ The active notebook tab (§15.2 B1).  Bootstrap's default is
+// `$nav-tabs-link-active-bg: $white !default` (bootstrap_overridden.scss:226),
+// which on a non-white sheet made the selected tab read as a NOTCH CUT OUT of
+// the sheet rather than part of it.  Following the sheet is the whole point of
+// a tab: it is meant to look continuous with the panel it opens.
+//
+// ⚠ Do NOT also write a `border-bottom` rule to close the tab-to-content seam.
+// Bootstrap derives $nav-tabs-link-active-border-color's bottom edge from THIS
+// SAME variable, so the seam closes itself the moment this line lands.  Adding
+// the rule anyway would be a second declaration of the same intent — exactly
+// the additive-patching habit §0.1 documents in Aura.
+$nav-tabs-link-active-bg: $o-view-background-color;
+
+// The line under the whole tab strip — the one the active tab "breaks" to look
+// open into the panel below.  Bootstrap defaults it to $border-color (a light
+// grey), which left the active tab's black left/right edges terminating into a
+// pale line that read as unfinished.  Ink matches those edges, so the strip
+// closes as one shape.  Owner-directed.
+//
+// Not set on `.nav-tabs` as a rule: this is Bootstrap's own `!default`
+// (_variables.scss), and Odoo never overrides it — so §15.1's "configure, don't
+// override" applies cleanly and this survives Odoo restructuring its markup.
+$nav-tabs-border-color: $m-ink-border;
+
+// --- Navbar (§5.4, owner-directed P9) --------------------------------------
+// The navbar becomes part of the page instead of a bar on top of it: page
+// colour, ink text, no bottom edge.  Configured here rather than overridden in
+// navbar.scss because every one of these is a `!default` in
+// webclient/navbar/navbar.variables.scss, which this file precedes.
+//
+// ⚠ This is what makes the topbar colour in Theme Settings inert — it was
+// already inert (--m-topbar-bg has no consumer), but now it is inert BY DESIGN.
+// Remove the field or repoint it at these variables; do not leave a setting
+// that silently does nothing.
+$o-navbar-background:         $m-bg-primary;
+$o-navbar-border-bottom:      0;
+$o-navbar-entry-color:        $m-text;
+$o-navbar-entry-color--hover: $m-text;
+$o-navbar-entry-bg--hover:    rgba($m-accent, .22);
+$o-navbar-entry-bg--active:   rgba($m-accent, .35);
+$o-navbar-brand-color:        $m-text;
+
+// --- Typography (THEME_PLAN §5.2) ------------------------------------------
+// Nunito is vendored at static/lib/nunito/ and @font-face'd in typography.scss.
+// Confirmed against 02-display-title.png by rendering the asset's own string in
+// both candidate faces: the plate is Nunito 700, not Outfit.  (Outfit is the
+// *marketing* title face and lives in methode_demo_tour; it is deliberately not
+// used in the backend.)
+//
+// $o-system-fonts is THE lever.  Odoo derives the whole chain from it:
+//
+//   $o-system-fonts
+//     └→ $o-font-family-sans-serif      (primary_variables.scss:114)
+//          └→ $font-family-sans-serif   (bootstrap_overridden.scss:117)
+//               └→ Bootstrap's body/`$font-family-base` and every component
+//
+// Setting it here — before primary_variables.scss, whose declarations are all
+// `!default` — means Nunito arrives through Bootstrap's own cascade instead of
+// being bolted on with override rules.  Do NOT also set font-family on `body`
+// in assets_backend; that re-implements what this line already does, and only
+// for the selectors someone remembered to list.
+$o-system-fonts: ("Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI",
+                Roboto, "Helvetica Neue", Arial, sans-serif);
+
+// ⚠ Odoo's default is `("SF Pro Display", $o-system-fonts)` — that prefix is
+// hardcoded, so on macOS every heading would resolve to SF Pro Display and
+// silently ignore Nunito.  Re-derive it from the stack alone.
+//
+// o-add-unicode-support-font() (utils.scss:211) appends Odoo's unicode-coverage
+// font.  It is safe to call here: primary_variables.scss:114 calls it three
+// lines after this file is parsed, so it is necessarily already in scope.
+$o-headings-font-family: o-add-unicode-support-font($o-system-fonts);
+
+// Bootstrap maps `$font-weight-bold` to `$o-font-weight-medium`
+// (bootstrap_overridden.scss:115), so this is what <strong>, .fw-bold and
+// every "bold" label actually render at.  Odoo's 500 reads weak in Nunito,
+// whose 600 is the semibold of the brand assets' labels.
+$o-font-weight-medium: 600;

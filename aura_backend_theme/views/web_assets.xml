@@ -9,17 +9,17 @@
             <t t-set="tbt_active_cid_token" t-value="(tbt_active_cids or '').replace('-', ',').split(',')[0].strip()"/>
             <t t-set="tbt_active_cid" t-value="int(tbt_active_cid_token) if tbt_active_cid_token.isdigit() else request.env.user.company_id.id"/>
             <t t-set="tbt_company" t-value="request.env['res.company'].sudo().browse(tbt_active_cid) if tbt_active_cid in request.env.user.company_ids.ids else (request.env.company or request.env.user.company_id).sudo()"/>
-            <t t-set="tbt_brand" t-value="tbt_company.tbt_brand_color or '#000000'"/>
-            <t t-set="tbt_brand_rgb" t-value="tbt_company.tbt_brand_color_rgb or '0,0,0'"/>
-            <t t-set="tbt_brand_dark" t-value="tbt_company.tbt_brand_color_dark or '#000000'"/>
+            <t t-set="tbt_brand" t-value="tbt_company.tbt_brand_color or '#0A8FDC'"/>
+            <t t-set="tbt_brand_rgb" t-value="tbt_company.tbt_brand_color_rgb or '10,143,220'"/>
+            <t t-set="tbt_brand_dark" t-value="tbt_company.tbt_brand_color_dark or '#07649A'"/>
             <t t-set="tbt_topbar_bg" t-value="tbt_company.tbt_topbar_bg or '#000000'"/>
             <t t-set="tbt_topbar_text" t-value="tbt_company.tbt_topbar_text or '#FFFFFF'"/>
-            <t t-set="tbt_content_bg" t-value="tbt_company.tbt_content_bg or '#FDFAF6'"/>
-            <t t-set="tbt_card_bg" t-value="tbt_company.tbt_card_bg or '#F2F2F2'"/>
-            <t t-set="tbt_dashboard_card_1" t-value="tbt_company.tbt_dashboard_card_1_color or '#000000'"/>
-            <t t-set="tbt_dashboard_card_2" t-value="tbt_company.tbt_dashboard_card_2_color or '#6D6D6D'"/>
-            <t t-set="tbt_dashboard_card_3" t-value="tbt_company.tbt_dashboard_card_3_color or '#FAA140'"/>
-            <t t-set="tbt_dashboard_card_4" t-value="tbt_company.tbt_dashboard_card_4_color or '#E9DBCA'"/>
+            <t t-set="tbt_content_bg" t-value="tbt_company.tbt_content_bg or '#F4F7FE'"/>
+            <t t-set="tbt_card_bg" t-value="tbt_company.tbt_card_bg or '#FFFFFF'"/>
+            <t t-set="tbt_dashboard_card_1" t-value="tbt_company.tbt_dashboard_card_1_color or '#111827'"/>
+            <t t-set="tbt_dashboard_card_2" t-value="tbt_company.tbt_dashboard_card_2_color or '#6B7280'"/>
+            <t t-set="tbt_dashboard_card_3" t-value="tbt_company.tbt_dashboard_card_3_color or '#0A8FDC'"/>
+            <t t-set="tbt_dashboard_card_4" t-value="tbt_company.tbt_dashboard_card_4_color or '#E3E9F6'"/>
             <t t-set="tbt_loading_display" t-value="'inline-flex' if tbt_company.tbt_loading_enabled else 'none'"/>
             <t t-set="tbt_loading_text" t-value="tbt_company.tbt_loading_text or '#FFFFFF'"/>
             <t t-set="tbt_loading_style" t-value="tbt_company.tbt_loading_style or 'arc'"/>
@@ -98,17 +98,17 @@
             <t t-set="tbt_active_cid_token" t-value="(tbt_active_cids or '').replace('-', ',').split(',')[0].strip()"/>
             <t t-set="tbt_active_cid" t-value="int(tbt_active_cid_token) if tbt_active_cid_token.isdigit() else request.env.user.company_id.id"/>
             <t t-set="tbt_company" t-value="request.env['res.company'].sudo().browse(tbt_active_cid) if tbt_active_cid in request.env.user.company_ids.ids else (request.env.company or request.env.user.company_id).sudo()"/>
-            <t t-set="tbt_brand" t-value="tbt_company.tbt_brand_color or '#000000'"/>
-            <t t-set="tbt_brand_rgb" t-value="tbt_company.tbt_brand_color_rgb or '0,0,0'"/>
-            <t t-set="tbt_brand_dark" t-value="tbt_company.tbt_brand_color_dark or '#000000'"/>
+            <t t-set="tbt_brand" t-value="tbt_company.tbt_brand_color or '#0A8FDC'"/>
+            <t t-set="tbt_brand_rgb" t-value="tbt_company.tbt_brand_color_rgb or '10,143,220'"/>
+            <t t-set="tbt_brand_dark" t-value="tbt_company.tbt_brand_color_dark or '#07649A'"/>
             <t t-set="tbt_topbar_bg" t-value="tbt_company.tbt_topbar_bg or '#000000'"/>
             <t t-set="tbt_topbar_text" t-value="tbt_company.tbt_topbar_text or '#FFFFFF'"/>
-            <t t-set="tbt_content_bg" t-value="tbt_company.tbt_content_bg or '#FDFAF6'"/>
-            <t t-set="tbt_card_bg" t-value="tbt_company.tbt_card_bg or '#F2F2F2'"/>
-            <t t-set="tbt_dashboard_card_1" t-value="tbt_company.tbt_dashboard_card_1_color or '#000000'"/>
-            <t t-set="tbt_dashboard_card_2" t-value="tbt_company.tbt_dashboard_card_2_color or '#6D6D6D'"/>
-            <t t-set="tbt_dashboard_card_3" t-value="tbt_company.tbt_dashboard_card_3_color or '#FAA140'"/>
-            <t t-set="tbt_dashboard_card_4" t-value="tbt_company.tbt_dashboard_card_4_color or '#E9DBCA'"/>
+            <t t-set="tbt_content_bg" t-value="tbt_company.tbt_content_bg or '#F4F7FE'"/>
+            <t t-set="tbt_card_bg" t-value="tbt_company.tbt_card_bg or '#FFFFFF'"/>
+            <t t-set="tbt_dashboard_card_1" t-value="tbt_company.tbt_dashboard_card_1_color or '#111827'"/>
+            <t t-set="tbt_dashboard_card_2" t-value="tbt_company.tbt_dashboard_card_2_color or '#6B7280'"/>
+            <t t-set="tbt_dashboard_card_3" t-value="tbt_company.tbt_dashboard_card_3_color or '#0A8FDC'"/>
+            <t t-set="tbt_dashboard_card_4" t-value="tbt_company.tbt_dashboard_card_4_color or '#E3E9F6'"/>
             <t t-set="tbt_loading_display" t-value="'inline-flex' if tbt_company.tbt_loading_enabled else 'none'"/>
             <t t-set="tbt_loading_text" t-value="tbt_company.tbt_loading_text or '#FFFFFF'"/>
             <t t-set="tbt_loading_style" t-value="tbt_company.tbt_loading_style or 'arc'"/>

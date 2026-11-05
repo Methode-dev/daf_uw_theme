@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+  <!--
+    First-load skeleton for every list view.  Logic and the full rationale are
+    in list_loading.js; styles in list_loading.scss.
+
+    ⚠ It is the t-else of the renderer's own `t-if="model.isReady"`: it renders
+    in exactly the hole web.ListView leaves while a lazy first load is in
+    flight, and disappears the moment the real renderer can mount.  Nothing else
+    in the stock template is touched.
+
+    Shaped like the list it stands in for: a header row and eight body rows, as
+    many columns as the view will show (clamped 3..7), plus the selector column
+    when the list has one.  The bars share their fill, sweep and timing with
+    the bar the reload state paints onto real cells, so both states read as one.
+
+    ⚠ None of the stock list classes (.o_list_renderer, .o_list_table,
+    .o_data_row) on purpose: tours and tests wait on those selectors to mean
+    "the list has loaded", and a skeleton wearing them would satisfy the wait
+    before any record exists.
+
+    aria-busy + a visually-hidden label: the bars are decoration, the status is
+    what a screen reader should get.
+  -->
+  <t t-name="daf_uw_theme.ListView" t-inherit="web.ListView" t-inherit-mode="extension">
+    <xpath expr="//t[@t-component='props.Renderer']" position="after">
+      <div t-else="" class="m-list-skeleton" aria-busy="true">
+        <span class="visually-hidden">Loading...</span>
+        <table class="m-list-skeleton__table table table-sm mb-0" aria-hidden="true">
+          <thead>
+            <tr>
+              <th t-if="props.allowSelectors" class="m-list-skeleton__selector"/>
+              <th t-foreach="mSkeletonColumns" t-as="col" t-key="col">
+                <span class="m-skeleton-bar"/>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr t-foreach="mSkeletonRows" t-as="row" t-key="row">
+              <td t-if="props.allowSelectors" class="m-list-skeleton__selector">
+                <span class="m-skeleton-bar m-skeleton-bar--box"/>
+              </td>
+              <td t-foreach="mSkeletonColumns" t-as="col" t-key="col">
+                <span class="m-skeleton-bar"/>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </xpath>
+  </t>
+
+</templates>

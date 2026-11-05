@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Aura Backend Theme - Community Edition',
-    # 19.0.1.6.0 re-seeds the four dashboard card colours off Aura's hues; the
-    # migration only fires because this number moved.
-    'version': '19.0.1.6.0',
+    # 19.0.1.7.0 moves the stored palette to the owner's blue palette (page,
+    # card, brand, dashboard cards); the migration only fires because this
+    # number moved.
+    'version': '19.0.1.7.0',
     'category': 'Themes/Backend',
     'summary': 'Premium backend theme for Odoo 19 Community',
     'description': """
@@ -49,7 +50,7 @@ Covers:
             # THEME_PLAN §13.5 planned to keep it and rebuild the six
             # .tbt-loading-style-* rule sets it depends on; P8e retired the six
             # styles instead, in favour of the single brand loader in
-            # methode_theme/static/src/scss/loader.scss.  That left the script
+            # daf_uw_theme/static/src/scss/loader.scss.  That left the script
             # writing two class families — tbt-loading-style-<name> and
             # tbt-loading-active — that nothing anywhere reads.
             #

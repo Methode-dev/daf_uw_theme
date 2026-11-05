@@ -57,7 +57,7 @@
                   type="text"
                   class="tbt-tsd-hex-input o_input"
                   maxlength="7"
-                  placeholder="#242424"
+                  placeholder="#0A8FDC"
                   t-att-value="state.brandColor"
                   t-on-change="onHexInputChange"/>
                 <button
@@ -368,7 +368,7 @@
                       <input type="color" class="tbt-tsd-color-picker" t-att-value="state.dashboardCard1" t-on-input="(ev) => this.onDashboardCardPickerChange(1, ev)"/>
                       <div class="tbt-tsd-swatch-preview" t-att-style="'background:' + state.dashboardCard1"/>
                     </div>
-                    <input type="text" class="tbt-tsd-hex-input o_input" maxlength="7" placeholder="#000000" t-att-value="state.dashboardCard1" t-on-change="(ev) => this.onDashboardCardHexInputChange(1, ev)"/>
+                    <input type="text" class="tbt-tsd-hex-input o_input" maxlength="7" placeholder="#111827" t-att-value="state.dashboardCard1" t-on-change="(ev) => this.onDashboardCardHexInputChange(1, ev)"/>
                   </div>
                 </div>
               </div>
@@ -381,7 +381,7 @@
                       <input type="color" class="tbt-tsd-color-picker" t-att-value="state.dashboardCard2" t-on-input="(ev) => this.onDashboardCardPickerChange(2, ev)"/>
                       <div class="tbt-tsd-swatch-preview" t-att-style="'background:' + state.dashboardCard2"/>
                     </div>
-                    <input type="text" class="tbt-tsd-hex-input o_input" maxlength="7" placeholder="#6D6D6D" t-att-value="state.dashboardCard2" t-on-change="(ev) => this.onDashboardCardHexInputChange(2, ev)"/>
+                    <input type="text" class="tbt-tsd-hex-input o_input" maxlength="7" placeholder="#6B7280" t-att-value="state.dashboardCard2" t-on-change="(ev) => this.onDashboardCardHexInputChange(2, ev)"/>
                   </div>
                 </div>
               </div>
@@ -394,7 +394,7 @@
                       <input type="color" class="tbt-tsd-color-picker" t-att-value="state.dashboardCard3" t-on-input="(ev) => this.onDashboardCardPickerChange(3, ev)"/>
                       <div class="tbt-tsd-swatch-preview" t-att-style="'background:' + state.dashboardCard3"/>
                     </div>
-                    <input type="text" class="tbt-tsd-hex-input o_input" maxlength="7" placeholder="#FAA140" t-att-value="state.dashboardCard3" t-on-change="(ev) => this.onDashboardCardHexInputChange(3, ev)"/>
+                    <input type="text" class="tbt-tsd-hex-input o_input" maxlength="7" placeholder="#0A8FDC" t-att-value="state.dashboardCard3" t-on-change="(ev) => this.onDashboardCardHexInputChange(3, ev)"/>
                   </div>
                 </div>
               </div>
@@ -407,7 +407,7 @@
                       <input type="color" class="tbt-tsd-color-picker" t-att-value="state.dashboardCard4" t-on-input="(ev) => this.onDashboardCardPickerChange(4, ev)"/>
                       <div class="tbt-tsd-swatch-preview" t-att-style="'background:' + state.dashboardCard4"/>
                     </div>
-                    <input type="text" class="tbt-tsd-hex-input o_input" maxlength="7" placeholder="#E9DBCA" t-att-value="state.dashboardCard4" t-on-change="(ev) => this.onDashboardCardHexInputChange(4, ev)"/>
+                    <input type="text" class="tbt-tsd-hex-input o_input" maxlength="7" placeholder="#E3E9F6" t-att-value="state.dashboardCard4" t-on-change="(ev) => this.onDashboardCardHexInputChange(4, ev)"/>
                   </div>
                 </div>
               </div>

@@ -1,6 +1,6 @@
 from odoo import api, fields, models, _
 
-from odoo.addons.methode_theme.models.methode_dashboard_focus import URGENCY_OVERDUE
+from odoo.addons.daf_uw_theme.models.methode_dashboard_focus import URGENCY_OVERDUE
 
 
 class MethodeDashboardInsight(models.AbstractModel):

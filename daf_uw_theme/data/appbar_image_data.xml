@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Seeds MuK's sidebar footer image with the Méthode lockup
+    (static/src/img/brand/appbar_logo.png). See res_company.py::
+    _m_seed_appbar_image for the "never overwrite a real logo" rule.
+
+    NOT noupdate: the function must run on module updates too, so existing
+    databases (which already went through MuK's install hook) are fixed by an
+    upgrade. It is idempotent, so re-running it is harmless.
+
+    The lockup was rendered from the brand mark (the favicon PNG) and the
+    brand face (Nunito 800, static/lib/nunito), not drawn by hand.
+-->
+<odoo>
+    <function model="res.company" name="_m_seed_appbar_image"/>
+</odoo>

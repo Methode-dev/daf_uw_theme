@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="tbt_web_fonts_backend" inherit_id="web.layout" priority="20">
+        <xpath expr="//head" position="inside">
+            <link rel="stylesheet" href="/aura_backend_theme/static/lib/fontawesome-free/6.7.2/css/all.min.css"/>
+            <link rel="stylesheet" href="/aura_backend_theme/static/lib/fontawesome-free/6.7.2/css/v4-shims.min.css"/>
+            <t t-set="tbt_active_cids" t-value="request.httprequest.cookies.get('cids', str(request.env.user.company_id.id))"/>
+            <t t-set="tbt_active_cid_token" t-value="(tbt_active_cids or '').replace('-', ',').split(',')[0].strip()"/>
+            <t t-set="tbt_active_cid" t-value="int(tbt_active_cid_token) if tbt_active_cid_token.isdigit() else request.env.user.company_id.id"/>
+            <t t-set="tbt_company" t-value="request.env['res.company'].sudo().browse(tbt_active_cid) if tbt_active_cid in request.env.user.company_ids.ids else (request.env.company or request.env.user.company_id).sudo()"/>
+            <t t-set="tbt_brand" t-value="tbt_company.tbt_brand_color or '#0A8FDC'"/>
+            <t t-set="tbt_brand_rgb" t-value="tbt_company.tbt_brand_color_rgb or '10,143,220'"/>
+            <t t-set="tbt_brand_dark" t-value="tbt_company.tbt_brand_color_dark or '#07649A'"/>
+            <t t-set="tbt_topbar_bg" t-value="tbt_company.tbt_topbar_bg or '#000000'"/>
+            <t t-set="tbt_topbar_text" t-value="tbt_company.tbt_topbar_text or '#FFFFFF'"/>
+            <t t-set="tbt_content_bg" t-value="tbt_company.tbt_content_bg or '#F4F7FE'"/>
+            <t t-set="tbt_card_bg" t-value="tbt_company.tbt_card_bg or '#FFFFFF'"/>
+            <t t-set="tbt_dashboard_card_1" t-value="tbt_company.tbt_dashboard_card_1_color or '#111827'"/>
+            <t t-set="tbt_dashboard_card_2" t-value="tbt_company.tbt_dashboard_card_2_color or '#6B7280'"/>
+            <t t-set="tbt_dashboard_card_3" t-value="tbt_company.tbt_dashboard_card_3_color or '#0A8FDC'"/>
+            <t t-set="tbt_dashboard_card_4" t-value="tbt_company.tbt_dashboard_card_4_color or '#E3E9F6'"/>
+            <t t-set="tbt_loading_display" t-value="'inline-flex' if tbt_company.tbt_loading_enabled else 'none'"/>
+            <t t-set="tbt_loading_text" t-value="tbt_company.tbt_loading_text or '#FFFFFF'"/>
+            <t t-set="tbt_loading_style" t-value="tbt_company.tbt_loading_style or 'arc'"/>
+            <t t-set="tbt_sidebar_bg" t-value="tbt_company.tbt_sidebar_bg or '#f1f2f4'"/>
+            <t t-set="tbt_sidebar_border" t-value="tbt_company.tbt_sidebar_border or 'rgba(171, 173, 175, .15)'"/>
+            <t t-set="tbt_sidebar_text" t-value="tbt_company.tbt_sidebar_text or '#555b70'"/>
+            <t t-set="tbt_sidebar_text_muted" t-value="tbt_company.tbt_sidebar_text_muted or '#8a8e98'"/>
+            <t t-set="tbt_sidebar_surface" t-value="tbt_company.tbt_sidebar_surface or 'rgba(255, 255, 255, .7)'"/>
+            <t t-set="tbt_sidebar_surface_hover" t-value="tbt_company.tbt_sidebar_surface_hover or '#ffffff'"/>
+            <t t-set="tbt_sidebar_surface_active" t-value="tbt_company.tbt_sidebar_surface_active or '#ffffff'"/>
+            <t t-set="tbt_sidebar_active_text" t-value="tbt_company.tbt_sidebar_active_text or '#0c0f0f'"/>
+            <t t-set="tbt_sidebar_active_border" t-value="tbt_company.tbt_sidebar_active_border or 'rgba(24, 55, 254, .45)'"/>
+            <t t-set="tbt_sidebar_icon" t-value="tbt_company.tbt_sidebar_icon or '#6e7380'"/>
+            <t t-set="tbt_sidebar_icon_hover" t-value="tbt_company.tbt_sidebar_icon_hover or '#4f5564'"/>
+            <t t-set="tbt_sidebar_icon_active" t-value="tbt_company.tbt_sidebar_icon_active or tbt_brand"/>
+            <t t-set="tbt_sidebar_icon_bg" t-value="tbt_company.tbt_sidebar_icon_bg or 'rgba(24, 55, 254, .10)'"/>
+            <t t-set="tbt_sidebar_brand_bg" t-value="tbt_company.tbt_sidebar_brand_bg or '#f6f6f6'"/>
+            <style id="tbt-brand-color-vars">
+                :root {
+                    --tbt-brand-color: <t t-esc="tbt_brand"/>;
+                    --tbt-brand-color-rgb: <t t-esc="tbt_brand_rgb"/>;
+                    --tbt-brand-color-dark: <t t-esc="tbt_brand_dark"/>;
+                    --tbt-brand-color-emphasis: <t t-esc="tbt_brand_dark"/>;
+                    --tbt-brand-color-soft: rgba(<t t-esc="tbt_brand_rgb"/>, .10);
+                    --tbt-brand-color-softer: rgba(<t t-esc="tbt_brand_rgb"/>, .14);
+                    --o-brand-primary: <t t-esc="tbt_brand"/>;
+                    --o-brand-odoo: <t t-esc="tbt_brand"/>;
+                    --o-action: <t t-esc="tbt_brand"/>;
+                    --o-brand-secondary: <t t-esc="tbt_brand"/>;
+                    --o-community-color: <t t-esc="tbt_brand"/>;
+                    --o-enterprise-color: <t t-esc="tbt_brand"/>;
+                    --o-enterprise-action-color: <t t-esc="tbt_brand"/>;
+                    --bs-primary: <t t-esc="tbt_brand"/>;
+                    --bs-primary-rgb: <t t-esc="tbt_brand_rgb"/>;
+                    --bs-link-color: <t t-esc="tbt_brand"/>;
+                    --bs-link-hover-color: <t t-esc="tbt_brand_dark"/>;
+                    --bs-primary-text-emphasis: <t t-esc="tbt_brand_dark"/>;
+                    --bs-primary-bg-subtle: rgba(<t t-esc="tbt_brand_rgb"/>, .12);
+                    --bs-primary-border-subtle: rgba(<t t-esc="tbt_brand_rgb"/>, .28);
+                    --bs-focus-ring-color: rgba(<t t-esc="tbt_brand_rgb"/>, .25);
+                    --tbt-topbar-bg-dynamic: <t t-esc="tbt_topbar_bg"/>;
+                    --tbt-topbar-text-dynamic: <t t-esc="tbt_topbar_text"/>;
+                    --tbt-content-bg-dynamic: <t t-esc="tbt_content_bg"/>;
+                    --tbt-card-bg-dynamic: <t t-esc="tbt_card_bg"/>;
+                    --tbt-dashboard-card-1: <t t-esc="tbt_dashboard_card_1"/>;
+                    --tbt-dashboard-card-2: <t t-esc="tbt_dashboard_card_2"/>;
+                    --tbt-dashboard-card-3: <t t-esc="tbt_dashboard_card_3"/>;
+                    --tbt-dashboard-card-4: <t t-esc="tbt_dashboard_card_4"/>;
+                    --tbt-loading-display-dynamic: <t t-esc="tbt_loading_display"/>;
+                    --tbt-loading-text-dynamic: <t t-esc="tbt_loading_text"/>;
+                    --tbt-loading-style-dynamic: <t t-esc="tbt_loading_style"/>;
+                    --tbt-sidebar-bg-dynamic: <t t-esc="tbt_sidebar_bg"/>;
+                    --tbt-sidebar-border-dynamic: <t t-esc="tbt_sidebar_border"/>;
+                    --tbt-sidebar-text-dynamic: <t t-esc="tbt_sidebar_text"/>;
+                    --tbt-sidebar-text-muted-dynamic: <t t-esc="tbt_sidebar_text_muted"/>;
+                    --tbt-sidebar-surface-dynamic: <t t-esc="tbt_sidebar_surface"/>;
+                    --tbt-sidebar-surface-hover-dynamic: <t t-esc="tbt_sidebar_surface_hover"/>;
+                    --tbt-sidebar-surface-active-dynamic: <t t-esc="tbt_sidebar_surface_active"/>;
+                    --tbt-sidebar-active-text-dynamic: <t t-esc="tbt_sidebar_active_text"/>;
+                    --tbt-sidebar-active-border-dynamic: <t t-esc="tbt_sidebar_active_border"/>;
+                    --tbt-sidebar-icon-dynamic: <t t-esc="tbt_sidebar_icon"/>;
+                    --tbt-sidebar-icon-hover-dynamic: <t t-esc="tbt_sidebar_icon_hover"/>;
+                    --tbt-sidebar-icon-active-dynamic: <t t-esc="tbt_sidebar_icon_active"/>;
+                    --tbt-sidebar-icon-bg-dynamic: <t t-esc="tbt_sidebar_icon_bg"/>;
+                    --tbt-sidebar-brand-bg-dynamic: <t t-esc="tbt_sidebar_brand_bg"/>;
+                }
+            </style>
+        </xpath>
+    </template>
+
+    <template id="tbt_web_fonts_frontend" inherit_id="web.frontend_layout" priority="20">
+        <xpath expr="//head" position="inside">
+            <link rel="stylesheet" href="/aura_backend_theme/static/lib/fontawesome-free/6.7.2/css/all.min.css"/>
+            <link rel="stylesheet" href="/aura_backend_theme/static/lib/fontawesome-free/6.7.2/css/v4-shims.min.css"/>
+            <t t-set="tbt_active_cids" t-value="request.httprequest.cookies.get('cids', str(request.env.user.company_id.id))"/>
+            <t t-set="tbt_active_cid_token" t-value="(tbt_active_cids or '').replace('-', ',').split(',')[0].strip()"/>
+            <t t-set="tbt_active_cid" t-value="int(tbt_active_cid_token) if tbt_active_cid_token.isdigit() else request.env.user.company_id.id"/>
+            <t t-set="tbt_company" t-value="request.env['res.company'].sudo().browse(tbt_active_cid) if tbt_active_cid in request.env.user.company_ids.ids else (request.env.company or request.env.user.company_id).sudo()"/>
+            <t t-set="tbt_brand" t-value="tbt_company.tbt_brand_color or '#0A8FDC'"/>
+            <t t-set="tbt_brand_rgb" t-value="tbt_company.tbt_brand_color_rgb or '10,143,220'"/>
+            <t t-set="tbt_brand_dark" t-value="tbt_company.tbt_brand_color_dark or '#07649A'"/>
+            <t t-set="tbt_topbar_bg" t-value="tbt_company.tbt_topbar_bg or '#000000'"/>
+            <t t-set="tbt_topbar_text" t-value="tbt_company.tbt_topbar_text or '#FFFFFF'"/>
+            <t t-set="tbt_content_bg" t-value="tbt_company.tbt_content_bg or '#F4F7FE'"/>
+            <t t-set="tbt_card_bg" t-value="tbt_company.tbt_card_bg or '#FFFFFF'"/>
+            <t t-set="tbt_dashboard_card_1" t-value="tbt_company.tbt_dashboard_card_1_color or '#111827'"/>
+            <t t-set="tbt_dashboard_card_2" t-value="tbt_company.tbt_dashboard_card_2_color or '#6B7280'"/>
+            <t t-set="tbt_dashboard_card_3" t-value="tbt_company.tbt_dashboard_card_3_color or '#0A8FDC'"/>
+            <t t-set="tbt_dashboard_card_4" t-value="tbt_company.tbt_dashboard_card_4_color or '#E3E9F6'"/>
+            <t t-set="tbt_loading_display" t-value="'inline-flex' if tbt_company.tbt_loading_enabled else 'none'"/>
+            <t t-set="tbt_loading_text" t-value="tbt_company.tbt_loading_text or '#FFFFFF'"/>
+            <t t-set="tbt_loading_style" t-value="tbt_company.tbt_loading_style or 'arc'"/>
+            <t t-set="tbt_sidebar_bg" t-value="tbt_company.tbt_sidebar_bg or '#f1f2f4'"/>
+            <t t-set="tbt_sidebar_border" t-value="tbt_company.tbt_sidebar_border or 'rgba(171, 173, 175, .15)'"/>
+            <t t-set="tbt_sidebar_text" t-value="tbt_company.tbt_sidebar_text or '#555b70'"/>
+            <t t-set="tbt_sidebar_text_muted" t-value="tbt_company.tbt_sidebar_text_muted or '#8a8e98'"/>
+            <t t-set="tbt_sidebar_surface" t-value="tbt_company.tbt_sidebar_surface or 'rgba(255, 255, 255, .7)'"/>
+            <t t-set="tbt_sidebar_surface_hover" t-value="tbt_company.tbt_sidebar_surface_hover or '#ffffff'"/>
+            <t t-set="tbt_sidebar_surface_active" t-value="tbt_company.tbt_sidebar_surface_active or '#ffffff'"/>
+            <t t-set="tbt_sidebar_active_text" t-value="tbt_company.tbt_sidebar_active_text or '#0c0f0f'"/>
+            <t t-set="tbt_sidebar_active_border" t-value="tbt_company.tbt_sidebar_active_border or 'rgba(24, 55, 254, .45)'"/>
+            <t t-set="tbt_sidebar_icon" t-value="tbt_company.tbt_sidebar_icon or '#6e7380'"/>
+            <t t-set="tbt_sidebar_icon_hover" t-value="tbt_company.tbt_sidebar_icon_hover or '#4f5564'"/>
+            <t t-set="tbt_sidebar_icon_active" t-value="tbt_company.tbt_sidebar_icon_active or tbt_brand"/>
+            <t t-set="tbt_sidebar_icon_bg" t-value="tbt_company.tbt_sidebar_icon_bg or 'rgba(24, 55, 254, .10)'"/>
+            <t t-set="tbt_sidebar_brand_bg" t-value="tbt_company.tbt_sidebar_brand_bg or '#f6f6f6'"/>
+            <style id="tbt-brand-color-vars-frontend">
+                :root {
+                    --tbt-brand-color: <t t-esc="tbt_brand"/>;
+                    --tbt-brand-color-rgb: <t t-esc="tbt_brand_rgb"/>;
+                    --tbt-brand-color-dark: <t t-esc="tbt_brand_dark"/>;
+                    --tbt-brand-color-emphasis: <t t-esc="tbt_brand_dark"/>;
+                    --tbt-brand-color-soft: rgba(<t t-esc="tbt_brand_rgb"/>, .10);
+                    --tbt-brand-color-softer: rgba(<t t-esc="tbt_brand_rgb"/>, .14);
+                    --o-brand-primary: <t t-esc="tbt_brand"/>;
+                    --o-brand-odoo: <t t-esc="tbt_brand"/>;
+                    --o-action: <t t-esc="tbt_brand"/>;
+                    --o-brand-secondary: <t t-esc="tbt_brand"/>;
+                    --o-community-color: <t t-esc="tbt_brand"/>;
+                    --o-enterprise-color: <t t-esc="tbt_brand"/>;
+                    --o-enterprise-action-color: <t t-esc="tbt_brand"/>;
+                    --bs-primary: <t t-esc="tbt_brand"/>;
+                    --bs-primary-rgb: <t t-esc="tbt_brand_rgb"/>;
+                    --bs-link-color: <t t-esc="tbt_brand"/>;
+                    --bs-link-hover-color: <t t-esc="tbt_brand_dark"/>;
+                    --bs-primary-text-emphasis: <t t-esc="tbt_brand_dark"/>;
+                    --bs-primary-bg-subtle: rgba(<t t-esc="tbt_brand_rgb"/>, .12);
+                    --bs-primary-border-subtle: rgba(<t t-esc="tbt_brand_rgb"/>, .28);
+                    --bs-focus-ring-color: rgba(<t t-esc="tbt_brand_rgb"/>, .25);
+                    --tbt-topbar-bg-dynamic: <t t-esc="tbt_topbar_bg"/>;
+                    --tbt-topbar-text-dynamic: <t t-esc="tbt_topbar_text"/>;
+                    --tbt-content-bg-dynamic: <t t-esc="tbt_content_bg"/>;
+                    --tbt-card-bg-dynamic: <t t-esc="tbt_card_bg"/>;
+                    --tbt-dashboard-card-1: <t t-esc="tbt_dashboard_card_1"/>;
+                    --tbt-dashboard-card-2: <t t-esc="tbt_dashboard_card_2"/>;
+                    --tbt-dashboard-card-3: <t t-esc="tbt_dashboard_card_3"/>;
+                    --tbt-dashboard-card-4: <t t-esc="tbt_dashboard_card_4"/>;
+                    --tbt-loading-display-dynamic: <t t-esc="tbt_loading_display"/>;
+                    --tbt-loading-text-dynamic: <t t-esc="tbt_loading_text"/>;
+                    --tbt-loading-style-dynamic: <t t-esc="tbt_loading_style"/>;
+                    --tbt-sidebar-bg-dynamic: <t t-esc="tbt_sidebar_bg"/>;
+                    --tbt-sidebar-border-dynamic: <t t-esc="tbt_sidebar_border"/>;
+                    --tbt-sidebar-text-dynamic: <t t-esc="tbt_sidebar_text"/>;
+                    --tbt-sidebar-text-muted-dynamic: <t t-esc="tbt_sidebar_text_muted"/>;
+                    --tbt-sidebar-surface-dynamic: <t t-esc="tbt_sidebar_surface"/>;
+                    --tbt-sidebar-surface-hover-dynamic: <t t-esc="tbt_sidebar_surface_hover"/>;
+                    --tbt-sidebar-surface-active-dynamic: <t t-esc="tbt_sidebar_surface_active"/>;
+                    --tbt-sidebar-active-text-dynamic: <t t-esc="tbt_sidebar_active_text"/>;
+                    --tbt-sidebar-active-border-dynamic: <t t-esc="tbt_sidebar_active_border"/>;
+                    --tbt-sidebar-icon-dynamic: <t t-esc="tbt_sidebar_icon"/>;
+                    --tbt-sidebar-icon-hover-dynamic: <t t-esc="tbt_sidebar_icon_hover"/>;
+                    --tbt-sidebar-icon-active-dynamic: <t t-esc="tbt_sidebar_icon_active"/>;
+                    --tbt-sidebar-icon-bg-dynamic: <t t-esc="tbt_sidebar_icon_bg"/>;
+                    --tbt-sidebar-brand-bg-dynamic: <t t-esc="tbt_sidebar_brand_bg"/>;
+                }
+            </style>
+        </xpath>
+    </template>
+
+</odoo>

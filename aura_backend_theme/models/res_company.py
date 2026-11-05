@@ -11,21 +11,22 @@ HEX_COLOR_RE = re.compile(r"^#[0-9A-Fa-f]{6}$")
 # Méthode brand palette (THEME_PLAN §5.1).  These defaults are what
 # theme_bootstrap.js writes as inline styles on <html>, which beat every
 # stylesheet rule at the same custom-property name (§9.2) — so the brand has
-# to be seeded *here*, not fought with !important in methode_theme's SCSS.
+# to be seeded *here*, not fought with !important in daf_uw_theme's SCSS.
 #
 # Keep in lockstep with the fallbacks in models/ir_http.py and
 # views/web_assets.xml; all three restate these values independently.
-# Brand/primary is BLACK, not the orange accent.  The brand assets are
-# unambiguous about this: 02-display-title is a black plate with white text and
-# 03-card's action affordance is a black circular button — orange appears only
-# inside the illustration.  So black carries primary actions and the orange is
-# reserved for accents and emphasis (§5.1 $m-accent).
-DEFAULT_BRAND = "#000000"           # $m-text — drives --bs-primary, links, focus
-METHODE_ACCENT = "#FAA140"          # $m-accent — emphasis, NOT --bs-primary
-METHODE_BG_PRIMARY = "#FDFAF6"      # $m-bg-primary — page / app background
-METHODE_BG_SECONDARY = "#E9DBCA"    # $m-bg-secondary — raised surfaces, group
+# Owner palette, 2026-11 (matches the React front end).  Brand/primary is the
+# blue; its dark variant is what _compute_tbt_brand_palette derives (factor
+# 0.70 lands exactly on #07649A).
+DEFAULT_BRAND = "#0A8FDC"           # $m-primary — drives --bs-primary, focus
+DEFAULT_BRAND_DARK = "#07649A"      # $m-primary-dark — hover, links
+METHODE_ACCENT = DEFAULT_BRAND      # $m-accent is the primary since 2026-11
+METHODE_SECONDARY = "#F04F47"       # $m-secondary — emphasis fills
+METHODE_BG_PRIMARY = "#F4F7FE"      # $m-bg-primary — page / app background
+METHODE_BG_SECONDARY = "#E3E9F6"    # $m-bg-secondary — raised surfaces, group
                                     # headers, hovers. Not the navbar: see below.
-METHODE_TEXT = "#000000"            # $m-text
+METHODE_TEXT = "#111827"            # $m-text
+METHODE_TEXT_SECONDARY = "#6B7280"  # $m-text-secondary
 # The navbar renders as a black plate, matching 02-display-title.png.  That is
 # not a free choice: Odoo's stock navbar takes its background from
 # $o-brand-odoo, which brand_variables.scss sets to $m-text.  These fields
@@ -34,11 +35,9 @@ METHODE_TEXT = "#000000"            # $m-text
 # Aura's navbar.scss was deleted (§3.1).  P6 wires them up for real.
 METHODE_TOPBAR_BG = "#000000"
 METHODE_TOPBAR_TEXT = "#FFFFFF"
-# Card / form-sheet surface — §14 open question 3, resolved in P5.
-# #F2F2F2 is measured from 03-card.png, so sheets and .m-card share one surface.
-# White was the interim value; the owner rejected it because a white sheet on
-# the warm #FDFAF6 page reads as an unfinished gap rather than a surface.
-METHODE_CARD_BG = "#F2F2F2"
+# Card / form-sheet surface: the palette's paper white on the #F4F7FE page.
+# (Was the measured #F2F2F2 on the old warm page, until 19.0.1.7.0.)
+METHODE_CARD_BG = "#FFFFFF"
 # ⚠ THESE WERE AURA'S FOUR SATURATED HUES (#2F6BFF blue, #EF4444 red, #F59E0B
 # amber, #22C55E green) and they are now the brand's own ramp: ink, secondary
 # ink, the single orange accent, warm raised surface.  THEME_PLAN §13.2 forbids
@@ -55,10 +54,10 @@ METHODE_CARD_BG = "#F2F2F2"
 # working screen to tidy four dead variables.  Re-seeding them costs nothing and
 # means that if anything ever does consume them — or an administrator simply
 # opens the colour pickers — what comes out is the brand rather than Aura.
-DEFAULT_DASHBOARD_CARD_1 = "#000000"
-DEFAULT_DASHBOARD_CARD_2 = "#6D6D6D"
-DEFAULT_DASHBOARD_CARD_3 = "#FAA140"
-DEFAULT_DASHBOARD_CARD_4 = "#E9DBCA"
+DEFAULT_DASHBOARD_CARD_1 = METHODE_TEXT
+DEFAULT_DASHBOARD_CARD_2 = METHODE_TEXT_SECONDARY
+DEFAULT_DASHBOARD_CARD_3 = DEFAULT_BRAND
+DEFAULT_DASHBOARD_CARD_4 = METHODE_BG_SECONDARY
 DEFAULT_SIDEBAR_DARKNESS = 70
 DEFAULT_LOGIN_BRAND_COPY = (
     "Your all-in-one business platform. Manage sales, inventory,\n"
@@ -262,7 +261,7 @@ class ResCompany(models.Model):
             darkness = DEFAULT_SIDEBAR_DARKNESS
             darkness_ratio = darkness / 100.0
             company.tbt_brand_color_rgb = _hex_to_rgb_triplet(color)
-            company.tbt_brand_color_dark = _darken_hex(color)
+            company.tbt_brand_color_dark = _darken_hex(color, factor=0.70)
 
             if company.tbt_sidebar_dark_mode:
                 dark_base = (company.tbt_sidebar_dark_color or "#1E2433").strip()

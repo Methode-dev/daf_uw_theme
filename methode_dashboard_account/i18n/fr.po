@@ -26,7 +26,7 @@ msgstr "%(amount)s en retard"
 msgid "%(count)s invoices are more than %(days)s days overdue"
 msgstr "%(count)s factures ont plus de %(days)s jours de retard"
 
-#. modules: methode_dashboard_account, methode_theme
+#. modules: methode_dashboard_account, daf_uw_theme
 #. odoo-javascript
 #. odoo-python
 #: code:addons/methode_dashboard_account/models/account_move.py:0
@@ -40,7 +40,7 @@ msgstr "%s jours de retard"
 msgid "%s open invoices"
 msgstr "%s factures ouvertes"
 
-#. modules: methode_dashboard_account, methode_theme
+#. modules: methode_dashboard_account, daf_uw_theme
 #. odoo-javascript
 #. odoo-python
 #: code:addons/methode_dashboard_account/models/account_move.py:0
@@ -154,7 +154,7 @@ msgstr "Factures clients ouvertes classées par degré de retard"
 msgid "Outstanding"
 msgstr "En cours"
 
-#. modules: methode_dashboard_account, methode_theme
+#. modules: methode_dashboard_account, daf_uw_theme
 #. odoo-python
 #: code:addons/methode_dashboard_account/models/account_move.py:0
 #: model:methode.dashboard.widget.type,name:methode_dashboard_account.dashboard_stat_overdue

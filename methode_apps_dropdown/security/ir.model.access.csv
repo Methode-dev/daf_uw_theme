@@ -1,3 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_methode_apps_category_user,methode.apps.category user,model_methode_apps_category,base.group_user,1,0,0,0
-access_methode_apps_category_system,methode.apps.category system,model_methode_apps_category,base.group_system,1,1,1,1

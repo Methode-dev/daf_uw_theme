@@ -1,0 +1,155 @@
+// ---------------------------------------------------------------------------
+// List loading: skeleton, reload shimmer, row enter (list_loading.js has the
+// seams and the reasoning; this file is only how it looks).
+//
+// One material for both waiting states: a --m-bg-secondary bar (the palette's
+// "group header" grey, so it reads as structure, not content) with a
+// --m-bg-card highlight sweeping across it.  Flat, no blur, no shadow — §6
+// applies to placeholders too.
+//
+//   .m-list-skeleton    first load, markup from list_loading.xml
+//   .m-list-reloading   on the controller root while a reload is pending;
+//                       paints the bar onto the REAL cells (renderer stays
+//                       mounted — see the JS for why)
+//   .m-list-enter       on .o_list_renderer for ~700ms after rows arrive
+//
+// ⚠ Timings are mirrored in list_loading.js (RELOAD_SKELETON_DELAY,
+// ENTER_DURATION).  Change one, change the other.
+// ---------------------------------------------------------------------------
+
+$m-skeleton-bar-height: var(--m-space-3);
+$m-skeleton-sweep: linear-gradient(90deg, transparent 0%, var(--m-bg-card) 50%, transparent 100%);
+$m-enter-step: 30ms;
+$m-enter-stagger-rows: 10;
+
+// ⚠ x ONLY.  Animating the `background-position` shorthand would also pin y to
+// whatever the keyframe says, overriding the vertical centring of the bar
+// painted on real cells (reload state).  The second value is the bar layer of
+// that state, held still; a one-layer .m-skeleton-bar ignores it.
+@keyframes m-skeleton-sweep {
+    from { background-position-x: -100%, 0; }
+    to   { background-position-x:  200%, 0; }
+}
+
+// Appears only once the wait has lasted RELOAD_SKELETON_DELAY: a first load
+// that answers in 80ms should not flash grey bars.
+@keyframes m-skeleton-appear {
+    from { opacity: 0; }
+}
+
+@keyframes m-list-row-enter {
+    from {
+        opacity: 0;
+        transform: translateY(var(--m-space-1));
+    }
+}
+
+// --- Shared bar --------------------------------------------------------------
+.m-skeleton-bar {
+    display: block;
+    width: var(--m-skeleton-w, 60%);
+    height: $m-skeleton-bar-height;
+    border-radius: var(--m-radius-sm);
+    background-color: var(--m-bg-secondary);
+    background-image: $m-skeleton-sweep;
+    background-size: 50% 100%;
+    background-repeat: no-repeat;
+    animation: m-skeleton-sweep 1.4s ease-in-out infinite;
+
+    // A selector-column checkbox stand-in.
+    &--box {
+        --m-skeleton-w: #{$m-skeleton-bar-height};
+    }
+}
+
+// --- 1. First load -----------------------------------------------------------
+.m-list-skeleton {
+    background-color: var(--m-bg-card);
+    animation: m-skeleton-appear 200ms ease-out 150ms both;
+
+    .m-list-skeleton__table {
+        --bs-table-bg: transparent;
+
+        > thead > tr > th {
+            border-bottom: 1px solid rgba(17, 24, 39, 0.16);
+            padding-block: var(--m-space-2);
+            --m-skeleton-w: 45%;
+        }
+
+        > tbody > tr > td {
+            padding-block: var(--m-space-3);
+        }
+
+        // Varied widths, or a grid of identical bars reads as a pattern
+        // rather than as text.  Cycles by column, offset by row.
+        > tbody > tr:nth-child(odd) > td:nth-child(3n + 1),
+        > tbody > tr:nth-child(even) > td:nth-child(3n + 2) { --m-skeleton-w: 75%; }
+        > tbody > tr:nth-child(odd) > td:nth-child(3n + 2),
+        > tbody > tr:nth-child(even) > td:nth-child(3n) { --m-skeleton-w: 45%; }
+    }
+
+    .m-list-skeleton__selector {
+        width: var(--m-space-8);
+    }
+}
+
+// --- 2. Reload ---------------------------------------------------------------
+// The live rows, reskinned.  Only data cells: the selector checkbox and the
+// optional-columns toggle keep their place so the table does not jump.
+// pointer-events: the rows on screen are the OLD result — clicking one while
+// the new one loads would open a record from a list the user just left.
+.m-list-reloading .o_list_renderer .o_list_table > tbody {
+    > tr.o_data_row,
+    > tr.o_group_header {
+        pointer-events: none;
+    }
+
+    > tr.o_data_row > td.o_data_cell,
+    > tr.o_group_header > th {
+        color: transparent;
+        background-image: $m-skeleton-sweep,
+            linear-gradient(var(--m-bg-secondary), var(--m-bg-secondary));
+        background-size: 50% $m-skeleton-bar-height, var(--m-skeleton-w, 60%) $m-skeleton-bar-height;
+        background-position: -100% center, 0 center;
+        background-origin: content-box;
+        background-repeat: no-repeat;
+        animation: m-skeleton-sweep 1.4s ease-in-out infinite;
+
+        > * {
+            visibility: hidden;
+        }
+    }
+
+    > tr.o_data_row:nth-child(odd) > td.o_data_cell:nth-child(3n + 1) { --m-skeleton-w: 75%; }
+    > tr.o_data_row:nth-child(even) > td.o_data_cell:nth-child(3n) { --m-skeleton-w: 45%; }
+}
+
+// --- 3. Rows arrive ----------------------------------------------------------
+// ⚠ `both` fill mode: a row waiting for its stagger delay must already be at
+// the `from` frame, or it shows, vanishes, then fades in.
+// Group headers ride along so a grouped list enters as one piece.  The empty
+// filler rows Odoo pads short lists with have no class and are left alone.
+.m-list-enter .o_list_table > tbody > tr:is(.o_data_row, .o_group_header) {
+    animation: m-list-row-enter 240ms ease-out both;
+    animation-delay: #{($m-enter-stagger-rows - 1) * $m-enter-step};
+
+    @for $i from 1 through $m-enter-stagger-rows - 1 {
+        &:nth-child(#{$i}) {
+            animation-delay: #{($i - 1) * $m-enter-step};
+        }
+    }
+}
+
+// --- Reduced motion ------------------------------------------------------------
+// No sweep, no rise, no stagger, no delayed fade: the bars are static grey and
+// rows simply appear.  The STATES are kept — the skeleton still says "loading".
+// !important: the stagger rules above out-specify a plain selector here, and
+// this must win over all of them.
+@media (prefers-reduced-motion: reduce) {
+    .m-skeleton-bar,
+    .m-list-skeleton,
+    .m-list-reloading .o_list_renderer .o_list_table > tbody > tr > *,
+    .m-list-enter .o_list_table > tbody > tr {
+        animation: none !important;
+    }
+}

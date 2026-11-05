@@ -1,0 +1,143 @@
+// ---------------------------------------------------------------------------
+// Surfaces — cards, kanban records, form sheets, the display plate.
+//
+// LIQUID GLASS (see css_tokens.scss for the material and its five guard-rails).
+// Every surface here holds reading content, so every one uses the STRONG
+// glass weight — never the thinner chrome weight.  Cards repeat by the dozen,
+// so they are unfiltered panes (%m-glass-pane); the blur would be invisible
+// over the soft backdrop and expensive on scroll.
+//
+// History: these were flat #FFFFFF with a half-ink outline and a 1px HARD
+// zero-blur offset shadow, measured off asset 03 (README, "Material language").
+// ---------------------------------------------------------------------------
+
+%m-surface {
+    @extend %m-glass-pane;
+}
+
+// Full marketing-weight card.  Used for dashboard tiles and anywhere a
+// standalone content card is wanted.  Cards are the one place more padding is
+// correct (§6), so this is the exception to §8, not a violation of it.
+.m-card {
+    @extend %m-surface;
+    border-radius: var(--m-radius-card);
+    padding: var(--m-space-6);
+}
+
+// Kanban records take the same material at their own scale.  Only the radius
+// changes: the measured 34px belongs to a ~598x470 marketing card and reads
+// bulbous on a ~300x150 record.  Surface, outline and shadow are identical,
+// which is what keeps them one family with .m-card.
+//
+// ⚠ BOTH `:not()` GUARDS ARE LOAD-BEARING — copy them onto any rule added here.
+//
+//   .o_kanban_ghost      kanban_renderer.xml:115 emits SEVEN empty divs
+//                        (`t-foreach="[,,,,,,]"`) to space the final row.  They
+//                        carry .o_kanban_record but have no content, so giving
+//                        them a border and background renders each as a
+//                        collapsed bordered box — a heavy dark line across the
+//                        bottom of the view, stepped where the columns break.
+//                        It reads as a rendering artifact rather than a CSS
+//                        bug, which is what makes it expensive to find.
+//   .o-kanban-button-new the "New" affordance is also an .o_kanban_record; it
+//                        is a button, not a card, and must not get card skin.
+//
+// Odoo guards its own padding/border/background the same way
+// (kanban_record.scss:31) — this mirrors upstream rather than inventing a fix.
+//
+// This is deliberately NOT Aura's floating white card (Rule 1, §7): no
+// `margin: 0.875rem`, no `border-radius: 12px`, no `0 12px 30px` ambient blur.
+.o_kanban_renderer .o_kanban_record:not(.o_kanban_ghost):not(.o-kanban-button-new) {
+    @extend %m-surface;
+    border-radius: var(--m-radius-lg);
+    transition:
+        box-shadow var(--m-dur-base) var(--m-ease-out),
+        transform var(--m-dur-fast) var(--m-ease-spring),
+        background-color var(--m-dur-fast) var(--m-ease-out);
+
+    // A record is a door into a form: it lifts, its shadow opens, and the
+    // glint follows the pointer (glass_glint.js) — the glass control gesture.
+    &:hover {
+        transform: translateY(-2px);
+        background-color: var(--m-glass-bg-hover);
+        background-image: var(--m-glass-glint), var(--m-glass-sheen);
+        box-shadow: var(--m-glass-shadow-2);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        &:hover { transform: none; }
+    }
+}
+
+// Odoo's tag-colour strip (kanban_record.scss) is an absolutely-positioned
+// ::after with its own border-left/border-right and no radius of its own, so
+// it needs `top:0; bottom:0` to span the card independently of the flex
+// layout, then a manual radius patch to stop it poking past the record's
+// rounded corners. An inset box-shadow on the record itself avoids both: it's
+// drawn against the border-box, so it clips to --m-radius-lg for free.
+//
+// ⚠ Copies the two :not() guards from the base rule above — see its comment.
+@for $i from 2 through length($o-colors) {
+    $-color: nth($o-colors, $i);
+
+    .o_kanban_record.o_kanban_color_#{$i - 1}::after {
+        content: none;
+    }
+
+    .o_kanban_renderer .o_kanban_record.o_kanban_color_#{$i - 1}:not(.o_kanban_ghost):not(.o-kanban-button-new) {
+        box-shadow: inset 3px 0 0 $-color, var(--m-glass-shadow-1);
+
+        &:hover {
+            box-shadow: inset 3px 0 0 $-color, var(--m-glass-shadow-2);
+        }
+    }
+}
+
+// Form sheets share the card surface — §14 open question 3, resolved by the
+// owner in P5, and white (#FFFFFF) on the #F4F7FE page since the palette change.
+//
+// The compile-time half of this is $o-view-background-color (#FFFFFF), which
+// Odoo's own sheet rule already consumes.  This rule exists for the OTHER half:
+// reading --tbt-card-bg-dynamic keeps the surface live-configurable from the
+// Theme Settings dialog, which is the whole point of D3 (§9.2).  Deleting it
+// would leave the setting present but inert.
+//
+// No border-radius here: Odoo gives the sheet a top/bottom-only border
+// (`1px 0 1px 0`), and rounding corners on a partial border looks broken.
+// The sheet: a glass pane, UNFROSTED on purpose — it contains many2one
+// autocompletes (position:fixed inside their field), and a backdrop-filter
+// here would make the sheet their containing block (guard-rail 3).  Nothing
+// scrolls under it anyway; the frost lives on the sticky statusbar above it.
+// Content weight keeps every field label ≥ 5.1:1 (guard-rail 1).
+.o_form_view .o_form_sheet {
+    @include m-glass(var(--m-glass-bg-strong));
+    border-color: var(--m-glass-border);
+}
+
+// --- Display plate (asset 02) ----------------------------------------------
+// A SOLID ink plate on purpose: it is a title, and white on ink (17.7:1) is
+// the one contrast glass must never dilute.  The urbanist detached offset
+// outline (an ::after 4px down) is gone; the plate floats like everything else.
+.m-display-title {
+    display: inline-block;
+    background-color: var(--m-text);
+    color: #FFFFFF;
+    border-radius: var(--m-radius-control);
+    padding: var(--m-space-3) var(--m-space-6);
+    font-weight: 700;
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.14), var(--m-elev-2);
+}
+
+// --- Circular action affordance (asset 03) ---------------------------------
+// The black circle carrying the arrow next to "En savoir plus".
+.m-cta-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--m-radius-pill);
+    background-color: var(--m-text);
+    color: #FFFFFF;
+    flex: 0 0 auto;
+}

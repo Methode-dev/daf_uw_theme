@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+  <!--
+    Import / Export buttons beside "New" (data_transfer_buttons.js has the why).
+
+    Placed in the `control-panel-always-buttons` slot of both views: the
+    ControlPanel renders it inside .o_control_panel_main_buttons right after
+    the create button, and on small screens it folds that same slot into its
+    "More" dropdown (dropdownifyButtons) — so mobile is handled by core.
+    Appended AFTER the view's own `display="always"` header buttons, so a
+    model's business buttons keep the spot closest to "New".
+
+    `t-if="!env.inDialog"`: no Import/Export inside dialogs (the x2many "Add a
+    line" picker is the common one) — clutter in a record picker.
+    Export gets the controller's own exportRecords() and isExportEnable, so it
+    opens core's ExportDataDialog for the selection, or for the whole domain
+    when nothing is selected; it stays while records are selected.  Import
+    hides itself while records are selected (hasSelection).  See the JS header.
+
+    Icons are core's own for the two items (fa-download / fa-upload), so users
+    who knew the cog recognise them.  Short labels, core wording as the
+    tooltip; both are core source strings, so their translations already exist.
+  -->
+  <t t-name="daf_uw_theme.ListView.DataTransfer" t-inherit="web.ListView" t-inherit-mode="extension">
+    <xpath expr="//t[@t-set-slot='control-panel-always-buttons']" position="inside">
+      <t t-if="!env.inDialog" t-component="mDataTransferButtons" canExport="!!isExportEnable" onExport="() => this.exportRecords()" hasSelection="!!hasSelectedRecords"/>
+    </xpath>
+  </t>
+
+  <t t-name="daf_uw_theme.KanbanView.DataTransfer" t-inherit="web.KanbanView" t-inherit-mode="extension">
+    <xpath expr="//t[@t-set-slot='control-panel-always-buttons']" position="inside">
+      <t t-if="!env.inDialog" t-component="mDataTransferButtons" canExport="!!isExportEnable" onExport="() => this.exportRecords()" hasSelection="!!hasSelectedRecords"/>
+    </xpath>
+  </t>
+
+  <t t-name="daf_uw_theme.DataTransferButtons">
+    <button t-if="showImport" type="button"
+            class="btn btn-secondary o_button_import m-cp-data-button"
+            t-att-data-tooltip="importTitle" t-att-aria-label="importTitle"
+            t-on-click="onImport">
+      <i class="fa fa-fw fa-download" aria-hidden="true"/>
+      <span class="m-cp-data-button__label">Import</span>
+    </button>
+    <button t-if="showExport" type="button"
+            class="btn btn-secondary o_button_export m-cp-data-button"
+            t-att-data-tooltip="exportTitle" t-att-aria-label="exportTitle"
+            t-on-click="onExportClick">
+      <i class="fa fa-fw fa-upload" aria-hidden="true"/>
+      <span class="m-cp-data-button__label">Export</span>
+    </button>
+  </t>
+
+</templates>

@@ -1,0 +1,194 @@
+// ---------------------------------------------------------------------------
+// Control panel: the Import/Export buttons and the single back-link breadcrumb.
+// Markup in data_transfer_buttons.xml and breadcrumbs.xml; the reasoning is in
+// those files' headers.
+//
+// Deliberately thin.  The buttons are plain `.btn-secondary`, so they already
+// carry the raised, hard-shadow secondary material from buttons.scss — this
+// file only spaces icon and label.  Re-declaring the button skin here would
+// fork it from every other secondary button in the product.
+// ---------------------------------------------------------------------------
+
+// --- Layout: title ABOVE the buttons when they do not fit side by side -----------
+// Core (search/control_panel/control_panel.{xml,scss}): .o_control_panel_
+// breadcrumbs holds [ New + Import/Export ][ breadcrumb/title ] in ONE
+// non-wrapping row.  From lg up the main row is [breadcrumbs][search][pager]
+// with `flex-lg-nowrap`, breadcrumbs and pager each `flex: 1` (equal shares)
+// and the search box at least MIN(500/600px, 33%).  Measured on "Cabinets de
+// courtage" with Import/Export: the title is truncated below ~1650px, its
+// block is squeezed to 0px below ~1300px, and at 992–1200px "Exporter" runs
+// under the search box.  At md (768–991) it happens to fit, until a longer title.
+//
+// ⚠ NO BREAKPOINT, ON PURPOSE.  Whether the row fits depends on the title's
+// length and on which buttons the view has, not on the viewport alone; any
+// fixed breakpoint either stacks too early or still breaks on a longer title.
+// Instead the block WRAPS, and `wrap-reverse` decides where:
+//   - fits      -> one line, [buttons][title], exactly core's order;
+//   - too tight -> the title moves to the line ABOVE, buttons stay below.
+// (wrap-reverse stacks lines bottom-up, so the first line — the buttons —
+// ends up underneath and the overflow — the title — on top.)
+//
+// ⚠ `min-width: min-content` is what stops the squeeze.  It replaces core's
+// flat 200px floor: the block can no longer be made narrower than its
+// widest unbreakable piece, the button group (flex-shrink: 0 below), so the
+// buttons never slide under the search box again — the pager block (the
+// other `flex: 1`) gives way instead.
+// ⚠ The title's max-width is in vw, not %: a percentage is ignored while the
+// browser computes min-content, and an uncapped 80-character title would then
+// become the block's floor and crush the search box instead.  Past the cap
+// the title truncates (core's text-truncate), as it always has.
+//
+// md and up only: below md Odoo moves the breadcrumbs into the navbar
+// (t-portal, see breadcrumbs.xml), and this block holds only the buttons.
+// Search box layout inside .o_control_panel_actions is the search work's
+// (static/src/search/) and is not touched here.
+@include media-breakpoint-up(md) {
+    .o_control_panel .o_control_panel_breadcrumbs {
+        flex-wrap: wrap-reverse;
+        row-gap: var(--m-space-2);
+        min-width: min-content;
+
+        > .o_control_panel_main_buttons {
+            flex-shrink: 0;
+        }
+
+        > .o_breadcrumb {
+            max-width: 40vw;
+            // ⚠ The back link and the title are ONE block, kept together.
+            // Core gives .o_breadcrumb `align-self-stretch` +
+            // `justify-content-between` (column from md up): it is stretched
+            // to the full height of the control panel row — two search rows
+            // tall from lg up — and the back link is pushed to its top, the
+            // title to its bottom (QA: a large gap at 1600px).  Centred, both
+            // stay adjacent at any row height.  !important: those two are
+            // Bootstrap utilities, themselves !important.
+            justify-content: center !important;
+            align-self: center !important;
+        }
+    }
+
+    // The save/discard indicator now lives INSIDE the title row (re-slotted
+    // in breadcrumbs.xml so it wraps with the title).  That row is core's
+    // `text-truncate` flex box: the record name must be what gives way, never
+    // the two icon buttons.
+    .o_breadcrumb .o_form_status_indicator {
+        flex-shrink: 0;
+    }
+}
+
+// --- One action row: search on the same line as New / Import / Export --------
+// From lg up core lays the main row out as [breadcrumbs][search][pager] with
+// `align-items-lg-start`.  Once the breadcrumbs block wraps (title above the
+// buttons, see above), the buttons drop to its SECOND line while the search
+// stays pinned to the top — two rows that read as unrelated.
+//
+// Everything is bottom-aligned instead, so the buttons, the search box and its
+// pickers, the pager and the view switcher share one baseline: the action row.
+// The title alone sits above it.
+//
+// ⚠ align-self on the children, NOT align-items on the row: the row's
+// `align-items-lg-start` is a Bootstrap utility (!important), and align-self
+// beats align-items without spending from the !important budget.
+//
+// ⚠ `align-content: flex-start` on the breadcrumbs block is what keeps the
+// buttons at the BOTTOM when the search grows taller (facets wrapping inside
+// the box): the block is multi-line (wrap-reverse), and for wrap-reverse the
+// cross-start edge is the bottom — so its lines pack downward, never spread.
+//
+// Below lg the row already wraps the search onto its own last line
+// (order-2 + w-100 in core), i.e. it is already at the bottom.
+@include media-breakpoint-up(lg) {
+    .o_control_panel .o_control_panel_main {
+        > .o_control_panel_breadcrumbs,
+        > .o_control_panel_actions,
+        > .o_control_panel_navigation {
+            align-self: flex-end;
+        }
+
+        > .o_control_panel_breadcrumbs {
+            align-content: flex-start;
+        }
+    }
+}
+
+// --- Import / Export -----------------------------------------------------------
+.m-cp-data-button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--m-space-1);
+    white-space: nowrap;
+}
+
+// --- Back link ("← Previous page") ----------------------------------------------
+// Secondary text, not the stock bold link blue: it is navigation chrome, and
+// the current page name right under it must stay the visual anchor.  Primary
+// dark on hover (never --m-accent for text — 3.28:1, see css_tokens.scss).
+.o_breadcrumb .m-breadcrumb-back {
+    // ⚠ Transparent, and as wide as its link.  Bootstrap's `.breadcrumb`
+    // paints `--breadcrumb-bg`, which Odoo compiles to $body-bg (#F4F7FE here)
+    // — a COMPILE-time colour, so it cannot follow whatever is painted behind
+    // the control panel at runtime (the glass gradient, Theme Settings).  And
+    // as a child of core's column-direction .o_breadcrumb it was stretched to
+    // the column's full width (214px for a 143px link).  Together: a pale slab
+    // sticking out to the right of "← Previous" (QA round 2).
+    // `flex-start` sizes the <ol> to its content; max-width keeps core's
+    // truncation working when the previous page's name is long.
+    &.breadcrumb {
+        --breadcrumb-bg: transparent;
+        background-color: transparent;
+        align-self: flex-start;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    .breadcrumb-item > a,
+    &.o_back_button {
+        color: var(--m-text-secondary);
+        font-weight: 600;
+        text-decoration: none;
+
+        &:hover,
+        &:focus-visible {
+            color: var(--m-primary-dark);
+        }
+    }
+
+    // ⚠ Desktop: the <a> stays a block with core's `text-truncate`, and the
+    // icon is an inline sibling of the name — NOT a flex row.  The name is a
+    // bare text node; inside a flex container it becomes an anonymous flex
+    // item and `text-overflow: ellipsis` stops applying to it.
+    .m-breadcrumb-back__icon {
+        margin-right: var(--m-space-1);
+    }
+
+    // Mobile button: its label is its own element, so flex is safe here.
+    &.o_back_button {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--m-space-1);
+        min-width: 0;
+
+        > .oi-arrow-left {
+            flex-shrink: 0;
+        }
+    }
+}
+
+// Small screens: the back button now carries the previous page's name.  It
+// shares one row with the current page name (stock `flex-row` below md), so it
+// is capped — the current page wins the space, the back link truncates first.
+// ⚠ flex-shrink: 0 + max-width, not flex-shrink: 1.  The sibling holding the
+// current name is itself `text-truncate` with no basis, so with both allowed
+// to shrink the back button lost first and showed "Clie…" on an empty row.
+// This way it takes its natural width, up to the cap, and truncates only past it.
+// ⚠ The cap is in vw, not %: in the navbar row .o_breadcrumb is sized by its
+// content, so a percentage resolved against it (≈170px) and capped the link
+// at ~68px.
+.o_breadcrumb .m-breadcrumb-back--small {
+    max-width: 40vw;
+    flex-shrink: 0;
+
+    .m-breadcrumb-back__label {
+        min-width: 0;
+    }
+}
