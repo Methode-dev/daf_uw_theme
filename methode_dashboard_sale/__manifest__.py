@@ -5,11 +5,11 @@
     'summary': "Quotation and order widgets for the Méthode home dashboard",
     'description': "Contributes the sales widgets, stat tile and shortcut to the "
                    "Methode home dashboard. Auto-installs when both "
-                   "methode_theme and sale are present.",
+                   "daf_uw_theme and sale are present.",
     'author': 'Méthode - Progiciel sur mesure',
     'website': 'https://methode.dev',
     'license': 'LGPL-3',
-    'depends': ['methode_theme', 'sale'],
+    'depends': ['daf_uw_theme', 'sale'],
     'data': [
         'data/dashboard_widget_type_data.xml',
     ],

@@ -5,6 +5,10 @@ from odoo.http import request
 
 from .res_company import (
     DEFAULT_BRAND,
+    DEFAULT_DASHBOARD_CARD_1,
+    DEFAULT_DASHBOARD_CARD_2,
+    DEFAULT_DASHBOARD_CARD_3,
+    DEFAULT_DASHBOARD_CARD_4,
     METHODE_BG_PRIMARY,
     METHODE_CARD_BG,
     METHODE_TOPBAR_BG,
@@ -30,10 +34,10 @@ class IrHttp(models.AbstractModel):
                 'topbar_text': company.tbt_topbar_text or METHODE_TOPBAR_TEXT,
                 'content_bg': company.tbt_content_bg or METHODE_BG_PRIMARY,
                 'card_bg': company.tbt_card_bg or METHODE_CARD_BG,
-                'dashboard_card_1': company.tbt_dashboard_card_1_color or '#000000',
-                'dashboard_card_2': company.tbt_dashboard_card_2_color or '#6D6D6D',
-                'dashboard_card_3': company.tbt_dashboard_card_3_color or '#FAA140',
-                'dashboard_card_4': company.tbt_dashboard_card_4_color or '#E9DBCA',
+                'dashboard_card_1': company.tbt_dashboard_card_1_color or DEFAULT_DASHBOARD_CARD_1,
+                'dashboard_card_2': company.tbt_dashboard_card_2_color or DEFAULT_DASHBOARD_CARD_2,
+                'dashboard_card_3': company.tbt_dashboard_card_3_color or DEFAULT_DASHBOARD_CARD_3,
+                'dashboard_card_4': company.tbt_dashboard_card_4_color or DEFAULT_DASHBOARD_CARD_4,
                 'dashboard_card_pattern': not company.tbt_dashboard_card_solid,
                 'loading_enabled': company.tbt_loading_enabled,
                 'loading_text': company.tbt_loading_text or '#FFFFFF',
@@ -62,7 +66,7 @@ def _hex_to_rgb(hex_color):
     return ','.join(str(int(v[i:i + 2], 16)) for i in (0, 2, 4))
 
 
-def _darken(hex_color, factor=0.55):
+def _darken(hex_color, factor=0.70):
     v = (hex_color or DEFAULT_BRAND).lstrip('#')
     rgb = [max(0, min(255, int(int(v[i:i + 2], 16) * factor))) for i in (0, 2, 4)]
     return '#%02X%02X%02X' % tuple(rgb)

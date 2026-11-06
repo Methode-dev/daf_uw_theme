@@ -1,0 +1,888 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* daf_uw_theme
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: daf_uw_theme
+#. odoo-python
+#: code:addons/daf_uw_theme/models/methode_dashboard_insight.py:0
+msgid "%s activities are overdue"
+msgstr "%s activités sont en retard"
+
+#. modules: methode_dashboard_account, daf_uw_theme
+#. odoo-javascript
+#. odoo-python
+#: code:addons/daf_uw_theme/static/src/dashboard/dashboard.js:0
+msgid "%s days late"
+msgstr "%s jours de retard"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/search/search_bar_patch.js:0
+msgid "%s filters"
+msgstr "%s filtres"
+
+#. module: daf_uw_theme
+#. odoo-python
+#: code:addons/daf_uw_theme/models/mail_activity.py:0
+msgid "%s overdue"
+msgstr "%s en retard"
+
+#. module: daf_uw_theme
+#. odoo-python
+#: code:addons/daf_uw_theme/models/methode_dashboard_insight.py:0
+msgid "1 activity is overdue"
+msgstr "1 activité est en retard"
+
+#. modules: methode_dashboard_account, daf_uw_theme
+#. odoo-javascript
+#. odoo-python
+#: code:addons/daf_uw_theme/static/src/dashboard/dashboard.js:0
+msgid "1 day late"
+msgstr "1 jour de retard"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/search/search_bar_patch.js:0
+msgid "1 filter"
+msgstr "1 filtre"
+
+#. module: daf_uw_theme
+#. odoo-python
+#: code:addons/daf_uw_theme/models/mail_activity.py:0
+msgid "1 overdue"
+msgstr "1 en retard"
+
+#. module: daf_uw_theme
+#: model_terms:ir.ui.view,arch_db:daf_uw_theme.res_config_settings_view_form_methode_dashboard
+msgid "<span>days past due</span>"
+msgstr "<span>jours de retard</span>"
+
+#. module: daf_uw_theme
+#: model_terms:ir.ui.view,arch_db:daf_uw_theme.res_config_settings_view_form_methode_dashboard
+msgid "<span>days without an update</span>"
+msgstr "<span>jours sans mise à jour</span>"
+
+#. module: daf_uw_theme
+#: model:ir.model.constraint,message:daf_uw_theme.constraint_methode_dashboard_widget_col_span_range
+msgid "A dashboard widget must span between 1 and 3 columns."
+msgstr "Un widget du tableau de bord doit occuper entre 1 et 3 colonnes."
+
+#. module: daf_uw_theme
+#: model:ir.model.constraint,message:daf_uw_theme.constraint_methode_dashboard_preferences_user_uniq
+msgid "A user can only have one set of dashboard preferences."
+msgstr "Un utilisateur ne peut avoir qu'un seul jeu de préférences de tableau de bord."
+
+#. module: daf_uw_theme
+#: model:ir.model.constraint,message:daf_uw_theme.constraint_methode_dashboard_widget_type_col_span_range
+msgid "A widget's default width must be between 1 and 3 columns."
+msgstr "La largeur par défaut d'un widget doit être comprise entre 1 et 3 colonnes."
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,field_description:daf_uw_theme.field_methode_dashboard_widget_type__active
+msgid "Active"
+msgstr "Actif"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields.selection,name:daf_uw_theme.selection__methode_dashboard_widget_type__render__activities
+msgid "Activities"
+msgstr "Activités"
+
+#. module: daf_uw_theme
+#: model:methode.dashboard.widget.type,name:daf_uw_theme.dashboard_stat_activities_due
+msgid "Activities Due"
+msgstr "Activités à échéance"
+
+#. module: daf_uw_theme
+#. odoo-python
+#: code:addons/daf_uw_theme/models/mail_activity.py:0
+msgid "Activities due"
+msgstr "Activités à échéance"
+
+#. module: daf_uw_theme
+#. odoo-python
+#: code:addons/daf_uw_theme/models/mail_activity.py:0
+#: code:addons/daf_uw_theme/models/methode_dashboard_focus.py:0
+#: model:ir.model,name:daf_uw_theme.model_mail_activity
+msgid "Activity"
+msgstr "Activité"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/dashboard/dashboard.xml:0
+msgid "Add"
+msgstr "Ajouter"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/dashboard/dashboard.xml:0
+msgid "Add a widget to get started."
+msgstr "Ajoutez un widget pour commencer."
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/dashboard/dashboard.xml:0
+msgid "Add widget"
+msgstr "Ajouter un widget"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/dashboard/dashboard.xml:0
+msgid "Added"
+msgstr "Ajouté"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/dashboard/dashboard.xml:0
+msgid "Alerts"
+msgstr "Alertes"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,help:daf_uw_theme.field_res_company__methode_dashboard_stalled_days
+#: model:ir.model.fields,help:daf_uw_theme.field_res_config_settings__methode_dashboard_stalled_days
+#: model_terms:ir.ui.view,arch_db:daf_uw_theme.res_config_settings_view_form_methode_dashboard
+msgid "An open opportunity with no update for this many days raises a dashboard banner."
+msgstr "Une opportunité ouverte sans mise à jour depuis ce nombre de jours déclenche une bannière sur le tableau de bord."
+
+#. module: daf_uw_theme
+#: model_terms:ir.ui.view,arch_db:daf_uw_theme.res_config_settings_view_form_methode_dashboard
+msgid "An unpaid customer invoice raises a dashboard banner once it is this many days past due."
+msgstr "Une facture client impayée déclenche une bannière sur le tableau de bord dès qu'elle dépasse ce nombre de jours de retard."
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,help:daf_uw_theme.field_res_company__methode_dashboard_overdue_days
+#: model:ir.model.fields,help:daf_uw_theme.field_res_config_settings__methode_dashboard_overdue_days
+msgid "An unpaid customer invoice raises a dashboard banner once it is this many days past its due date."
+msgstr "Une facture client impayée déclenche une bannière sur le tableau de bord dès qu'elle dépasse ce nombre de jours après sa date d'échéance."
+
+#. module: daf_uw_theme
+#: model:ir.model.fields.selection,name:daf_uw_theme.selection__methode_dashboard_widget_type__render__chart
+msgid "Chart"
+msgstr "Graphique"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/search/search_bar.xml:0
+msgid "Clear search"
+msgstr "Effacer la recherche"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,field_description:daf_uw_theme.field_methode_dashboard_widget_type__code
+msgid "Code"
+msgstr "Code"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,field_description:daf_uw_theme.field_methode_dashboard_widget__col_span
+msgid "Col Span"
+msgstr "Colonnes occupées"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,help:daf_uw_theme.field_methode_dashboard_widget__col_span
+msgid "Columns occupied, 1 to 3."
+msgstr "Colonnes occupées, de 1 à 3."
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,help:daf_uw_theme.field_methode_dashboard_widget_type__default_col_span
+msgid "Columns this widget occupies when first added, 1 to 3."
+msgstr "Colonnes occupées par ce widget lors de son premier ajout, de 1 à 3."
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/dashboard/dashboard.xml:0
+#: model:ir.model.fields.selection,name:daf_uw_theme.selection__methode_dashboard_preferences__layout_density__comfortable
+msgid "Comfortable"
+msgstr "Confortable"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/dashboard/dashboard.xml:0
+#: model:ir.model.fields.selection,name:daf_uw_theme.selection__methode_dashboard_preferences__layout_density__compact
+msgid "Compact"
+msgstr "Compact"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,field_description:daf_uw_theme.field_methode_dashboard_widget__config_json
+msgid "Configuration"
+msgstr "Configuration"
+
+#. module: daf_uw_theme
+#: model:methode.dashboard.widget.type,name:daf_uw_theme.dashboard_widget_type_recent
+msgid "Continue Working"
+msgstr "Continuer le travail"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields.selection,name:daf_uw_theme.selection__methode_dashboard_widget_type__render__custom
+msgid "Custom"
+msgstr "Personnalisé"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/dashboard/dashboard.xml:0
+msgid "Customize"
+msgstr "Personnaliser"
+
+#. module: daf_uw_theme
+#: model_terms:ir.ui.view,arch_db:daf_uw_theme.res_config_settings_view_form_methode_dashboard
+msgid "Dashboard Alerts"
+msgstr "Alertes du tableau de bord"
+
+#. module: daf_uw_theme
+#: model:ir.model,name:daf_uw_theme.model_methode_dashboard_focus
+msgid "Dashboard Focus Collector"
+msgstr "Collecteur de focus du tableau de bord"
+
+#. module: daf_uw_theme
+#: model:ir.model,name:daf_uw_theme.model_methode_dashboard_insight
+msgid "Dashboard Insights"
+msgstr "Analyses du tableau de bord"
+
+#. module: daf_uw_theme
+#: model:ir.model,name:daf_uw_theme.model_methode_dashboard_preferences
+msgid "Dashboard Preferences"
+msgstr "Préférences du tableau de bord"
+
+#. module: daf_uw_theme
+#: model:ir.model,name:daf_uw_theme.model_methode_dashboard_recent
+msgid "Dashboard Recent Records Collector"
+msgstr "Collecteur des enregistrements récents du tableau de bord"
+
+#. module: daf_uw_theme
+#: model:ir.model,name:daf_uw_theme.model_methode_dashboard_shortcut
+msgid "Dashboard Shortcuts"
+msgstr "Raccourcis du tableau de bord"
+
+#. module: daf_uw_theme
+#: model:ir.model,name:daf_uw_theme.model_methode_dashboard_widget
+msgid "Dashboard Widget Placement"
+msgstr "Emplacement du widget de tableau de bord"
+
+#. module: daf_uw_theme
+#: model:ir.model,name:daf_uw_theme.model_methode_dashboard_widget_type
+msgid "Dashboard Widget Type"
+msgstr "Type de widget de tableau de bord"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,field_description:daf_uw_theme.field_methode_dashboard_widget_type__default_col_span
+msgid "Default Width"
+msgstr "Largeur par défaut"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/dashboard/dashboard.xml:0
+msgid "Density"
+msgstr "Densité"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,field_description:daf_uw_theme.field_methode_dashboard_widget_type__description
+msgid "Description"
+msgstr "Description"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/dashboard/dashboard.xml:0
+msgid "Dismiss for today"
+msgstr "Ignorer pour aujourd'hui"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,field_description:daf_uw_theme.field_methode_dashboard_preferences__dismissed_json
+msgid "Dismissed Insights"
+msgstr "Analyses ignorées"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/dashboard/dashboard.xml:0
+msgid "Done"
+msgstr "Terminé"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/search/search_picker.js:0
+msgid "Favorites"
+msgstr "Favoris"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,field_description:daf_uw_theme.field_methode_dashboard_widget_type__fetch_method
+msgid "Fetch Method"
+msgstr "Méthode de récupération"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,field_description:daf_uw_theme.field_methode_dashboard_widget_type__fetch_model
+msgid "Fetch Model"
+msgstr "Modèle de récupération"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/search/search_picker.js:0
+msgid "Filter…"
+msgstr "Filtrer…"
+
+#. module: daf_uw_theme
+#: model:methode.dashboard.widget.type,group_name:daf_uw_theme.dashboard_stat_activities_due
+#: model:methode.dashboard.widget.type,group_name:daf_uw_theme.dashboard_widget_type_activities
+#: model:methode.dashboard.widget.type,group_name:daf_uw_theme.dashboard_widget_type_activity_trend
+#: model:methode.dashboard.widget.type,group_name:daf_uw_theme.dashboard_widget_type_focus
+#: model:methode.dashboard.widget.type,group_name:daf_uw_theme.dashboard_widget_type_recent
+msgid "General"
+msgstr "Général"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/dashboard/dashboard.js:0
+msgid "Good afternoon"
+msgstr "Bon après-midi"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/dashboard/dashboard.js:0
+msgid "Good evening"
+msgstr "Bonsoir"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/dashboard/dashboard.js:0
+msgid "Good morning"
+msgstr "Bonjour"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields.selection,name:daf_uw_theme.selection__methode_dashboard_widget_type__zone__grid
+msgid "Grid"
+msgstr "Grille"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,field_description:daf_uw_theme.field_methode_dashboard_widget_type__group_name
+msgid "Group"
+msgstr "Groupe"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/search/search_picker.js:0
+msgid "Group by…"
+msgstr "Regrouper par…"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,help:daf_uw_theme.field_methode_dashboard_widget_type__group_name
+msgid "Heading the picker files this widget under, e.g. 'Accounting'."
+msgstr "En-tête sous lequel ce widget est classé dans le sélecteur, par ex. « Comptabilité »."
+
+#. module: daf_uw_theme
+#: model:ir.actions.client,name:daf_uw_theme.action_home_dashboard
+#: model:ir.ui.menu,name:daf_uw_theme.menu_home_dashboard_root
+msgid "Homepage"
+msgstr "Accueil"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,help:daf_uw_theme.field_methode_dashboard_preferences__row_limit
+msgid "How many rows a list widget shows before it offers '+ N others'."
+msgstr "Nombre de lignes qu'un widget liste affiche avant de proposer « + N autres »."
+
+#. module: daf_uw_theme
+#: model:methode.dashboard.widget.type,description:daf_uw_theme.dashboard_widget_type_activity_trend
+msgid "How your workload has moved over recent weeks"
+msgstr "L'évolution de votre charge de travail ces dernières semaines"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,field_description:daf_uw_theme.field_methode_dashboard_widget_type__icon
+msgid "Icon"
+msgstr "Icône"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,help:daf_uw_theme.field_methode_dashboard_widget_type__icon
+msgid "Icon class, e.g. 'fa-bolt'.  Font Awesome 6 is available through aura_backend_theme's shim."
+msgstr "Classe de l'icône, par ex. « fa-bolt ». Font Awesome 6 est disponible via le shim d'aura_backend_theme."
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,field_description:daf_uw_theme.field_methode_dashboard_widget_type__is_default
+msgid "In Default Layout"
+msgstr "Dans la mise en page par défaut"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,help:daf_uw_theme.field_methode_dashboard_widget_type__is_default
+msgid "Included when a user's dashboard is first created, or reset."
+msgstr "Inclus lors de la première création du tableau de bord d'un utilisateur, ou lors de sa réinitialisation."
+
+#. module: daf_uw_theme
+#. odoo-python
+#: code:addons/daf_uw_theme/models/mail_activity.py:0
+msgid "Later"
+msgstr "Plus tard"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,field_description:daf_uw_theme.field_methode_dashboard_preferences__layout_density
+msgid "Layout Density"
+msgstr "Densité de la mise en page"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields.selection,name:daf_uw_theme.selection__methode_dashboard_widget_type__render__list
+msgid "List"
+msgstr "Liste"
+
+#. module: daf_uw_theme
+#: model_terms:ir.ui.view,arch_db:daf_uw_theme.webclient_bootstrap_boot_loader
+msgid "Loading"
+msgstr "Chargement"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/dashboard/dashboard.xml:0
+msgid "Mark done"
+msgstr "Marquer comme fait"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,help:daf_uw_theme.field_methode_dashboard_widget_type__fetch_model
+msgid "Model exposing the fetch method the client calls over RPC, e.g. 'mail.activity'.  Empty means the widget has no data yet and renders the pending frame."
+msgstr "Modèle exposant la méthode de récupération appelée par le client via RPC, par ex. « mail.activity ». Vide signifie que le widget n'a pas encore de données et affiche le cadre en attente."
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/dashboard/dashboard.xml:0
+msgid "Move earlier"
+msgstr "Déplacer plus tôt"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/dashboard/dashboard.xml:0
+msgid "Move later"
+msgstr "Déplacer plus tard"
+
+#. module: daf_uw_theme
+#: model:methode.dashboard.widget.type,name:daf_uw_theme.dashboard_widget_type_activities
+msgid "My Activities"
+msgstr "Mes activités"
+
+#. module: daf_uw_theme
+#: model:methode.dashboard.widget.type,name:daf_uw_theme.dashboard_widget_type_activity_trend
+msgid "My Activity Trend"
+msgstr "Tendance de mes activités"
+
+#. module: daf_uw_theme
+#: model_terms:ir.ui.view,arch_db:daf_uw_theme.login_layout_brand
+msgid "Méthode"
+msgstr "Méthode"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,field_description:daf_uw_theme.field_methode_dashboard_widget_type__name
+msgid "Name"
+msgstr "Nom"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,field_description:daf_uw_theme.field_methode_dashboard_widget_type__needs_config
+msgid "Needs Config"
+msgstr "Nécessite une configuration"
+
+#. module: daf_uw_theme
+#. odoo-python
+#: code:addons/daf_uw_theme/models/methode_dashboard_insight.py:0
+msgid "New Contact"
+msgstr "Nouveau contact"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/dashboard/dashboard.xml:0
+msgid "No content yet — this widget is wired up in a later step."
+msgstr "Pas encore de contenu — ce widget sera connecté à une étape ultérieure."
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/search/search_picker.js:0
+msgid "No matching filter"
+msgstr "Aucun filtre correspondant"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/search/search_picker.js:0
+msgid "No matching grouping"
+msgstr "Aucun regroupement correspondant"
+
+#. module: daf_uw_theme
+#. odoo-python
+#: code:addons/daf_uw_theme/models/methode_dashboard_widget.py:0
+msgid "No overdue work and nothing due today."
+msgstr "Aucun travail en retard et rien à échéance aujourd'hui."
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/dashboard/dashboard.js:0
+msgid "Nothing here"
+msgstr "Rien ici"
+
+#. module: daf_uw_theme
+#. odoo-python
+#: code:addons/daf_uw_theme/models/methode_dashboard_widget.py:0
+msgid "Nothing needs you"
+msgstr "Rien ne nécessite votre attention"
+
+#. module: daf_uw_theme
+#. odoo-python
+#: code:addons/daf_uw_theme/models/methode_dashboard_widget.py:0
+msgid "Nothing recent"
+msgstr "Rien de récent"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#. odoo-python
+#: code:addons/daf_uw_theme/models/mail_activity.py:0
+#: code:addons/daf_uw_theme/static/src/dashboard/dashboard.xml:0
+msgid "Nothing scheduled"
+msgstr "Rien de prévu"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,help:daf_uw_theme.field_methode_dashboard_widget_type__description
+msgid "One line, shown in the add-widget picker."
+msgstr "Une ligne, affichée dans le sélecteur d'ajout de widget."
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,help:daf_uw_theme.field_methode_dashboard_widget__position
+msgid "Order within the grid."
+msgstr "Ordre dans la grille."
+
+#. modules: methode_dashboard_account, daf_uw_theme
+#. odoo-python
+#: code:addons/daf_uw_theme/models/mail_activity.py:0
+#: code:addons/daf_uw_theme/models/methode_dashboard_focus.py:0
+msgid "Overdue"
+msgstr "En retard"
+
+#. module: daf_uw_theme
+#: model_terms:ir.ui.view,arch_db:daf_uw_theme.res_config_settings_view_form_methode_dashboard
+msgid "Overdue Invoice Alert"
+msgstr "Alerte facture en retard"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,field_description:daf_uw_theme.field_res_company__methode_dashboard_overdue_days
+#: model:ir.model.fields,field_description:daf_uw_theme.field_res_config_settings__methode_dashboard_overdue_days
+msgid "Overdue Invoice Alert (days)"
+msgstr "Alerte facture en retard (jours)"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,help:daf_uw_theme.field_methode_dashboard_preferences__user_id
+msgid "Owner of these preferences.  One row per user, never shared."
+msgstr "Propriétaire de ces préférences. Une ligne par utilisateur, jamais partagée."
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,help:daf_uw_theme.field_methode_dashboard_widget__user_id
+msgid "Owner of this placement.  Layouts are per user, never shared."
+msgstr "Propriétaire de cet emplacement. Les mises en page sont propres à chaque utilisateur, jamais partagées."
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,help:daf_uw_theme.field_methode_dashboard_widget_type__needs_config
+msgid "Pass the placement's parsed config_json to the fetcher (custom widgets build their query from it)."
+msgstr "Transmet le config_json de l'emplacement, une fois analysé, au collecteur (les widgets personnalisés construisent leur requête à partir de celui-ci)."
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#. odoo-python
+#: code:addons/daf_uw_theme/models/methode_dashboard_insight.py:0
+#: code:addons/daf_uw_theme/static/src/dashboard/dashboard.js:0
+msgid "Plan an activity"
+msgstr "Planifier une activité"
+
+#. module: daf_uw_theme
+#. odoo-python
+#: code:addons/daf_uw_theme/models/mail_activity.py:0
+msgid "Planned"
+msgstr "Planifié"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/dashboard/dashboard.xml:0
+msgid "Plan…"
+msgstr "Planifier…"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,field_description:daf_uw_theme.field_methode_dashboard_widget__position
+msgid "Position"
+msgstr "Position"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/dashboard/dashboard.xml:0
+msgid "Preferences"
+msgstr "Préférences"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,help:daf_uw_theme.field_methode_dashboard_widget_type__fetch_method
+msgid "Public @api.model method on fetch_model returning this widget's payload.  MUST be public — Odoo refuses to dispatch RPC to _names."
+msgstr "Méthode @api.model publique sur fetch_model renvoyant les données de ce widget. DOIT être publique — Odoo refuse de router le RPC vers les méthodes _names."
+
+#. module: daf_uw_theme
+#. odoo-python
+#: code:addons/daf_uw_theme/models/methode_dashboard_widget.py:0
+msgid "Records you edit will show up here."
+msgstr "Les enregistrements que vous modifiez apparaîtront ici."
+
+#. module: daf_uw_theme
+#: model:methode.dashboard.widget.type,description:daf_uw_theme.dashboard_widget_type_recent
+msgid "Records you touched most recently"
+msgstr "Enregistrements consultés le plus récemment"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/dashboard/dashboard.xml:0
+msgid "Remove"
+msgstr "Supprimer"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,field_description:daf_uw_theme.field_methode_dashboard_widget_type__render
+msgid "Render"
+msgstr "Rendu"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/dashboard/dashboard.xml:0
+msgid "Restore defaults"
+msgstr "Restaurer les valeurs par défaut"
+
+#. module: daf_uw_theme
+#. odoo-python
+#: code:addons/daf_uw_theme/models/methode_dashboard_insight.py:0
+msgid "Review activities"
+msgstr "Consulter les activités"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,help:daf_uw_theme.field_methode_dashboard_widget_type__expected_rows
+msgid "Roughly how many rows this widget renders.  Used only to size its loading skeleton, so the page does not jump when data lands."
+msgstr "Nombre approximatif de lignes affichées par ce widget. Sert uniquement à dimensionner son squelette de chargement, afin que la page ne bouge pas à l'arrivée des données."
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,field_description:daf_uw_theme.field_methode_dashboard_preferences__row_limit
+msgid "Rows per Widget"
+msgstr "Lignes par widget"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/dashboard/dashboard.xml:0
+msgid "Rows per widget"
+msgstr "Lignes par widget"
+
+#. module: daf_uw_theme
+#: model:ir.model.constraint,message:daf_uw_theme.constraint_methode_dashboard_preferences_row_limit_range
+msgid "Rows per widget must be between 1 and 20."
+msgstr "Le nombre de lignes par widget doit être compris entre 1 et 20."
+
+#. module: daf_uw_theme
+#. odoo-python
+#: code:addons/daf_uw_theme/models/methode_dashboard_insight.py:0
+msgid "Schedule Activity"
+msgstr "Planifier une activité"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/search/search_model_patch.js:0
+msgid "Search"
+msgstr "Rechercher"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/navbar/navbar.js:0
+msgid "Search (%s)"
+msgstr "Rechercher (%s)"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/search/search_bar_patch.js:0
+msgid "Searches in: %s"
+msgstr "Recherche dans : %s"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/navbar/navbar.xml:0
+msgid "Search…"
+msgstr "Rechercher…"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,field_description:daf_uw_theme.field_methode_dashboard_widget_type__sequence
+msgid "Sequence"
+msgstr "Séquence"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/dashboard/dashboard.xml:0
+msgid "Shortcuts"
+msgstr "Raccourcis"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,field_description:daf_uw_theme.field_methode_dashboard_preferences__show_insights
+msgid "Show Insight Banners"
+msgstr "Afficher les bannières d'analyse"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,field_description:daf_uw_theme.field_methode_dashboard_preferences__show_shortcuts
+msgid "Show Shortcuts"
+msgstr "Afficher les raccourcis"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,field_description:daf_uw_theme.field_methode_dashboard_preferences__show_stats_row
+msgid "Show Stats Row"
+msgstr "Afficher la ligne de statistiques"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/search/search_bar_patch.js:0
+msgid "Show all active filters"
+msgstr "Afficher tous les filtres actifs"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,field_description:daf_uw_theme.field_methode_dashboard_widget_type__expected_rows
+msgid "Skeleton Rows"
+msgstr "Lignes du squelette"
+
+#. module: daf_uw_theme
+#: model:ir.model.constraint,message:daf_uw_theme.constraint_methode_dashboard_widget_type_expected_rows_positive
+msgid "Skeleton rows cannot be negative."
+msgstr "Le nombre de lignes du squelette ne peut pas être négatif."
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,help:daf_uw_theme.field_methode_dashboard_widget_type__code
+msgid "Stable technical key, e.g. 'activities'.  Referenced by fetchers and by the client; unlike the name it is never translated."
+msgstr "Clé technique stable, par ex. « activities ». Référencée par les collecteurs et par le client ; contrairement au nom, elle n'est jamais traduite."
+
+#. module: daf_uw_theme
+#: model_terms:ir.ui.view,arch_db:daf_uw_theme.res_config_settings_view_form_methode_dashboard
+msgid "Stalled Deal Alert"
+msgstr "Alerte affaire au point mort"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,field_description:daf_uw_theme.field_res_company__methode_dashboard_stalled_days
+#: model:ir.model.fields,field_description:daf_uw_theme.field_res_config_settings__methode_dashboard_stalled_days
+msgid "Stalled Deal Alert (days)"
+msgstr "Alerte affaire au point mort (jours)"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields.selection,name:daf_uw_theme.selection__methode_dashboard_widget_type__render__stat
+msgid "Stat"
+msgstr "Statistique"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/dashboard/dashboard.xml:0
+#: model:ir.model.fields.selection,name:daf_uw_theme.selection__methode_dashboard_widget_type__zone__stats
+msgid "Stats row"
+msgstr "Ligne de statistiques"
+
+#. module: daf_uw_theme
+#: model:ir.model.constraint,message:daf_uw_theme.constraint_methode_dashboard_widget_type_code_uniq
+msgid "The widget type code must be unique."
+msgstr "Le code du type de widget doit être unique."
+
+#. module: daf_uw_theme
+#. odoo-python
+#: code:addons/daf_uw_theme/models/mail_activity.py:0
+msgid "This week"
+msgstr "Cette semaine"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#. odoo-python
+#: code:addons/daf_uw_theme/models/mail_activity.py:0
+#: code:addons/daf_uw_theme/models/methode_dashboard_focus.py:0
+#: code:addons/daf_uw_theme/static/src/dashboard/dashboard.js:0
+msgid "Today"
+msgstr "Aujourd'hui"
+
+#. module: daf_uw_theme
+#: model:methode.dashboard.widget.type,name:daf_uw_theme.dashboard_widget_type_focus
+msgid "Today's Focus"
+msgstr "Focus du jour"
+
+#. module: daf_uw_theme
+#: model:methode.dashboard.widget.type,description:daf_uw_theme.dashboard_widget_type_focus
+msgid "Urgent items and things that need a decision"
+msgstr "Éléments urgents et sujets nécessitant une décision"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,field_description:daf_uw_theme.field_methode_dashboard_preferences__user_id
+#: model:ir.model.fields,field_description:daf_uw_theme.field_methode_dashboard_widget__user_id
+msgid "User"
+msgstr "Utilisateur"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/dashboard/dashboard.xml:0
+msgid "View all"
+msgstr "Tout voir"
+
+#. module: daf_uw_theme
+#: model:methode.dashboard.widget.type,description:daf_uw_theme.dashboard_widget_type_activities
+msgid "What is scheduled for you, grouped by due date"
+msgstr "Ce qui est prévu pour vous, groupé par date d'échéance"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,help:daf_uw_theme.field_methode_dashboard_widget_type__render
+msgid "Which client component renders this widget."
+msgstr "Composant client qui affiche ce widget."
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,field_description:daf_uw_theme.field_methode_dashboard_widget__widget_type_id
+msgid "Widget Type"
+msgstr "Type de widget"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#. odoo-python
+#: code:addons/daf_uw_theme/models/mail_activity.py:0
+#: code:addons/daf_uw_theme/static/src/dashboard/dashboard.xml:0
+msgid "You're all caught up."
+msgstr "Vous êtes à jour."
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/dashboard/dashboard.xml:0
+msgid "Your dashboard is empty."
+msgstr "Votre tableau de bord est vide."
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,field_description:daf_uw_theme.field_methode_dashboard_widget_type__zone
+msgid "Zone"
+msgstr "Zone"
+
+#. module: daf_uw_theme
+#. odoo-python
+#: code:addons/daf_uw_theme/models/mail_activity.py:0
+msgid "due today"
+msgstr "à échéance aujourd'hui"
+
+#. module: daf_uw_theme
+#: model:ir.model.fields,help:daf_uw_theme.field_methode_dashboard_widget_type__zone
+msgid "grid = a placeable widget; stats = a fixed KPI tile in the stats row."
+msgstr "grid = un widget positionnable ; stats = une tuile KPI fixe dans la ligne de statistiques."
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/dashboard/dashboard.js:0
+msgid "in %s days"
+msgstr "dans %s jours"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/dashboard/dashboard.js:0
+msgid "in 1 day"
+msgstr "dans 1 jour"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/dashboard/dashboard.xml:0
+msgid "more to review"
+msgstr "à consulter en plus"
+
+#. module: daf_uw_theme
+#. odoo-python
+#: code:addons/daf_uw_theme/models/mail_activity.py:0
+msgid "nothing due"
+msgstr "rien à échéance"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/dashboard/dashboard.xml:0
+msgid "others"
+msgstr "autres"

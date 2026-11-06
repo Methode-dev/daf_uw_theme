@@ -1,0 +1,196 @@
+// Liquid glass, CHROME weight (css_tokens.scss).  One pane for both rows: the
+// app row is told apart by its rules, not by a second fill, so the navbar
+// reads as one floating layer over the backdrop's top-left pool.
+.o_main_navbar {
+    --m-nav-menu-bg: transparent;
+    --m-nav-app-bg: transparent;
+    --m-nav-rule: var(--m-glass-hairline);
+
+    @include m-glass(var(--m-glass-bg), true, var(--m-glass-rim), $sheen: false);
+    border-bottom: 1px solid var(--m-glass-hairline);
+
+    flex-direction: column;
+    align-items: stretch;
+    height: auto;
+    padding: 0;
+}
+
+.m-nav-row {
+    display: flex;
+    align-items: center;
+    gap: var(--m-space-1);
+    min-width: 0;
+    padding: 0 var(--m-space-4);
+    box-sizing: content-box;
+    height: var(--o-navbar-height);
+}
+
+.m-nav-row .o_navbar_apps_menu .dropdown-toggle,
+.m-nav-row .o_menu_toggle {
+    --NavBar-entry-padding-left: 0;
+}
+
+.m-nav-row__menu {
+    --o-navbar-height: 48px;
+    background-color: var(--m-nav-menu-bg);
+}
+
+.m-nav-row__app {
+    --o-navbar-height: 40px;
+    --NavBar-entry-backgroundColor: transparent;
+    background-color: var(--m-nav-app-bg);
+    border-top: 1px solid var(--m-nav-rule);
+    border-bottom: 1px solid var(--m-nav-rule);
+
+    // ⚠ Collapsed when it has nothing to show — measured on small screens on
+    // the DAF dashboard: a 42px white band.  There, navbar.xml's moved nodes
+    // are all absent (the brand and app sections are desktop-only in
+    // web.NavBar), so the row's ONLY child is `.o_navbar_breadcrumbs`: the
+    // `d-contents` target the control panel t-portals the breadcrumbs into
+    // on small screens (see control_panel/breadcrumbs.xml).  A client action
+    // with no control panel (the dashboard) leaves that target empty.
+    // Hence the condition: no child other than that target, and the target
+    // itself empty.  The moment a list/form portals its breadcrumbs in, the
+    // second clause fails and the row is back — no JS, nothing to keep in
+    // sync.  On desktop the brand is always a child, so this never matches.
+    &:not(:has(> :not(.o_navbar_breadcrumbs))):not(:has(> .o_navbar_breadcrumbs > *)) {
+        display: none;
+    }
+}
+
+.m-nav-company {
+    display: flex;
+    align-items: center;
+    padding: 0 var(--m-space-3);
+    font-size: 1.2em;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.m-nav-search {
+    display: flex;
+    align-items: center;
+    gap: var(--m-space-2);
+    flex: 0 1 320px;
+    min-width: 0;
+    margin-left: var(--m-space-2);
+    padding: var(--m-space-1) var(--m-space-3);
+    border: 1px solid var(--m-glass-border);
+    border-radius: var(--m-radius-control);
+    background-color: var(--m-glass-bg-strong);
+    background-image: var(--m-glass-sheen);
+    box-shadow: var(--m-glass-shadow-1);
+    color: var(--m-text);
+    font: inherit;
+    font-size: 0.8125rem;
+    cursor: pointer;
+    transition:
+        border-color var(--m-dur-fast) var(--m-ease-out),
+        background-color var(--m-dur-fast) var(--m-ease-out);
+
+    &:hover {
+        background-color: var(--m-glass-bg-hover);
+        background-image: var(--m-glass-glint), var(--m-glass-sheen);
+        box-shadow: var(--m-glass-shadow-2);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--m-primary);
+        outline-offset: 2px;
+    }
+}
+
+.m-nav-search-label {
+    flex: 1 1 auto;
+    min-width: 0;
+    text-align: left;
+    opacity: 0.75;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.m-nav-search-hotkey {
+    flex: 0 0 auto;
+    padding: 1px var(--m-space-1);
+    border-radius: var(--m-radius-sm);
+    background-color: var(--m-bg-secondary);
+    color: var(--m-text-secondary);
+    font-size: 0.6875rem;
+}
+
+.m-nav-search-icon {
+    flex: 0 0 auto;
+    color: var(--m-text-secondary);
+}
+
+.o_main_navbar .o_menu_sections .dropdown-toggle::after {
+    content: "";
+    display: inline-block;
+    width: 0.38em;
+    height: 0.38em;
+    border: 0;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+
+    margin-left: var(--m-space-1);
+
+    transform: translateY(-0.15em) rotate(45deg);
+    vertical-align: middle;
+}
+
+// The apps dropdown (web.NavBar.AppsMenu, the oi-apps grid button) duplicates
+// muk_web_appsbar's sidebar, so it goes wherever the sidebar is on screen.
+//
+// ⚠ Hidden with CSS, NOT removed from the template, and only from `lg` up,
+// because the sidebar is not always there:
+//   * below `lg` MuK collapses the sidebar to zero width (appsbar.scss,
+//     media-breakpoint-down(md)) — the dropdown is then the only launcher;
+//   * a user can pick "invisible" as their sidebar type (res.users
+//     sidebar_type), which puts mk_sidebar_type_invisible on <body>.
+// The template keeps the node, so both cases fall back to stock for free.
+// (Below `md` Odoo renders its own mobile toggle instead of this dropdown.)
+@include media-breakpoint-up(lg) {
+    body:not(.mk_sidebar_type_invisible) .o_main_navbar .o_navbar_apps_menu {
+        display: none;
+    }
+}
+
+// --- Content under the bar ------------------------------------------------------
+// Owner call: the top bar must SHOW its glass — "scroll the home page: it is
+// neither transparent nor blurry".  It was both, but MuK's grid put the action
+// area in the row BELOW the navbar, so nothing ever scrolled beneath it and the
+// frost only had the still backdrop to work with.
+//
+// Now the action area spans the navbar's row as well (it starts at the top of
+// the window), the navbar is laid over it, and the action pads its own content
+// down by the navbar's height (--m-navbar-h, measured live by navbar.js).  At
+// rest the page sits exactly where it did; scrolled, it slides under the bar.
+//
+//  * The home page and every client action whose .o_action is the scroller get
+//    the full effect.  Views keep their control panel at the top, under the
+//    bar, and scroll inside .o_content below it — unchanged.
+//  * The sidebar keeps its own row: it does not scroll under anything.
+//  * ⚠ The action manager becomes a stacking context (z 0) under the navbar
+//    (z 1): without it, a sticky element inside a view (the form statusbar is
+//    z 1020) would compete with the navbar at the root and could paint over it.
+//    Popups still open above everything — Odoo renders them in the overlay
+//    container, outside the action manager.
+//  * --m-navbar-h falls back to 0: if the script never runs, the page is
+//    simply not padded (same as stock), never hidden behind the bar.
+.o_web_client {
+    > .o_navbar {
+        position: relative;
+        z-index: 1;
+    }
+
+    > .o_action_manager {
+        grid-row: navbar-start / content-end;
+        position: relative;
+        z-index: 0;
+    }
+}
+
+.o_action_manager > .o_action {
+    padding-top: var(--m-navbar-h, 0px);
+}

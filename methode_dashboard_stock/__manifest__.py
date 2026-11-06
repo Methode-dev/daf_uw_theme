@@ -5,11 +5,11 @@
     'summary': "Reorder and receipt widgets for the Méthode home dashboard",
     'description': "Contributes the inventory widgets and shortcut to the "
                    "Methode home dashboard. Auto-installs when both "
-                   "methode_theme and stock are present.",
+                   "daf_uw_theme and stock are present.",
     'author': 'Méthode - Progiciel sur mesure',
     'website': 'https://methode.dev',
     'license': 'LGPL-3',
-    'depends': ['methode_theme', 'stock'],
+    'depends': ['daf_uw_theme', 'stock'],
     'data': [
         'data/dashboard_widget_type_data.xml',
     ],

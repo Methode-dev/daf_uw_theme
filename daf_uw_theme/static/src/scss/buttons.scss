@@ -1,0 +1,198 @@
+.btn {
+    --btn-active-shadow: none;
+    --btn-box-shadow: none;
+}
+
+// ---------------------------------------------------------------------------
+// Buttons on liquid glass — FLAT glass, owner call.
+//
+// The second pass made them glossy capsules (pill radius, top sheen, bright
+// rim, dark bottom lip, coloured glow, lift + squeeze).  Owner verdict: too
+// round, too 3-D.  So: the theme's 8px control radius (Bootstrap's own, via
+// $o-border-radius — nothing set here), flat fills, one quiet flat shadow, and
+// no travel.  What stays of the glass is the material, not the bevel: the
+// secondary button is translucent, and hover lays the pointer-following glint
+// (glass_glint.js) over the face — light on glass, not depth.
+//
+// ⚠ HIERARCHY IS CARRIED BY FILL (guard-rail 4).
+//   primary   solid blue    the one thing to do on this screen
+//   accent    solid violet  secondary emphasis
+//   secondary clear glass   everything else
+// ---------------------------------------------------------------------------
+%m-raised {
+    box-shadow: 0 1px 2px rgba(20, 45, 95, 0.08);
+    transition:
+        box-shadow var(--m-dur-fast) var(--m-ease-out),
+        background-color var(--m-dur-fast) var(--m-ease-out);
+
+    &:hover {
+        background-image: var(--m-glass-glint);
+        box-shadow: 0 2px 8px -2px rgba(20, 45, 95, 0.16);
+    }
+
+    &:active,
+    &.active {
+        background-image: none;
+        box-shadow: none;
+    }
+
+    &:disabled,
+    &.disabled {
+        background-image: none;
+        box-shadow: none;
+    }
+}
+
+.btn-primary,
+.btn-secondary,
+.btn-info,
+.btn-accent,
+.btn-success,
+.btn-warning,
+.btn-danger {
+    @extend %m-raised;
+}
+
+// Solid fills: a bright glint would wash out a white label.
+.btn-primary,
+.btn-info,
+.btn-accent,
+.btn-success,
+.btn-warning,
+.btn-danger {
+    --m-glint-alpha: 0.18;
+}
+
+// Inside a button group (pager, view switcher) the buttons are segments: no
+// per-button shadow, which smeared across the joins.
+.btn-group > .btn {
+    &,
+    &:hover {
+        box-shadow: none;
+    }
+}
+
+// White label on the logo blue: 5.72:1 at rest, darkening on hover (6.49)
+// and press (7.37).
+.btn-primary {
+    --btn-bg: var(--m-primary);
+    --btn-border-color: var(--m-primary);
+    --btn-color: #FFFFFF;
+    --btn-hover-bg: #0D51DD;
+    --btn-hover-border-color: #0D51DD;
+    --btn-hover-color: #FFFFFF;
+    --btn-active-bg: #0C4ACA;
+    --btn-active-border-color: #0C4ACA;
+    --btn-active-color: #FFFFFF;
+    --btn-disabled-bg: var(--m-primary);
+    --btn-disabled-border-color: var(--m-primary);
+    --btn-disabled-color: #FFFFFF;
+}
+
+// Clear glass.  Ink on --m-glass-bg-hover: > 15:1 wherever it lands.  The
+// edge is a faint INK hairline: without the old rim shadow, a light edge
+// vanished against the page.
+.btn-secondary {
+    --btn-bg: var(--m-glass-bg-hover);
+    --btn-border-color: rgba(17, 24, 39, 0.14);
+    --btn-color: var(--m-text);
+    // Hover must READ: 88% → 100% white was invisible on a light page.  A
+    // primary wash (8%) and a primary edge — a step below the 12% pressed
+    // state, so hover and press stay distinct.  Ink on it: > 14:1.
+    --btn-hover-bg: #{"color-mix(in srgb, var(--m-primary) 8%, var(--m-bg-card))"};
+    --btn-hover-border-color: var(--m-accent-border);
+    --btn-hover-color: var(--m-text);
+    --btn-active-bg: #{"color-mix(in srgb, var(--m-primary) 12%, var(--m-bg-card))"};
+    --btn-active-border-color: var(--m-accent-border);
+    --btn-active-color: var(--m-primary-dark);
+    // Disabled stays glass, not Bootstrap's flat #DEE2E6 at 50% opacity.
+    --btn-disabled-bg: var(--m-glass-bg-strong);
+    --btn-disabled-border-color: rgba(17, 24, 39, 0.10);
+    --btn-disabled-color: var(--m-text-secondary);
+    --btn-disabled-opacity: 1;
+}
+
+// --- The stage statusbar keeps its ORIGINAL skin (owner call) ----------------
+// views/status_bar.scss is the pre-glass file, restored as is.  Its arrows (and
+// the folded single-stage toggle) are .btn-secondary, so without this block
+// they would wear the glass button above.  These are the values the theme
+// gave .btn-secondary before the glass work (white plate, #898989 edge), plus
+// Odoo's own disabled values that the glass block overrides, and the original
+// raised press (a 3px hard ink shadow — clipped away by the arrow polygons —
+// and a 3px drop on hover).  (0,2,0)+, so it wins over the rules above.
+.o_statusbar_status .btn-secondary {
+    --btn-bg: #FFFFFF;
+    --btn-border-color: #898989;
+    --btn-color: var(--m-text);
+    --btn-hover-bg: var(--m-bg-primary);
+    --btn-hover-border-color: var(--m-ink-border);
+    --btn-hover-color: var(--m-text);
+    --btn-active-bg: var(--m-bg-secondary);
+    --btn-active-border-color: var(--m-ink-border);
+    --btn-active-color: var(--m-text);
+    --btn-disabled-bg: #DEE2E6;
+    --btn-disabled-border-color: #DEE2E6;
+    --btn-disabled-color: #000000;
+    --btn-disabled-opacity: initial;
+
+    background-image: none;
+    box-shadow: 0 3px 0 0 var(--m-text);
+    border-bottom-color: var(--m-text);
+    transition: transform 90ms ease-out, box-shadow 90ms ease-out;
+
+    &:hover,
+    &:active,
+    &.active {
+        transform: translateY(3px);
+        background-image: none;
+        box-shadow: 0 0 0 0 var(--m-text);
+    }
+
+    &:disabled,
+    &.disabled {
+        box-shadow: none;
+        transform: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        transition: none;
+        &:hover,
+        &:active,
+        &.active { transform: none; }
+    }
+}
+
+// --- The palette's secondary lives here ------------------------------------
+// .btn-info carries the secondary violet (#6D3BFF) instead of Odoo's blue,
+// which would be indistinguishable from primary.  .btn-accent is the same
+// thing under a name that states intent.  White text: 5.65:1 (ink: 3.14).
+.btn-info,
+.btn-accent {
+    --btn-bg: var(--m-secondary);
+    --btn-border-color: var(--m-secondary);
+    --btn-color: #FFFFFF;
+    --btn-hover-bg: #6436EB;
+    --btn-hover-border-color: #6436EB;
+    --btn-hover-color: #FFFFFF;
+    --btn-active-bg: #5C32D6;
+    --btn-active-border-color: #5C32D6;
+    --btn-active-color: #FFFFFF;
+    --btn-disabled-bg: var(--m-secondary);
+    --btn-disabled-border-color: var(--m-secondary);
+    --btn-disabled-color: #FFFFFF;
+}
+
+.btn-link {
+    text-underline-offset: 2px;
+}
+
+.o-mail-ActionList button.o-tag-JOIN_LEAVE_CALL i {
+    color: var(--btn-color, var(--m-text)) !important;
+}
+
+// Keyboard focus: a crisp outline, offset off the glass — never only a glow,
+// which disappears against a translucent surface.
+.btn:focus-visible {
+    outline: 2px solid var(--m-primary);
+    outline-offset: 2px;
+}

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The DAF Under Writing mark, as an animated SVG ("Assemble").  THE one copy.
+
+    t-called by the webclient boot overlay (views/boot_loader_templates.xml).
+    Callers supply their own wrapper, because the accessible label differs by
+    surface:
+
+        <div class="m-daf-loader" role="status" aria-label="Chargement">
+            <t t-call="daf_uw_theme.daf_mark"/>
+        </div>
+
+    Choreography (keyframes in static/src/scss/loader.scss): the D's outline is
+    drawn then filled, the A rises out of a blur, the F's black arm and blue
+    bar slide together, the triangle spins in, the tagline is wiped in, then a
+    light sweep runs over the glossy letters for as long as the wait lasts.
+
+    ⚠ GENERATED GEOMETRY.  Every `d`, gradient and highlight stroke below is
+    copied from static/src/img/brand/daf_uw_logo.svg; only the ids are
+    namespaced (m-daf-*) so nothing can collide with an Odoo selector.  Change
+    the brand SVG and regenerate; do not hand-edit coordinates here.
+
+    ⚠ ANIMATION CLASSES SIT ON THE <use> ELEMENTS, NEVER ON THE <path>s IN
+    <defs>.  Gecko does not reflect an animation on a referenced element into
+    its <use> instances (the old tree mark froze as a static logo on every
+    Firefox because of exactly this).  Geometry lives in <defs> once, unstyled.
+
+    The <defs> ids are not namespaced per caller.  Two instances on one page
+    would collide, and that is harmless by construction: both resolve to the
+    same geometry.
+-->
+<odoo>
+
+    <template id="daf_mark">
+        <svg class="m-daf-mark" viewBox="0 0 378 180" aria-hidden="true">
+            <defs>
+                <path id="m-daf-D" fill="#0C0C0C" d="M16,18 H62 A48,48 0 0 1 110,66 V70 A48,48 0 0 1 62,118 H16 V60 H40 V96 H62 A26,26 0 0 0 88,70 V66 A26,26 0 0 0 62,40 H16 Z"/>
+                <path id="m-daf-A" fill="#0C0C0C" d="M185,18 H211 L250,118 H224 L198,51.5 L172,118 H146 Z"/>
+                <path id="m-daf-tri" fill="#0E58F0" d="M182.6,96 H213.4 L198,118 Z"/>
+                <rect id="m-daf-Fbar" fill="#0E58F0" x="290" y="18" width="72" height="22"/>
+                <path id="m-daf-F" fill="#0C0C0C" d="M290,60 H362 V80 H314 V118 H290 Z"/>
+                <clipPath id="m-daf-clip">
+                    <use href="#m-daf-D"/><use href="#m-daf-A"/><use href="#m-daf-tri"/><use href="#m-daf-Fbar"/><use href="#m-daf-F"/>
+                </clipPath>
+                <filter id="m-daf-soften" x="-10%" y="-10%" width="120%" height="120%">
+                    <feGaussianBlur stdDeviation="0.75"/>
+                </filter>
+                <linearGradient id="m-daf-sweep" x1="0" x2="1">
+                    <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+                    <stop offset=".5" stop-color="#fff" stop-opacity=".5"/>
+                    <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+                </linearGradient>
+                <linearGradient id="m-daf-hD1" gradientUnits="userSpaceOnUse" x1="18" y1="20" x2="48" y2="20"><stop offset="0" stop-color="#fff" stop-opacity="0.95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+                    <linearGradient id="m-daf-hD2" gradientUnits="userSpaceOnUse" x1="18" y1="20" x2="18" y2="30"><stop offset="0" stop-color="#fff" stop-opacity="0.7"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+                    <linearGradient id="m-daf-hD3" gradientUnits="userSpaceOnUse" x1="18" y1="62" x2="40" y2="62"><stop offset="0" stop-color="#fff" stop-opacity="0.95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+                    <linearGradient id="m-daf-hD4" gradientUnits="userSpaceOnUse" x1="18" y1="62" x2="18" y2="74"><stop offset="0" stop-color="#fff" stop-opacity="0.7"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+                    <linearGradient id="m-daf-hD5" gradientUnits="userSpaceOnUse" x1="91" y1="74" x2="52" y2="99"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="0.45" stop-color="#fff" stop-opacity="0.85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+                    <linearGradient id="m-daf-hA1" gradientUnits="userSpaceOnUse" x1="186" y1="20" x2="152" y2="108"><stop offset="0" stop-color="#fff" stop-opacity="0.95"/><stop offset="0.55" stop-color="#fff" stop-opacity="0.6"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+                    <linearGradient id="m-daf-hA2" gradientUnits="userSpaceOnUse" x1="186" y1="20.5" x2="202" y2="20.5"><stop offset="0" stop-color="#fff" stop-opacity="0.95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+                    <linearGradient id="m-daf-hT" gradientUnits="userSpaceOnUse" x1="185" y1="98" x2="199" y2="98"><stop offset="0" stop-color="#fff" stop-opacity="0.95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+                    <linearGradient id="m-daf-hF1" gradientUnits="userSpaceOnUse" x1="292" y1="20.5" x2="318" y2="20.5"><stop offset="0" stop-color="#fff" stop-opacity="0.95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+                    <linearGradient id="m-daf-hF2" gradientUnits="userSpaceOnUse" x1="292" y1="20" x2="292" y2="29"><stop offset="0" stop-color="#fff" stop-opacity="0.7"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+                    <linearGradient id="m-daf-hF3" gradientUnits="userSpaceOnUse" x1="292" y1="62.5" x2="320" y2="62.5"><stop offset="0" stop-color="#fff" stop-opacity="0.95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+                    <linearGradient id="m-daf-hF4" gradientUnits="userSpaceOnUse" x1="292" y1="62" x2="292" y2="108"><stop offset="0" stop-color="#fff" stop-opacity="0.7"/><stop offset="0.3" stop-color="#fff" stop-opacity="0.3"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+            </defs>
+
+            <!-- The D's outline, drawn before its fill fades in. -->
+            <path class="m-daf-d-line" pathLength="1" d="M16,18 H62 A48,48 0 0 1 110,66 V70 A48,48 0 0 1 62,118 H16 V60 H40 V96 H62 A26,26 0 0 0 88,70 V66 A26,26 0 0 0 62,40 H16 Z"/>
+            <use class="m-daf-d" href="#m-daf-D"/>
+            <use class="m-daf-a" href="#m-daf-A"/>
+            <use class="m-daf-f" href="#m-daf-F"/>
+            <use class="m-daf-fbar" href="#m-daf-Fbar"/>
+            <use class="m-daf-tri" href="#m-daf-tri"/>
+
+            <!-- Static gloss: soft highlights lit from the top-left. -->
+            <g class="m-daf-gloss" clip-path="url(#m-daf-clip)">
+                <g filter="url(#m-daf-soften)" fill="none" stroke-linecap="round">
+                    <path d="M18.5,20.6 H48" stroke="url(#m-daf-hD1)" stroke-width="2.4"/>
+                    <path d="M18.4,20.5 V30" stroke="url(#m-daf-hD2)" stroke-width="1.7"/>
+                    <path d="M18.5,62.4 H38" stroke="url(#m-daf-hD3)" stroke-width="2.2"/>
+                    <path d="M18.4,62.3 V74" stroke="url(#m-daf-hD4)" stroke-width="1.6"/>
+                    <path d="M90.3,74.5 A28.5,28.5 0 0 1 52,98.6" stroke="url(#m-daf-hD5)" stroke-width="2.6"/>
+                    <path d="M186.2,21 L153.2,106" stroke="url(#m-daf-hA1)" stroke-width="2.4"/>
+                    <path d="M187,20.6 H202" stroke="url(#m-daf-hA2)" stroke-width="2.0"/>
+                    <path d="M185.5,98.2 H199" stroke="url(#m-daf-hT)" stroke-width="1.8"/>
+                    <path d="M292.5,20.6 H318" stroke="url(#m-daf-hF1)" stroke-width="2.2"/>
+                    <path d="M292.4,20.5 V29" stroke="url(#m-daf-hF2)" stroke-width="1.6"/>
+                    <path d="M292.5,62.5 H320" stroke="url(#m-daf-hF3)" stroke-width="2.2"/>
+                    <path d="M292.4,62.4 V100" stroke="url(#m-daf-hF4)" stroke-width="1.6"/>
+                </g>
+            </g>
+
+            <!-- Idle light sweep, clipped to the letters. -->
+            <g clip-path="url(#m-daf-clip)">
+                <g transform="skewX(-22)">
+                    <rect class="m-daf-sweep" x="-80" y="0" width="46" height="140" fill="url(#m-daf-sweep)"/>
+                </g>
+            </g>
+
+            <!-- "Under Writing", Quicksand Medium (SIL OFL 1.1) as outlines. -->
+            <path class="m-daf-tag" fill="#0E58F0" d="M33.07 133.98Q33.71 133.98 34.1 134.41Q34.49 134.84 34.49 135.46V149.92Q34.49 152.72 33.21 154.96Q31.92 157.19 29.74 158.48Q27.55 159.77 24.76 159.77Q21.98 159.77 19.77 158.48Q17.57 157.19 16.28 154.96Q15 152.72 15 149.92V135.46Q15 134.84 15.43 134.41Q15.86 133.98 16.55 133.98Q17.13 133.98 17.58 134.41Q18.02 134.84 18.02 135.46V149.92Q18.02 151.92 18.94 153.49Q19.86 155.06 21.41 155.96Q22.96 156.86 24.76 156.86Q26.64 156.86 28.21 155.96Q29.77 155.06 30.73 153.49Q31.68 151.92 31.68 149.92V135.46Q31.68 134.84 32.06 134.41Q32.43 133.98 33.07 133.98ZM59.75 140.19Q62.24 140.19 63.66 141.21Q65.08 142.23 65.68 143.95Q66.28 145.68 66.28 147.79V158.02Q66.28 158.64 65.87 159.07Q65.45 159.5 64.83 159.5Q64.19 159.5 63.78 159.07Q63.37 158.64 63.37 158.02V147.86Q63.37 146.48 62.95 145.36Q62.53 144.24 61.56 143.56Q60.58 142.89 58.91 142.89Q57.38 142.89 56.11 143.56Q54.85 144.24 54.08 145.36Q53.32 146.48 53.32 147.86V158.02Q53.32 158.64 52.9 159.07Q52.48 159.5 51.86 159.5Q51.22 159.5 50.81 159.07Q50.4 158.64 50.4 158.02V142.14Q50.4 141.52 50.82 141.09Q51.24 140.67 51.86 140.67Q52.5 140.67 52.91 141.09Q53.32 141.52 53.32 142.14V144.71L52.59 145.53Q52.75 144.56 53.41 143.61Q54.06 142.65 55.05 141.88Q56.03 141.1 57.24 140.65Q58.45 140.19 59.75 140.19ZM97.21 132.54Q97.84 132.54 98.25 132.96Q98.66 133.38 98.66 134.02V158.02Q98.66 158.64 98.24 159.07Q97.82 159.5 97.21 159.5Q96.57 159.5 96.16 159.07Q95.75 158.64 95.75 158.02V154.55L96.44 154.31Q96.44 155.16 95.9 156.13Q95.37 157.1 94.41 157.94Q93.45 158.79 92.17 159.33Q90.88 159.86 89.39 159.86Q86.93 159.86 84.96 158.59Q82.98 157.31 81.83 155.09Q80.68 152.87 80.68 150.03Q80.68 147.17 81.83 144.95Q82.98 142.72 84.94 141.46Q86.9 140.19 89.32 140.19Q90.85 140.19 92.19 140.71Q93.53 141.23 94.54 142.11Q95.55 142.98 96.12 144.04Q96.7 145.09 96.7 146.15L95.75 145.93V134.02Q95.75 133.4 96.16 132.97Q96.57 132.54 97.21 132.54ZM89.7 157.17Q91.54 157.17 92.93 156.24Q94.33 155.31 95.12 153.69Q95.91 152.07 95.91 150.03Q95.91 147.97 95.12 146.36Q94.33 144.75 92.92 143.82Q91.52 142.89 89.7 142.89Q87.92 142.89 86.51 143.82Q85.11 144.75 84.31 146.36Q83.51 147.97 83.51 150.03Q83.51 152.05 84.31 153.67Q85.11 155.29 86.51 156.23Q87.92 157.17 89.7 157.17ZM122.79 159.86Q119.88 159.86 117.69 158.63Q115.5 157.41 114.29 155.23Q113.08 153.05 113.08 150.21Q113.08 147.04 114.34 144.81Q115.59 142.58 117.61 141.39Q119.62 140.19 121.88 140.19Q123.57 140.19 125.13 140.82Q126.69 141.45 127.9 142.63Q129.11 143.82 129.84 145.47Q130.57 147.11 130.6 149.17Q130.59 149.76 130.15 150.15Q129.71 150.54 129.13 150.54H114.74L114.08 148.03H128.11L127.53 148.55V147.73Q127.4 146.24 126.54 145.17Q125.69 144.09 124.46 143.51Q123.23 142.93 121.88 142.93Q120.79 142.93 119.71 143.32Q118.64 143.71 117.78 144.56Q116.92 145.4 116.41 146.75Q115.89 148.1 115.89 150.01Q115.89 152.1 116.74 153.72Q117.6 155.33 119.13 156.25Q120.66 157.17 122.68 157.17Q123.97 157.17 124.92 156.85Q125.87 156.53 126.55 156.03Q127.23 155.53 127.71 155.02Q128.18 154.69 128.64 154.69Q129.16 154.69 129.52 155.06Q129.87 155.44 129.87 155.93Q129.87 156.55 129.29 157.04Q128.25 158.17 126.51 159.02Q124.77 159.86 122.79 159.86ZM146.46 159.5Q145.82 159.5 145.41 159.07Q145 158.64 145 158.02V142.14Q145 141.52 145.42 141.09Q145.84 140.67 146.46 140.67Q147.1 140.67 147.51 141.09Q147.92 141.52 147.92 142.14V146.93L147.48 146.19Q147.68 145.04 148.25 143.97Q148.81 142.91 149.68 142.05Q150.56 141.19 151.7 140.69Q152.84 140.19 154.18 140.19Q154.99 140.19 155.65 140.58Q156.31 140.96 156.31 141.65Q156.31 142.41 155.91 142.79Q155.51 143.16 155 143.16Q154.55 143.16 154.11 142.95Q153.67 142.74 153.02 142.74Q152.11 142.74 151.21 143.24Q150.3 143.74 149.56 144.65Q148.81 145.55 148.36 146.7Q147.92 147.86 147.92 149.15V158.02Q147.92 158.64 147.5 159.07Q147.08 159.5 146.46 159.5ZM214.91 133.91Q215.49 133.91 215.98 134.31Q216.47 134.71 216.47 135.44Q216.47 135.68 216.38 135.99L208.62 158.57Q208.48 159.01 208.09 159.25Q207.71 159.48 207.31 159.5Q206.87 159.5 206.47 159.27Q206.07 159.04 205.87 158.57L199.77 143.85L200.08 143.96L194.01 158.57Q193.79 159.04 193.39 159.27Q192.99 159.5 192.56 159.5Q192.17 159.48 191.79 159.25Q191.41 159.01 191.26 158.57L183.5 135.99Q183.41 135.68 183.41 135.46Q183.41 134.73 183.94 134.32Q184.47 133.91 185.02 133.91Q185.47 133.91 185.87 134.15Q186.27 134.4 186.42 134.86L193.23 154.95H192.7L198.64 140.27Q198.82 139.83 199.19 139.57Q199.55 139.32 200.02 139.34Q200.48 139.32 200.85 139.57Q201.23 139.83 201.39 140.27L207.15 154.73L206.69 154.93L213.47 134.86Q213.61 134.4 214.01 134.15Q214.41 133.91 214.91 133.91ZM231.6 159.5Q230.96 159.5 230.55 159.07Q230.14 158.64 230.14 158.02V142.14Q230.14 141.52 230.56 141.09Q230.98 140.67 231.6 140.67Q232.24 140.67 232.65 141.09Q233.06 141.52 233.06 142.14V146.93L232.62 146.19Q232.82 145.04 233.39 143.97Q233.95 142.91 234.82 142.05Q235.7 141.19 236.84 140.69Q237.98 140.19 239.32 140.19Q240.13 140.19 240.79 140.58Q241.45 140.96 241.45 141.65Q241.45 142.41 241.05 142.79Q240.65 143.16 240.14 143.16Q239.69 143.16 239.25 142.95Q238.81 142.74 238.16 142.74Q237.25 142.74 236.35 143.24Q235.44 143.74 234.7 144.65Q233.95 145.55 233.5 146.7Q233.06 147.86 233.06 149.15V158.02Q233.06 158.64 232.64 159.07Q232.22 159.5 231.6 159.5ZM257.57 158.02Q257.57 158.64 257.15 159.07Q256.73 159.5 256.11 159.5Q255.47 159.5 255.06 159.07Q254.65 158.64 254.65 158.02V141.85Q254.65 141.23 255.07 140.8Q255.49 140.38 256.11 140.38Q256.75 140.38 257.16 140.8Q257.57 141.23 257.57 141.85ZM256.09 137.95Q255.18 137.95 254.75 137.59Q254.33 137.22 254.33 136.46V135.97Q254.33 135.18 254.79 134.83Q255.25 134.47 256.13 134.47Q257.02 134.47 257.45 134.84Q257.88 135.2 257.88 135.97V136.46Q257.88 137.24 257.43 137.6Q256.98 137.95 256.09 137.95ZM272.13 140.78H280.67Q281.26 140.78 281.65 141.18Q282.04 141.58 282.04 142.14Q282.04 142.71 281.65 143.09Q281.26 143.47 280.67 143.47H272.13Q271.57 143.47 271.17 143.07Q270.77 142.67 270.77 142.11Q270.77 141.54 271.17 141.16Q271.57 140.78 272.13 140.78ZM275.94 135.82Q276.58 135.82 276.98 136.25Q277.38 136.68 277.38 137.3V154.89Q277.38 155.75 277.63 156.19Q277.89 156.64 278.3 156.8Q278.71 156.95 279.13 156.95Q279.47 156.95 279.75 156.83Q280.02 156.71 280.38 156.71Q280.77 156.71 281.07 157.05Q281.37 157.39 281.37 157.93Q281.37 158.61 280.6 159.05Q279.84 159.5 278.89 159.5Q278.4 159.5 277.65 159.43Q276.9 159.35 276.18 158.95Q275.45 158.55 274.95 157.63Q274.46 156.71 274.46 155.02V137.3Q274.46 136.68 274.89 136.25Q275.32 135.82 275.94 135.82ZM298.9 158.02Q298.9 158.64 298.48 159.07Q298.06 159.5 297.44 159.5Q296.81 159.5 296.4 159.07Q295.99 158.64 295.99 158.02V141.85Q295.99 141.23 296.4 140.8Q296.82 140.38 297.44 140.38Q298.08 140.38 298.49 140.8Q298.9 141.23 298.9 141.85ZM297.42 137.95Q296.51 137.95 296.09 137.59Q295.66 137.22 295.66 136.46V135.97Q295.66 135.18 296.12 134.83Q296.59 134.47 297.46 134.47Q298.35 134.47 298.78 134.84Q299.21 135.2 299.21 135.97V136.46Q299.21 137.24 298.76 137.6Q298.32 137.95 297.42 137.95ZM323.54 140.19Q326.03 140.19 327.45 141.21Q328.87 142.23 329.47 143.95Q330.08 145.68 330.08 147.79V158.02Q330.08 158.64 329.66 159.07Q329.24 159.5 328.62 159.5Q327.98 159.5 327.57 159.07Q327.16 158.64 327.16 158.02V147.86Q327.16 146.48 326.74 145.36Q326.32 144.24 325.35 143.56Q324.37 142.89 322.7 142.89Q321.17 142.89 319.9 143.56Q318.64 144.24 317.87 145.36Q317.11 146.48 317.11 147.86V158.02Q317.11 158.64 316.69 159.07Q316.27 159.5 315.65 159.5Q315.01 159.5 314.6 159.07Q314.19 158.64 314.19 158.02V142.14Q314.19 141.52 314.61 141.09Q315.03 140.67 315.65 140.67Q316.29 140.67 316.7 141.09Q317.11 141.52 317.11 142.14V144.71L316.38 145.53Q316.54 144.56 317.2 143.61Q317.85 142.65 318.84 141.88Q319.82 141.1 321.03 140.65Q322.24 140.19 323.54 140.19ZM353.38 140.19Q354.97 140.19 356.32 140.72Q357.66 141.25 358.67 142.09Q359.67 142.93 360.23 143.84Q360.8 144.76 360.8 145.55L360.09 145.11V141.96Q360.09 141.34 360.5 140.91Q360.91 140.48 361.54 140.48Q362.18 140.48 362.59 140.9Q363 141.32 363 141.96V157.9Q363 160.88 361.74 162.86Q360.49 164.84 358.37 165.81Q356.26 166.79 353.66 166.79Q352.56 166.79 351.24 166.5Q349.92 166.22 348.9 165.8Q347.88 165.38 347.61 164.95Q347.06 164.56 346.94 164.12Q346.81 163.67 347.08 163.27Q347.43 162.74 347.95 162.75Q348.47 162.76 349.27 163.07Q349.61 163.18 350.31 163.43Q351.02 163.69 351.92 163.89Q352.82 164.09 353.69 164.09Q356.79 164.09 358.44 162.48Q360.09 160.87 360.09 158.19V154.8L360.49 154.98Q360.27 156 359.6 156.89Q358.94 157.77 357.97 158.43Q357.01 159.1 355.83 159.48Q354.66 159.86 353.46 159.86Q350.91 159.86 348.87 158.59Q346.84 157.31 345.66 155.09Q344.48 152.87 344.48 150.03Q344.48 147.17 345.66 144.95Q346.84 142.72 348.86 141.46Q350.87 140.19 353.38 140.19ZM353.77 142.89Q351.89 142.89 350.42 143.82Q348.96 144.75 348.13 146.36Q347.3 147.97 347.3 150.03Q347.3 152.05 348.13 153.67Q348.96 155.29 350.42 156.23Q351.89 157.17 353.77 157.17Q355.66 157.17 357.12 156.25Q358.57 155.33 359.41 153.72Q360.25 152.1 360.25 150.03Q360.25 147.93 359.41 146.32Q358.57 144.71 357.12 143.8Q355.66 142.89 353.77 142.89Z"/>
+        </svg>
+    </template>
+
+</odoo>

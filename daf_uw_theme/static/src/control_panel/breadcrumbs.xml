@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+  <!--
+    Breadcrumbs: a single "← Previous page" back link instead of the trail.
+
+    ONE TEMPLATE COVERS EVERY PLACE.  web.Breadcrumbs (web/static/src/search/
+    breadcrumbs/) is the only breadcrumb component; the ControlPanel renders it
+    inline on desktop and, on small screens, t-portals the SAME component into
+    `.o_navbar_breadcrumbs` (control_panel.xml) — the node our navbar.xml moves
+    into the second navbar row.  So extending web.Breadcrumbs changes the
+    control panel, the navbar row and mobile at once, and they cannot drift.
+
+    WHAT IS SHOWN
+      1 level  : unchanged — the current page title, large (stock `t-else`).
+      2+ levels: "← <page n-1>"  then the current page name under it.
+    ⚠ The current page name is KEPT at every depth, not only in forms.  Owner
+      preference was "keep the record name in a form"; it is kept everywhere
+      because (a) in a form it IS the record name (Odoo puts the record's
+      display_name in the last breadcrumb), and (b) its row also hosts
+      `web.Breadcrumb.Actions` — the form's cog and the save/discard status
+      indicator live in that slot.  Dropping the name in lists would have meant
+      re-plumbing those slots for no gain, and a list without its own title
+      under the back link reads as "where am I?".
+    The pager and the record name are untouched: the pager is a separate
+    control-panel block, and the name is the stock o_last_breadcrumb_item.
+
+    HOW: by narrowing the template's own inputs rather than re-emitting markup.
+      visiblePathBreadcrumbs  slice(-3, -1) -> slice(-2, -1)   (page n-1 only)
+      collapsedBreadcrumbs    the "…" dropdown of older pages  -> []  (gone)
+    The single remaining crumb is rendered by stock markup, which keeps its
+    click handler (breadcrumb.onSelected — identical to clicking that crumb
+    today), its href (middle-click / open in new tab), its tooltip, and the
+    `b` hotkey core puts on the last path crumb.  We add an arrow icon in front
+    of its name, and the name next to the mobile back button, which is
+    icon-only in stock and therefore did not say where it goes.
+  -->
+  <t t-name="daf_uw_theme.Breadcrumbs" t-inherit="web.Breadcrumbs" t-inherit-mode="extension">
+
+    <xpath expr="//t[@t-set='visiblePathBreadcrumbs']" position="attributes">
+      <attribute name="t-value">props.breadcrumbs.slice(-2, -1)</attribute>
+    </xpath>
+    <xpath expr="//t[@t-set='collapsedBreadcrumbs']" position="attributes">
+      <attribute name="t-value">[]</attribute>
+    </xpath>
+
+    <!-- ⚠ The save/discard indicator travels WITH the title.  Core renders this
+         slot at the template root, i.e. as a sibling of .o_breadcrumb — so it
+         is a separate flex item of .o_control_panel_breadcrumbs.  Once that
+         block wraps (control_panel.scss, "title ABOVE the buttons"), the
+         indicator wrapped on its own: a lone cloud and ✕ on the top line,
+         the record name below.  Re-slotting it right after the breadcrumb
+         actions (the record cog) puts it exactly where core shows it when
+         everything fits, but inside the title's own box, so they wrap as one.
+         One slot per branch (several levels / single level); the root one is
+         removed first so it is never rendered twice.  Mobile is unaffected:
+         there the control panel renders its indicator itself and passes no
+         slot here. -->
+    <xpath expr="//t[@t-slot='breadcrumb-status-indicator']" position="replace"/>
+    <xpath expr="(//t[@t-call='web.Breadcrumb.Actions'])[1]" position="after">
+      <t t-slot="breadcrumb-status-indicator"/>
+    </xpath>
+    <xpath expr="(//t[@t-call='web.Breadcrumb.Actions'])[2]" position="after">
+      <t t-slot="breadcrumb-status-indicator"/>
+    </xpath>
+
+    <!-- Desktop: the one crumb becomes "← name". -->
+    <xpath expr="//ol[hasclass('breadcrumb')]" position="attributes">
+      <attribute name="class" add="m-breadcrumb-back" separator=" "/>
+    </xpath>
+    <xpath expr="//ol[hasclass('breadcrumb')]//a/t[@t-call='web.Breadcrumb.Name']" position="before">
+      <i class="oi oi-arrow-left m-breadcrumb-back__icon" aria-hidden="true"/>
+    </xpath>
+
+    <!-- Mobile: same link, same words.  Truncated by the stylesheet. -->
+    <xpath expr="//button[hasclass('o_back_button')]" position="attributes">
+      <attribute name="class" add="m-breadcrumb-back m-breadcrumb-back--small" separator=" "/>
+      <attribute name="t-att-data-tooltip">getBreadcrumbTooltip(previousBreadcrumb)</attribute>
+    </xpath>
+    <xpath expr="//button[hasclass('o_back_button')]/i" position="after">
+      <!-- ⚠ The t-set lives INSIDE the t-call body on purpose: that body gets
+           its own sub-scope.  Set beside it, `breadcrumb` would be overwritten
+           for the rest of the template, and the current-page name rendered
+           below (o_last_breadcrumb_item, which reads `breadcrumb`) would show
+           the previous page's name instead. -->
+      <span class="m-breadcrumb-back__label text-truncate">
+        <t t-call="web.Breadcrumb.Name">
+          <t t-set="breadcrumb" t-value="previousBreadcrumb"/>
+        </t>
+      </span>
+    </xpath>
+
+  </t>
+
+</templates>

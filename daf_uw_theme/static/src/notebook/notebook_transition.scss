@@ -1,0 +1,73 @@
+// ---------------------------------------------------------------------------
+// Notebook page transitions — the classes notebook_transition.js toggles on
+// core's single `.tab-pane` (see that file for why leave needs JS).
+//
+//   .m-page-leave  the old page slides 28px away, blurs, fades     170ms
+//   .m-page-enter  the new page slides in from 28px, un-blurs     340ms
+//   .m-page--forward / --back   which way (tab order)
+//
+// First pass was 12px / 110ms / 220ms and read as no animation at all (owner
+// feedback): on a full-width sheet a 12px drift is under the noticing
+// threshold.  Now wider and longer, with the liquid-glass blur — the page
+// frosts out and comes back into focus.  Leave stays half the enter's length
+// because it delays the page the user asked for; ⚠ its duration is mirrored in
+// NOTEBOOK_LEAVE_MS (JS) — change both together.
+//
+// Core's own `.fade` opacity transition on the pane is switched off while
+// ours runs, or the two would fight over opacity.
+// ---------------------------------------------------------------------------
+
+@keyframes m-page-leave-x {
+    to { opacity: 0; transform: translateX(var(--m-page-shift)); filter: blur(4px); }
+}
+@keyframes m-page-enter-x {
+    from { opacity: 0; transform: translateX(calc(var(--m-page-shift) * -1)); filter: blur(6px); }
+    to   { opacity: 1; transform: none; filter: none; }
+}
+@keyframes m-page-leave-y {
+    to { opacity: 0; transform: translateY(var(--m-page-shift)); filter: blur(4px); }
+}
+@keyframes m-page-enter-y {
+    from { opacity: 0; transform: translateY(calc(var(--m-page-shift) * -1)); filter: blur(6px); }
+    to   { opacity: 1; transform: none; filter: none; }
+}
+
+.o_notebook_content > .tab-pane {
+    // Forward: the old page leaves LEFT (negative), the new one comes from the
+    // RIGHT (the enter keyframe negates the shift).  Back: mirrored.
+    &.m-page--forward { --m-page-shift: -28px; }
+    &.m-page--back    { --m-page-shift: 28px; }
+
+    &.m-page-leave,
+    &.m-page-enter {
+        transition: none;
+    }
+
+    &.m-page-leave {
+        // `forwards`: stays hidden until core swaps the page in, so the old
+        // content never flashes back for a frame.
+        animation: m-page-leave-x 170ms cubic-bezier(0.4, 0, 1, 1) forwards;
+        pointer-events: none;
+    }
+
+    &.m-page-enter {
+        animation: m-page-enter-x 340ms var(--m-ease-out) both;
+    }
+}
+
+// Vertical notebooks lay their tabs out top-to-bottom, so pages move on y.
+.o_notebook.vertical > .o_notebook_content > .tab-pane {
+    &.m-page-leave { animation-name: m-page-leave-y; }
+    &.m-page-enter { animation-name: m-page-enter-y; }
+}
+
+// The JS already skips the animation under reduced motion; this is the
+// belt-and-braces for a preference flipped while a page is mid-switch.
+@media (prefers-reduced-motion: reduce) {
+    .o_notebook_content > .tab-pane {
+        &.m-page-leave,
+        &.m-page-enter {
+            animation: none;
+        }
+    }
+}

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+  <!--
+    Simplified search bar. The behaviour, and why each seam exists, is described
+    in search_bar_patch.js. This file only re-points stock nodes. No upstream
+    markup is copied.
+
+    ⚠ The root loses `input-group`. That class glued the search box to the caret
+    button (border-end-0 here, rounded-start-0 there). With the caret gone, the
+    box and the two pickers are separate controls with a gap, and they wrap
+    onto their own row on small screens (search.scss).
+  -->
+  <t t-name="daf_uw_theme.SearchBar" t-inherit="web.SearchBar" t-inherit-mode="extension">
+
+    <xpath expr="//div[hasclass('o_cp_searchview')]" position="attributes">
+      <attribute name="class" remove="input-group" add="m-search" separator=" "/>
+    </xpath>
+
+    <xpath expr="//div[hasclass('o_searchview')]" position="attributes">
+      <attribute name="class" remove="border-end-0" add="m-search-box" separator=" "/>
+    </xpath>
+
+    <!-- "+N": the facets that do not fit on the one-line box (search.scss,
+         mFitFacets). Opens a popover listing all of them with full labels and
+         their own × (search_facet_overflow.js, which says why not a Dropdown).
+         Sits after the facets, before the input. -->
+    <xpath expr="//t[@t-call='web.SearchBar.Facets']" position="after">
+      <button t-if="mOverflowCount"
+              type="button"
+              class="m-facet-more d-print-none"
+              t-att-title="mOverflowTitle"
+              t-att-aria-label="mOverflowTitle"
+              aria-haspopup="true"
+              t-att-aria-expanded="mMorePopover.isOpen ? 'true' : 'false'"
+              t-on-click="onFacetMoreClick">
+        <t t-esc="mOverflowLabel"/>
+      </button>
+    </xpath>
+
+    <xpath expr="//input[hasclass('o_searchview_input')]" position="attributes">
+      <attribute name="t-att-title">simpleSearch.title</attribute>
+      <attribute name="t-on-keydown">onSimpleSearchKeydown</attribute>
+    </xpath>
+
+    <xpath expr="//input[hasclass('o_searchview_input')]" position="after">
+      <button t-if="simpleSearch.live and state.query"
+              type="button"
+              class="m-search-clear btn btn-link d-print-none"
+              title="Clear search"
+              aria-label="Clear search"
+              t-on-click="onSimpleSearchClear">
+        <i class="oi oi-close" aria-hidden="true"/>
+      </button>
+    </xpath>
+
+    <!-- The caret + big Filters / Group By / Favorites panel. -->
+    <xpath expr="//SearchBarMenu" position="replace">
+      <div t-if="simpleSearch.showFilter or simpleSearch.showGroupBy"
+           class="m-search-pickers d-print-none">
+        <SearchPicker t-if="simpleSearch.showFilter" kind="'filter'"/>
+        <SearchPicker t-if="simpleSearch.showGroupBy" kind="'groupBy'"/>
+      </div>
+    </xpath>
+
+  </t>
+
+  <!-- Facets stay stock, minus the pencil overlay that opened the domain editor. -->
+  <t t-name="daf_uw_theme.SearchBar.Facets" t-inherit="web.SearchBar.Facets" t-inherit-mode="extension">
+    <xpath expr="//span[@t-if='facet.domain']" position="replace"/>
+    <!-- Chips past the fit count leave the flow (search.scss); see mFitFacets. -->
+    <xpath expr="//div[hasclass('o_searchview_facet')]" position="attributes">
+      <attribute name="t-att-data-m-overflow">facet_index >= mFacetFit.visible ? '1' : false</attribute>
+    </xpath>
+  </t>
+
+</templates>

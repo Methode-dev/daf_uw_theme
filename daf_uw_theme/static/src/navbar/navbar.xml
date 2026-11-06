@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+  <!--
+    Two-row navbar: menu row (apps · search · systray) above an app row
+    (app name · app sections).
+
+    ⚠ Every stock node is MOVED, never re-emitted, so this file holds no copy of
+    upstream markup. web.NavBar.AppsMenu is untouched — Rule 2 (§7).
+
+    The wrappers need their own operation: `position="move"` is only honoured on
+    an operation's DIRECT children (template_inheritance.js::getNodes), so one
+    nested inside a new <div> would be emitted as literal markup.
+  -->
+  <t t-name="daf_uw_theme.NavBar" t-inherit="web.NavBar" t-inherit-mode="extension">
+
+    <xpath expr="//nav" position="inside">
+      <div class="m-nav-row m-nav-row__menu"/>
+      <div class="m-nav-row m-nav-row__app"/>
+    </xpath>
+
+    <xpath expr="//div[hasclass('m-nav-row__menu')]" position="inside">
+      <xpath expr="//t[@t-call='web.NavBar.AppsMenu']" position="move"/>
+      <NavBarSearch/>
+      <xpath expr="//div[hasclass('o_menu_systray')]" position="move"/>
+    </xpath>
+
+    <xpath expr="//div[hasclass('m-nav-row__app')]" position="inside">
+      <!-- contains() rather than hasclass(): the brand's class is an OWL
+           expression, quotes included, so hasclass() cannot see through it. -->
+      <xpath expr="//DropdownItem[contains(@class, 'o_menu_brand')]" position="move"/>
+      <span t-if="!currentApp" class="m-nav-company" t-esc="companyName"/>
+      <xpath expr="//div[hasclass('o_navbar_breadcrumbs')]" position="move"/>
+      <xpath expr="//t[@t-if='!this.ui.isSmall']" position="move"/>
+    </xpath>
+
+  </t>
+
+  <!-- Opens Odoo's own command palette; the hotkey is the palette's, not ours. -->
+  <t t-name="daf_uw_theme.NavBarSearch">
+    <button class="m-nav-search" t-on-click="() => this.open()" t-att-title="title">
+      <i class="fa fa-search m-nav-search-icon" aria-hidden="true"/>
+      <span class="m-nav-search-label">Search…</span>
+      <kbd class="m-nav-search-hotkey" t-esc="hotkey"/>
+    </button>
+  </t>
+
+</templates>

@@ -17,10 +17,10 @@ from odoo.tests.common import TransactionCase
 
 from odoo.addons.aura_backend_theme.models.res_company import (
     DEFAULT_BRAND,
-    METHODE_ACCENT,
+    DEFAULT_BRAND_DARK,
     METHODE_BG_PRIMARY,
     METHODE_CARD_BG,
-    METHODE_TEXT,
+    METHODE_SECONDARY,
     METHODE_TOPBAR_BG,
     METHODE_TOPBAR_TEXT,
 )
@@ -73,16 +73,19 @@ class TestThemeDefaults(TransactionCase):
         returns.
         """
         stale_by_field = {
-            # '#FAA140'/'250,161,64' are the short-lived orange primary, not
-            # Aura's — kept here so the accent cannot creep back into --bs-primary.
-            'tbt_brand_color': ('#242424', '#FAA140'),
-            'tbt_brand_color_rgb': ('36,36,36', '250,161,64'),
+            # '#FAA140' was a short-lived orange primary, '#000000' the black
+            # primary of the warm palette superseded in 19.0.1.7.0.
+            # '#0A8FDC' = the owner blue, superseded by the logo blue in
+            # 19.0.1.8.0.
+            'tbt_brand_color': ('#242424', '#FAA140', '#000000', '#0A8FDC'),
+            'tbt_brand_color_rgb': ('36,36,36', '250,161,64', '0,0,0', '10,143,220'),
             # '#E9DBCA' = the short-lived warm navbar, before it became clear
             # Odoo's stock bar renders black from $o-brand-odoo regardless.
             'tbt_topbar_bg': ('#ffffff', '#E9DBCA'),
             # Black topbar text was unreadable once the bar itself went black.
             'tbt_topbar_text': ('#0c0f0f', '#000000'),
-            'tbt_content_bg': ('#f6f6f6',),
+            'tbt_content_bg': ('#f6f6f6', '#FDFAF6'),
+            'tbt_card_bg': ('#F2F2F2',),
         }
         for fname, stale_values in stale_by_field.items():
             for stale in stale_values:
@@ -93,17 +96,17 @@ class TestThemeDefaults(TransactionCase):
                     "web_assets.xml" % (stale, fname),
                 )
 
-    def test_accent_is_not_the_brand_primary(self):
-        """The orange accent must never drive --bs-primary.
+    def test_secondary_is_not_the_brand_primary(self):
+        """The secondary (#6D3BFF) must never drive --bs-primary.
 
-        Primary is black (02-display-title.png, 03-card.png); orange is applied
-        per-component for emphasis. Wiring the accent into the brand colour
-        would tint every button, link and focus ring in the backend.
+        Primary is the logo blue; the secondary violet is applied per-component
+        for emphasis. Wiring it into the brand colour would tint every button,
+        link and focus ring in the backend violet instead of the client's blue.
         """
-        self.assertNotEqual(DEFAULT_BRAND, METHODE_ACCENT)
-        self.assertEqual(DEFAULT_BRAND, METHODE_TEXT)
+        self.assertNotEqual(DEFAULT_BRAND, METHODE_SECONDARY)
         company = self.env['res.company'].create({'name': 'Accent Probe'})
-        self.assertNotEqual(company.tbt_brand_color, METHODE_ACCENT)
+        self.assertEqual(company.tbt_brand_color, DEFAULT_BRAND)
+        self.assertEqual(company.tbt_brand_color_dark, DEFAULT_BRAND_DARK)
 
     def test_web_assets_template_is_installed(self):
         """The :root block and the FA6 <link> tags actually load.

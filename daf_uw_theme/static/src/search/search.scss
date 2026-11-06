@@ -1,0 +1,474 @@
+// ---------------------------------------------------------------------------
+// Simplified search bar: the search box + the Filter… / Group by… pickers.
+// Behaviour: search_bar_patch.js. Markup seams: search_bar.xml.
+//
+// The look is the navbar's command-palette button (.m-nav-search, navbar.scss)
+// at control-panel scale: near-opaque glass plate, 1px --m-border-soft at rest
+// (the 3:1 field edge, forms.scss has why), ink on hover, the primary edge +
+// halo on focus. Same 0.8125rem text, so the three controls and the palette button read
+// as one family.
+//
+// ⚠ SCOPED TO .m-search / .m-search-picker-menu ONLY. The control panel around it
+// (.o_control_panel_actions width, order, breakpoints) is owned by the
+// control-panel work in scss/views/; nothing here reaches outside the bar.
+//
+// Layout:
+//   ≥ xl   [ search box (grows) ][ ⏷ Filter… ][ ⊞ Group by… ]   one row
+//   lg     [ search box (grows) ][ ⏷ ][ ⊞ ]   icon-only pickers, which widen
+//                                             while focused
+//   < lg   [ search box ................................ ]
+//          [ Filter… ............ ][ Group by… .......... ]   stacked
+//
+// ⚠ THE ROW NEVER WRAPS FROM lg UP, AND THE BOX HAS `contain: inline-size`.
+// The control panel sizes its actions column from its content's intrinsic
+// width. Without containment the box's intrinsic width is its chips, so adding
+// one chip widened the whole column and the row went from two lines to one
+// (QA: "layout jump"). It also let the search claim width from the title
+// (QA: breadcrumb squeezed). Contained, the box contributes only its min-width;
+// it still fills whatever the column is given (flex-grow), and chips wrap
+// INSIDE it.
+// On small screens the whole bar is still behind Odoo's own magnifier toggle
+// (useSearchBarToggler). That is untouched.
+// ---------------------------------------------------------------------------
+
+.o_cp_searchview.m-search {
+    flex-wrap: nowrap;
+    // Pickers keep their own height when chips make the box taller, and sit on
+    // its BOTTOM edge: the bar shares one baseline with the New / Import /
+    // Export buttons (control_panel.scss, "One action row"), so the pickers
+    // must stay on that line while the box grows upward.
+    align-items: flex-end;
+    gap: var(--m-space-2);
+    width: 100%;
+    min-width: 0;
+}
+
+// The shared plate: the search box and each picker input.
+%m-search-plate {
+    // Glass field.  The border stays --m-border-soft (the 3:1 field
+    // edge, forms.scss); the glass is the fill, sheen and rim.
+    border: 1px solid var(--m-border-soft);
+    border-radius: var(--m-radius-control);
+    background-color: var(--m-glass-bg-hover);
+    background-image: var(--m-glass-sheen);
+    box-shadow: var(--m-glass-rim), var(--m-elev-1);
+    color: var(--m-text);
+    font-size: 0.8125rem;
+    transition:
+        border-color var(--m-dur-fast) var(--m-ease-out),
+        box-shadow var(--m-dur-fast) var(--m-ease-out);
+
+    &:hover {
+        border-color: var(--m-ink-border);
+    }
+}
+
+.m-search .m-search-box {
+    @extend %m-search-plate;
+    flex: 1 1 auto;
+    min-width: 180px;
+    // See the header: chips must not size the column. The box instead reports
+    // a FIXED intrinsic width, so the column is the same with or without chips.
+    contain: inline-size;
+    contain-intrinsic-inline-size: 360px;
+    padding-inline: var(--m-space-2);
+
+    // core's search_view.scss paints the focus ring with $input-focus-*. Here
+    // it is the theme's, as on every other input (forms.scss).
+    &:focus-within {
+        border-color: var(--m-primary);
+        box-shadow: var(--m-glass-rim), var(--m-focus-ring);
+    }
+
+    .o_searchview_icon {
+        color: var(--m-text-secondary);
+    }
+
+    .o_searchview_input::placeholder {
+        color: var(--m-text-secondary);
+    }
+
+    // The stock input keeps a ~20ch intrinsic width (size="20"), so one chip
+    // pushed it onto a second line. It takes the rest of the line instead,
+    // and only wraps below 8ch.
+    .o_searchview_input {
+        flex: 1 1 0;
+        width: 0;
+        min-width: 8ch;
+    }
+
+    // From lg up the chips and the input share ONE line, so adding a chip
+    // never changes the box's height (QA round 2). ⚠ Chips shrink only down
+    // to a readable floor (QA round 3: three of them squeezed to icon-only,
+    // × gone), with the value truncating inside and its × always beside it. The chips that do not fit are moved out of
+    // the flow by search_bar_patch.js (mFitFacets) and reached through the
+    // "+N" chip. Stacked layouts below lg keep stock wrapping.
+    @include media-breakpoint-up(lg) {
+        .o_searchview_input_container {
+            position: relative;
+            // ⚠ !important: the stock node carries Bootstrap's `flex-wrap`
+            // utility class, which is itself !important.
+            flex-wrap: nowrap !important;
+            overflow: hidden;
+        }
+
+        // Shrinks only down to a READABLE floor: icon + ~6ch of label + ×.
+        // mFitFacets counts every chip at this floor, so whatever is shown
+        // can always be read and removed (QA round 3).
+        .o_searchview_facet {
+            flex: 0 1 auto;
+            min-width: 6.5rem;
+            max-width: 220px;
+        }
+
+        // The input keeps room to type, a little less than when stacked.
+        .o_searchview_input {
+            min-width: 6ch;
+        }
+
+        .o_facet_values,
+        .o_facet_value {
+            min-width: 0;
+        }
+
+        // Inside the chip too (same !important utility): the value truncates
+        // and the × stays beside it.
+        .o_facet_values {
+            flex-wrap: nowrap !important;
+        }
+
+        // A multi-value chip ("Vendeur > Société > Pays") truncates from the
+        // END: the last value gives up width first, the earlier ones keep
+        // theirs, instead of every value shrinking to two letters. The
+        // separators never shrink; the × (last child) is outside this.
+        .o_facet_value {
+            flex: 0 0.15 auto;
+            min-width: 2ch;
+        }
+
+        .o_facet_value:nth-last-child(2) {
+            flex-shrink: 1;
+        }
+
+        .o_facet_values_sep {
+            flex: 0 0 auto;
+        }
+
+        // ⚠ The × and the icon label never shrink: as default flex items they
+        // gave up their width first; the × vanished from multi-value chips
+        // (the QA round 3 bug) and the icon slid over the first value.
+        .o_facet_remove,
+        .o_searchview_facet_label {
+            flex: 0 0 auto;
+        }
+
+        // Overflowing chips: still laid out (so they can be MEASURED at their
+        // natural width on the next pass), but out of the flow and invisible.
+        // ⚠ !important: the stock facet carries Bootstrap's
+        // `position-relative`, itself !important, which kept it in the flow.
+        .o_searchview_facet[data-m-overflow] {
+            position: absolute !important;
+            visibility: hidden;
+            pointer-events: none;
+        }
+    }
+}
+
+// The "+N" chip: same footprint as a facet, reads as "more of these".
+.m-facet-more {
+    flex: 0 0 auto;
+    align-self: center;
+    padding: 1px var(--m-space-2);
+    border: 1px solid var(--m-border-soft);
+    border-radius: var(--m-radius-sm);
+    background-color: var(--m-bg-card);
+    color: var(--m-text);
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1.6;
+    white-space: nowrap;
+
+    &:hover,
+    &:focus-visible {
+        border-color: var(--m-ink-border);
+    }
+}
+
+// Its popover: every active facet, full label, own ×.
+.m-facet-more-menu {
+    min-width: 240px;
+    max-width: 360px;
+    max-height: MIN(60vh, 420px); // uppercase: libsass would evaluate min()
+    overflow-y: auto;
+    padding-block: var(--m-space-1);
+    font-size: 0.8125rem;
+}
+
+.m-facet-more-row {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--m-space-2);
+    padding: var(--m-space-1) var(--m-space-2) var(--m-space-1) var(--m-space-3);
+
+    & + & {
+        border-top: 1px solid var(--m-bg-secondary);
+    }
+
+    .m-facet-more-icon {
+        flex: 0 0 auto;
+        margin-top: 3px;
+        color: var(--m-text-secondary);
+    }
+
+    .m-facet-more-label {
+        flex: 1 1 auto;
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+    .m-facet-more-remove {
+        flex: 0 0 auto;
+        padding: 0 var(--m-space-1);
+        color: var(--m-danger);
+        line-height: 1.4;
+    }
+}
+
+// The × that clears the live term. Sits at the end of the input row.
+.m-search .m-search-clear {
+    align-self: center;
+    flex: 0 0 auto;
+    padding: 0 var(--m-space-1);
+    color: var(--m-text-secondary);
+    line-height: 1;
+
+    &:hover,
+    &:focus-visible {
+        color: var(--m-text);
+    }
+}
+
+// Facets: stock chips, aligned to the theme radius. Their colours stay
+// stock (primary / action / favourite) so filter vs group-by still reads.
+.m-search .o_searchview_facet,
+.m-search .o_searchview_facet_label {
+    border-radius: var(--m-radius-sm);
+}
+
+// The domain editor is gone (search_bar.xml), so a facet with a domain is
+// no longer a button.
+.m-search .o_facet_with_domain .o_searchview_facet_label {
+    cursor: default;
+}
+
+// --- Pickers -----------------------------------------------------------------
+
+.m-search-pickers {
+    display: flex;
+    gap: var(--m-space-2);
+    // Never shrinks: the search box is the one elastic part of the row.
+    // Shrinking here let the pickers overflow onto the pager (QA, 1280px).
+    flex: 0 0 auto;
+}
+
+.m-search-picker {
+    position: relative;
+    flex: 0 0 auto;
+    width: 150px;
+    // Same height as the one-line search box, so the row reads as one bar.
+    height: 34px;
+
+    .m-search-picker-icon {
+        position: absolute;
+        top: 50%;
+        left: var(--m-space-2);
+        transform: translateY(-50%);
+        color: var(--m-text-secondary);
+        font-size: 0.75rem;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .o-autocomplete,
+    .o-autocomplete--input {
+        height: 100%;
+    }
+
+    .o-autocomplete--input.o_input {
+        @extend %m-search-plate;
+        // Left padding clears the absolutely-placed icon: inset + icon + gap.
+        padding: var(--m-space-1) var(--m-space-2);
+        padding-left: calc(var(--m-space-2) + 1rem + var(--m-space-1));
+
+        &::placeholder {
+            color: var(--m-text-secondary);
+        }
+
+        &:focus,
+        &:focus-visible {
+            border-color: var(--m-primary);
+            box-shadow: var(--m-focus-ring);
+            outline: none;
+        }
+    }
+}
+
+// The dropdown. It is a sibling of the input inside .o-autocomplete, so it is
+// styled by its own class (menuCssClass) rather than through .m-search.
+.m-search-picker-menu.o-autocomplete--dropdown-menu {
+    min-width: 240px;
+    max-height: MIN(60vh, 420px); // uppercase: libsass would evaluate min() and reject mixed units
+    overflow-y: auto;
+    padding: var(--m-space-1);
+    // Glass skin comes from surfaces.scss (.o-autocomplete--dropdown-menu).
+    border: 1px solid var(--m-glass-border);
+    border-radius: var(--m-radius-lg);
+    font-size: 0.8125rem;
+
+    .dropdown-item {
+        display: flex;
+        align-items: center;
+        gap: var(--m-space-1);
+        padding: var(--m-space-1) var(--m-space-3) var(--m-space-1) var(--m-space-2);
+
+        border-radius: var(--m-radius-control);
+
+        &.ui-state-active {
+            background-color: var(--m-accent-soft);
+            color: var(--m-text);
+        }
+    }
+
+    .m-search-picker-check {
+        flex: 0 0 auto;
+        color: var(--m-primary-dark);
+    }
+
+    // A thin rule between <separator> groups, as in the stock dropdown.
+    .m-search-picker-sep {
+        margin-top: var(--m-space-1);
+        padding-top: var(--m-space-1);
+        border-top: 1px solid var(--m-bg-secondary);
+    }
+
+    // Section headers ("Favorites") and the no-match row:
+    // unselectable spans, so no hover wash.
+    .m-search-picker-header,
+    .m-search-picker-empty {
+        > span.dropdown-item {
+            color: var(--m-text-secondary);
+            cursor: default;
+        }
+    }
+
+    .m-search-picker-header {
+        margin-top: var(--m-space-1);
+        border-top: 1px solid var(--m-bg-secondary);
+
+        > span.dropdown-item {
+            padding-top: var(--m-space-2);
+            font-size: 0.6875rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+    }
+
+    .m-search-picker-empty > span.dropdown-item {
+        font-style: italic;
+    }
+}
+
+// --- Medium screens: icon-only pickers -----------------------------------------
+// Between lg and xl the title row, the buttons and the pager compete with the
+// search. The pickers fold to their icon (title and accessible name stay the
+// placeholder) and widen while focused, so the typed keyword stays readable.
+
+@include media-breakpoint-only(lg) {
+    .m-search .m-search-box {
+        contain-intrinsic-inline-size: 280px;
+    }
+
+    // ⚠ The folded picker is a 38px plate holding the icon. Its input lies
+    // over that plate, transparent, so a click or Tab still lands in it. On
+    // focus the input drops BELOW the slot (right-aligned with it) instead of
+    // widening sideways: sideways meant covering the search box and its chips
+    // (QA round 2). Below, it covers only the list header, and only while the
+    // user is typing a keyword. The slot never changes size, so nothing reflows.
+    .m-search-picker {
+        // The %m-search-plate look, restated: @extend cannot cross a media
+        // query. Keep in step with the placeholder above.
+        width: 38px;
+        border: 1px solid var(--m-border-soft);
+        border-radius: var(--m-radius-control);
+        background-color: var(--m-glass-bg-hover);
+        background-image: var(--m-glass-sheen);
+        box-shadow: var(--m-glass-rim), var(--m-elev-1);
+
+        &:hover {
+            border-color: var(--m-ink-border);
+        }
+
+        .m-search-picker-icon {
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .o-autocomplete {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+        }
+
+        .o-autocomplete--input.o_input {
+            opacity: 0;
+        }
+
+        &:focus-within {
+            z-index: 2;
+            border-color: var(--m-primary);
+
+            .o-autocomplete {
+                top: calc(100% + var(--m-space-1));
+                width: 200px;
+                height: 34px;
+            }
+
+            .o-autocomplete--input.o_input {
+                opacity: 1;
+                padding-left: var(--m-space-2);
+            }
+        }
+    }
+}
+
+// --- Small screens: stacked ----------------------------------------------------
+
+@include media-breakpoint-down(lg) {
+    .o_cp_searchview.m-search {
+        flex-wrap: wrap;
+    }
+
+    .m-search .m-search-box {
+        flex-basis: 100%;
+        contain: none;
+    }
+
+    .m-search-pickers {
+        flex: 1 1 100%;
+    }
+
+    .m-search-picker {
+        flex: 1 1 0;
+        width: auto;
+    }
+}
+
+@include media-breakpoint-down(md) {
+    // Phones: a 16px input stops iOS Safari from zooming the page on focus.
+    .m-search .o_searchview_input,
+    .m-search-picker .o-autocomplete--input.o_input {
+        font-size: 1rem;
+    }
+}

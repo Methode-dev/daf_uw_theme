@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Boot loader (THEME_PLAN §13.5, P8e)
+
+    The DAF Under Writing mark assembling itself ("Assemble"), shown in the gap
+    between the backend HTML arriving and OWL mounting the webclient.  On a
+    cold bundle that gap is seconds long, and without it the screen is blank —
+    the first thing a user sees after logging in.
+
+    ⚠ WHY THIS IS SERVER-SIDE QWEB AND NOT AN OWL TEMPLATE.  It has to paint
+    BEFORE any JavaScript runs; an OWL component cannot, by definition, render
+    during the wait for OWL.
+
+    ⚠ THE CSS IS NOT HERE, AND INLINING IT DOES NOT MAKE THE MARK PAINT SOONER.
+    That was tried and reverted; do not try it again without re-reading this.
+    web.layout emits web.assets_web as a render-blocking <link> (~1 MB on this
+    build), and a blocking stylesheet gates the first paint no matter what
+    follows it in <head> — so an inline <style> after that link buys exactly
+    zero milliseconds while creating a second home for the mark's styling.
+
+    Styling lives in static/src/scss/loader.scss with the snackbar.
+
+    ⚠ WHY THE SVG IS INLINE.  Per-shape animation is the whole asset — each
+    letter enters on its own delay.  An <img> or a background url() renders SVG
+    in an isolated context CSS cannot reach, so the mark would appear fully
+    built and static.  It must be real DOM; see views/daf_mark_templates.xml.
+
+    Teardown is static/src/js/boot_loader.js: it removes the node once the
+    webclient has mounted.
+-->
+<odoo>
+
+    <template id="webclient_bootstrap_boot_loader" inherit_id="web.webclient_bootstrap">
+        <!--
+            web.layout renders `<body t-att-class="body_classname"><t t-out="0"/></body>`,
+            so the default slot of this t-call IS the body.  Its existing children
+            are all t-set and emit nothing, which is why appending here puts the
+            loader alone in the body until the webclient mounts over it.
+        -->
+        <xpath expr="//t[@t-call='web.layout']" position="inside">
+            <div id="m-boot-loader" class="m-boot-loader">
+                <div class="m-daf-loader" role="status" aria-label="Loading">
+                    <t t-call="daf_uw_theme.daf_mark"/>
+                    <div class="m-daf-loader__shadow"/>
+                    <div class="m-daf-loader__track"/>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+</odoo>

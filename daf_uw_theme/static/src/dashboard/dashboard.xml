@@ -1,0 +1,577 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!--
+        Home dashboard (THEME_PLAN §13 / HOMEPAGE_DASHBOARD_PLAN).
+
+        The grid dispatches each placement to its component by `render`
+        (data-driven — see dashboard.js). A placement with no fetcher yet renders
+        the honest WidgetPending frame; none pretend to have data (§0).
+    -->
+    <t t-name="daf_uw_theme.HomeDashboard">
+        <div class="m-dash" t-att-class="{ 'm-dash__compact': state.preferences.layout_density === 'compact' }">
+
+            <header class="m-dash-topbar">
+                <h1 class="m-dash-greeting">
+                    <t t-esc="greeting"/>, <t t-esc="userName"/>
+                </h1>
+                <span class="m-dash-topbar-spacer"/>
+                <!-- Edit mode's controls. Hidden until asked for: a landing screen
+                     should read as information, not as a form. -->
+                <t t-if="state.editing">
+                    <button class="btn btn-secondary btn-sm"
+                            t-on-click="() => this.state.picking = !this.state.picking">
+                        Add widget
+                    </button>
+                    <button class="btn btn-secondary btn-sm"
+                            t-on-click="() => this.state.configuring = !this.state.configuring">
+                        Preferences
+                    </button>
+                    <button class="btn btn-secondary btn-sm" t-on-click="() => this.resetLayout()">
+                        Restore defaults
+                    </button>
+                </t>
+                <button class="btn btn-sm"
+                        t-att-class="state.editing ? 'btn-primary' : 'btn-secondary'"
+                        t-on-click="() => this.toggleEdit()">
+                    <t t-if="state.editing">Done</t>
+                    <t t-else="">Customize</t>
+                </button>
+            </header>
+
+            <!-- Preferences: the toggles and limits that §9 calls sections rather
+                 than widgets — you can only show or hide them. -->
+            <div t-if="state.editing and state.configuring" class="m-dash-prefs">
+                <label class="m-dash-pref">
+                    <input type="checkbox" t-att-checked="state.preferences.show_stats_row"
+                           t-on-change="(ev) => this.savePreference('show_stats_row', ev.target.checked)"/>
+                    <span>Stats row</span>
+                </label>
+                <label class="m-dash-pref">
+                    <input type="checkbox" t-att-checked="state.preferences.show_insights"
+                           t-on-change="(ev) => this.savePreference('show_insights', ev.target.checked)"/>
+                    <span>Alerts</span>
+                </label>
+                <label class="m-dash-pref">
+                    <input type="checkbox" t-att-checked="state.preferences.show_shortcuts"
+                           t-on-change="(ev) => this.savePreference('show_shortcuts', ev.target.checked)"/>
+                    <span>Shortcuts</span>
+                </label>
+                <label class="m-dash-pref">
+                    <span>Density</span>
+                    <select t-on-change="(ev) => this.savePreference('layout_density', ev.target.value)">
+                        <option value="comfortable"
+                                t-att-selected="state.preferences.layout_density === 'comfortable'">Comfortable</option>
+                        <option value="compact"
+                                t-att-selected="state.preferences.layout_density === 'compact'">Compact</option>
+                    </select>
+                </label>
+                <label class="m-dash-pref">
+                    <span>Rows per widget</span>
+                    <input type="number" min="1" max="20" class="m-dash-pref-number"
+                           t-att-value="state.preferences.row_limit"
+                           t-on-change="onRowLimitChange"/>
+                </label>
+            </div>
+
+            <!-- Add-widget picker, grouped as the catalogue declares. Already-placed
+                 built-ins are shown as such rather than hidden, so the list does not
+                 change shape as you add things. -->
+            <div t-if="state.editing and state.picking" class="m-dash-picker">
+                <t t-foreach="catalogueGroups" t-as="group" t-key="group.name">
+                    <div class="m-dash-picker-group">
+                        <div class="m-dash-section-label" t-esc="group.name"/>
+                        <t t-foreach="group.items" t-as="entry" t-key="entry.id">
+                            <div class="m-dash-picker-item">
+                                <i class="fa fa-fw" t-att-class="entry.icon" aria-hidden="true"/>
+                                <div class="m-dash-picker-text">
+                                    <span class="m-dash-row-title" t-esc="entry.name"/>
+                                    <span t-if="entry.description" class="m-dash-row-subtitle"
+                                          t-esc="entry.description"/>
+                                </div>
+                                <button t-if="entry.placed" class="m-dash-picker-added" disabled="disabled">
+                                    Added
+                                </button>
+                                <button t-else="" class="btn btn-secondary btn-sm"
+                                        t-on-click="() => this.addWidget(entry)">
+                                    Add
+                                </button>
+                            </div>
+                        </t>
+                    </div>
+                </t>
+            </div>
+
+
+            <t t-if="state.loading">
+                <t t-call="daf_uw_theme.HomeDashboardSkeleton"/>
+            </t>
+
+            <t t-elif="isEmpty">
+                <!--
+                    Reachable state, not a defensive branch: a user can remove
+                    every widget in edit mode, and "restore defaults" is how they
+                    get back. Without this the grid would be a blank page with no
+                    way out.
+                -->
+                <div class="m-dash-empty">
+                    <p class="m-dash-empty-title">Your dashboard is empty.</p>
+                    <p class="m-dash-empty-hint">Add a widget to get started.</p>
+                </div>
+            </t>
+
+            <t t-else="">
+                <!--
+                    CHROME, STACKED ABOVE THE GRID (§9). These are not widgets and
+                    have no col_span: they are sections a user can only show or
+                    hide, which is exactly what makes them chrome. Order is
+                    deliberate — numbers, then what needs you, then what you start.
+                -->
+                <div t-if="showStats" class="m-dash-stats">
+                    <t t-foreach="state.stats" t-as="tile" t-key="tile.code">
+                        <StatCard tile="tile" data="state.statsData[tile.code]"/>
+                    </t>
+                </div>
+
+                <InsightBanners t-if="showInsights"
+                                insights="state.insights"
+                                more="state.insightsMore"/>
+
+                <QuickActions t-if="showShortcuts" shortcuts="state.shortcuts"/>
+
+                <!-- t-ref: usePackedGrid measures these cards and spans them. -->
+                <div class="m-dash-grid" t-ref="grid">
+                    <t t-foreach="state.placements" t-as="placement" t-key="placement.id">
+                        <!--
+                            In edit mode the widget is wrapped in a slot that owns
+                            the grid span, so the toolbar sits with the card rather
+                            than inside it — a widget knows nothing about being
+                            rearranged, which is what keeps the components reusable.
+                        -->
+                        <div t-if="state.editing"
+                             t-attf-class="m-dash-slot m-dash-span-{{ placement.col_span }}">
+                            <div class="m-dash-edit-bar">
+                                <button class="m-dash-edit-btn" title="Move earlier" aria-label="Move earlier"
+                                        t-on-click="() => this.moveWidget(placement, -1)">
+                                    <i class="fa fa-arrow-left" aria-hidden="true"/>
+                                </button>
+                                <button class="m-dash-edit-btn" title="Move later" aria-label="Move later"
+                                        t-on-click="() => this.moveWidget(placement, 1)">
+                                    <i class="fa fa-arrow-right" aria-hidden="true"/>
+                                </button>
+                                <span class="m-dash-edit-spans">
+                                    <t t-foreach="[1, 2, 3]" t-as="span" t-key="span">
+                                        <button class="m-dash-edit-btn"
+                                                t-att-class="{ 'is-active': placement.col_span === span }"
+                                                t-attf-title="Width {{ span }}"
+                                                t-on-click="() => this.resizeWidget(placement, span)"
+                                                t-esc="span"/>
+                                    </t>
+                                </span>
+                                <span class="m-dash-edit-name" t-esc="placement.name"/>
+                                <button class="m-dash-edit-btn m-dash-edit-remove"
+                                        title="Remove" aria-label="Remove"
+                                        t-on-click="() => this.removeWidget(placement)">
+                                    <i class="fa fa-times" aria-hidden="true"/>
+                                </button>
+                            </div>
+                            <t t-component="componentFor(placement)"
+                               placement="placement"
+                               data="state.data[placement.id]"/>
+                        </div>
+                        <t t-else="">
+                            <t t-component="componentFor(placement)"
+                               placement="placement"
+                               data="state.data[placement.id]"/>
+                        </t>
+                    </t>
+                </div>
+            </t>
+
+        </div>
+    </t>
+
+    <!--
+        StatCard — one KPI tile. Clickable as a whole when the fetcher supplied an
+        action, because a number you cannot open is decoration (§1).
+
+        ⚠ NO PER-TILE COLOUR. Aura's four tiles carried #2F6BFF/#EF4444/#F59E0B/
+        #22C55E; dropping four saturated hues on a monochrome brand is what
+        THEME_PLAN §13.2 forbids. Emphasis comes from the figure's size.
+    -->
+    <t t-name="daf_uw_theme.StatCard">
+        <div class="m-dash-stat"
+             t-att-class="{ 'is-clickable': hasAction }"
+             t-att-role="hasAction ? 'button' : undefined"
+             t-att-tabindex="hasAction ? 0 : undefined"
+             t-on-click="() => this.open()">
+            <div class="m-dash-stat-head">
+                <i class="m-dash-stat-icon fa fa-fw" t-att-class="props.tile.icon" aria-hidden="true"/>
+                <span class="m-dash-stat-label" t-esc="(props.data and props.data.label) or props.tile.name"/>
+            </div>
+            <div class="m-dash-stat-value" t-esc="props.data ? props.data.value : '—'"/>
+            <!-- Tone comes from the DATA, not the widget type: red means late. -->
+            <div t-if="props.data and props.data.meta"
+                 t-attf-class="m-dash-stat-meta m-dash-stat-meta__{{ props.data.tone or 'neutral' }}"
+                 t-esc="props.data.meta"/>
+        </div>
+    </t>
+
+    <!--
+        InsightBanners — the interruptions (§2.4). One line, one action, one
+        dismiss. Dismissal is a SNOOZE: remembered for today, back tomorrow if the
+        problem is still there.
+    -->
+    <t t-name="daf_uw_theme.InsightBanners">
+        <div class="m-dash-banners">
+            <t t-foreach="visible" t-as="insight" t-key="insight.key">
+                <div t-attf-class="m-dash-banner m-dash-banner__{{ insight.tone }}">
+                    <i class="m-dash-banner-icon fa fa-fw" t-att-class="insight.icon" aria-hidden="true"/>
+                    <span class="m-dash-banner-message" t-esc="insight.message"/>
+                    <button t-if="insight.action_label"
+                            class="m-dash-banner-action"
+                            t-on-click="() => this.run(insight)"
+                            t-esc="insight.action_label"/>
+                    <button class="m-dash-banner-dismiss"
+                            title="Dismiss for today"
+                            aria-label="Dismiss for today"
+                            t-on-click="() => this.dismiss(insight)">
+                        <i class="fa fa-times" aria-hidden="true"/>
+                    </button>
+                </div>
+            </t>
+            <p t-if="props.more" class="m-dash-banner-more">
+                + <t t-esc="props.more"/> more to review
+            </p>
+        </div>
+    </t>
+
+    <!--
+        QuickActions — the shortcut row. Presence-gated: each entry is contributed
+        by whichever module owns it, so an uninstalled app has no button here.
+    -->
+    <t t-name="daf_uw_theme.QuickActions">
+        <div class="m-dash-shortcuts">
+            <t t-foreach="props.shortcuts" t-as="shortcut" t-key="shortcut.key">
+                <!--
+                    data-shortcut is the only stable handle on this button: the
+                    label is translated and the fill is assigned by position, so
+                    anything outside this component (a guided tour, an
+                    acceptance test) would otherwise have to match on the visible
+                    text. The key is already the contributing module's own
+                    identifier — see methode.dashboard.shortcut._collect_shortcuts.
+                -->
+                <button class="m-dash-shortcut"
+                        t-att-data-shortcut="shortcut.key"
+                        t-on-click="() => this.run(shortcut)">
+                    <i class="fa fa-fw" t-att-class="shortcut.icon" aria-hidden="true"/>
+                    <span t-esc="shortcut.label"/>
+                </button>
+            </t>
+        </div>
+    </t>
+
+    <!--
+        WidgetFrame — the shared card chrome. Header (icon, title, optional count
+        badge, a `lead` slot next to the title, a trailing `action` slot) above a
+        default body slot. This is the grid child, so it owns the col_span class;
+        the skeleton below mirrors this exact shell so nothing shifts on load.
+    -->
+    <t t-name="daf_uw_theme.WidgetFrame">
+        <section t-attf-class="m-dash-card m-dash-span-{{ props.colSpan }}">
+            <header class="m-dash-card-header">
+                <i class="m-dash-card-icon fa fa-fw" t-att-class="props.icon" role="img" aria-hidden="true"/>
+                <span class="m-dash-card-title" t-esc="props.title"/>
+                <!-- 0 is a real value (loaded but empty); the pending frame omits it. -->
+                <span t-if="props.count or props.count === 0" class="m-dash-card-count" t-esc="props.count"/>
+                <!-- Primary action sits WITH the title; `action` is pushed to the far edge. -->
+                <t t-slot="lead"/>
+                <span class="m-dash-card-header-spacer"/>
+                <t t-slot="action"/>
+            </header>
+            <div class="m-dash-card-body">
+                <t t-slot="default"/>
+            </div>
+        </section>
+    </t>
+
+    <!--
+        WidgetRow — one line inside a widget. Leading icon, a title/subtitle
+        block, an optional trailing figure (meta, e.g. an amount), a status pill,
+        and a trailing `action` slot. When `onClick` is given the whole row is a
+        click target that opens the record behind it (§1: every row is a link).
+    -->
+    <t t-name="daf_uw_theme.WidgetRow">
+        <div class="m-dash-row"
+             t-att-class="{ 'is-clickable': props.onClick }"
+             t-att-role="props.onClick ? 'button' : undefined"
+             t-att-tabindex="props.onClick ? 0 : undefined"
+             t-on-click="onMainClick"
+             t-on-keydown="onKeydown">
+            <i class="m-dash-row-icon fa fa-fw" t-att-class="props.icon" aria-hidden="true"/>
+            <div class="m-dash-row-main">
+                <span class="m-dash-row-title" t-esc="props.title"/>
+                <span t-if="props.subtitle" class="m-dash-row-subtitle" t-esc="props.subtitle"/>
+            </div>
+            <span t-if="props.meta" class="m-dash-row-meta" t-esc="props.meta"/>
+            <span t-if="props.pill"
+                  t-attf-class="m-dash-pill m-dash-pill__{{ props.pill.tone }}"
+                  t-esc="props.pill.text"/>
+            <div class="m-dash-row-action">
+                <t t-slot="action"/>
+            </div>
+        </div>
+    </t>
+
+    <!--
+        WidgetPending — a placement whose type has no fetcher yet. Explicitly "no
+        content", never convincing fake data (§0).
+    -->
+    <t t-name="daf_uw_theme.WidgetPending">
+        <WidgetFrame colSpan="props.placement.col_span"
+                     icon="props.placement.icon"
+                     title="props.placement.name">
+            <div class="m-dash-card-body__pending">
+                No content yet — this widget is wired up in a later step.
+            </div>
+        </WidgetFrame>
+    </t>
+
+    <!--
+        WidgetList — the generic list renderer (render='list'). Consumes the
+        normalized payload: flat `rows` or `groups`, each row a WidgetRow with an
+        optional amount + status pill, a "+ N others" overflow, and a designed
+        empty state. Most app widgets are just a fetcher returning this shape.
+    -->
+    <t t-name="daf_uw_theme.WidgetList">
+        <WidgetFrame colSpan="props.placement.col_span"
+                     icon="props.placement.icon"
+                     title="props.placement.name"
+                     count="state.count">
+            <t t-set-slot="action">
+                <button t-if="state.action" class="m-dash-frame-action" t-on-click="() => this.viewAll()">
+                    View all
+                </button>
+            </t>
+
+            <t t-if="isEmpty">
+                <div class="m-dash-empty-inline">
+                    <p class="m-dash-empty-title" t-esc="emptyTitle"/>
+                    <p t-if="state.empty and state.empty.hint" class="m-dash-empty-hint" t-esc="state.empty.hint"/>
+                </div>
+            </t>
+
+            <t t-else="">
+                <t t-if="state.groups">
+                    <t t-foreach="state.groups" t-as="group" t-key="group.key">
+                        <div t-if="group.rows.length" class="m-dash-section">
+                            <div class="m-dash-section-header">
+                                <span class="m-dash-section-label" t-esc="group.label"/>
+                                <span class="m-dash-section-count" t-esc="group.count"/>
+                            </div>
+                            <t t-foreach="group.rows" t-as="row" t-key="row.id">
+                                <!--
+                                    `or ''` on every optional string: rows come
+                                    from fetchers in other modules, and an unset
+                                    Odoo Char arrives as False, which fails OWL
+                                    prop validation. One bridge returning a False
+                                    subtitle must not blank the dashboard.
+                                -->
+                                <WidgetRow icon="row.icon or 'fa-circle-o'"
+                                           title="row.title or ''"
+                                           subtitle="row.subtitle or ''"
+                                           meta="row.meta or ''" pill="row.pill"
+                                           onClick="row.res_model ? () => this.openRecord(row) : undefined"/>
+                            </t>
+                        </div>
+                    </t>
+                </t>
+                <t t-else="">
+                    <t t-foreach="state.rows" t-as="row" t-key="row.id">
+                        <WidgetRow icon="row.icon" title="row.title" subtitle="row.subtitle"
+                                   meta="row.meta" pill="row.pill"
+                                   onClick="row.res_model ? () => this.openRecord(row) : undefined"/>
+                    </t>
+                </t>
+
+                <button t-if="remaining" class="m-dash-more" t-on-click="() => this.viewAll()">
+                    + <t t-esc="remaining"/> others
+                </button>
+            </t>
+        </WidgetFrame>
+    </t>
+
+    <!--
+        WidgetChart — horizontal bars in CSS, no chart library (§13.6). The value
+        is printed beside every bar, so the widget is readable even when the bars
+        are not (colour-blind users, print, a screenshot in a deck).
+    -->
+    <t t-name="daf_uw_theme.WidgetChart">
+        <WidgetFrame colSpan="props.placement.col_span"
+                     icon="props.placement.icon"
+                     title="props.placement.name"
+                     count="total">
+            <t t-set-slot="action">
+                <button class="m-dash-frame-action" t-on-click="() => this.open()">
+                    View all
+                </button>
+            </t>
+
+            <t t-if="!total">
+                <div class="m-dash-empty-inline">
+                    <p class="m-dash-empty-title">Nothing scheduled</p>
+                    <p class="m-dash-empty-hint">You're all caught up.</p>
+                </div>
+            </t>
+            <t t-else="">
+                <div class="m-dash-chart">
+                    <t t-foreach="points" t-as="point" t-key="point.label">
+                        <div class="m-dash-chart-row">
+                            <span class="m-dash-chart-label" t-esc="point.label"/>
+                            <span class="m-dash-chart-track">
+                                <span t-attf-class="m-dash-chart-bar m-dash-chart-bar__{{ point.tone }}"
+                                      t-attf-style="width: {{ point.percent }}%"/>
+                            </span>
+                            <span class="m-dash-chart-value" t-esc="point.value"/>
+                        </div>
+                    </t>
+                </div>
+            </t>
+        </WidgetFrame>
+    </t>
+
+    <!--
+        WidgetActivities — "My Activities" (render='activities'). A list with a
+        "Plan…" primary and a per-row mark-done that refills the cap. Empty state
+        is designed, not defaulted (§6).
+    -->
+    <t t-name="daf_uw_theme.WidgetActivities">
+        <WidgetFrame colSpan="props.placement.col_span"
+                     icon="props.placement.icon"
+                     title="props.placement.name"
+                     count="state.count">
+            <t t-set-slot="lead">
+                <button class="btn btn-secondary btn-sm m-dash-frame-plan" t-on-click="() => this.plan()">
+                    Plan…
+                </button>
+            </t>
+            <t t-set-slot="action">
+                <button class="m-dash-frame-action" t-on-click="() => this.viewAll()">
+                    View all
+                </button>
+            </t>
+
+            <t t-if="isEmpty">
+                <div class="m-dash-empty-inline">
+                    <p class="m-dash-empty-title">Nothing scheduled</p>
+                    <p class="m-dash-empty-hint">You're all caught up.</p>
+                </div>
+            </t>
+
+            <t t-else="">
+                <t t-foreach="state.groups" t-as="group" t-key="group.key">
+                    <div t-if="group.rows.length" class="m-dash-section">
+                        <div class="m-dash-section-header">
+                            <span class="m-dash-section-label" t-esc="group.label"/>
+                            <span class="m-dash-section-count" t-esc="group.count"/>
+                        </div>
+                        <t t-foreach="group.rows" t-as="row" t-key="row.id">
+                            <WidgetRow icon="row.icon"
+                                       title="row.title"
+                                       subtitle="row.subtitle"
+                                       pill="pillFor(row)"
+                                       onClick="() => this.openRecord(row)">
+                                <t t-set-slot="action">
+                                    <button class="m-dash-row-done"
+                                            title="Mark done"
+                                            aria-label="Mark done"
+                                            t-on-click.stop="() => this.markDone(row, group)">
+                                        <i class="fa fa-check" aria-hidden="true"/>
+                                    </button>
+                                </t>
+                            </WidgetRow>
+                        </t>
+                    </div>
+                </t>
+                <!-- One overflow link for the whole widget, acting like View all. -->
+                <button t-if="remaining" class="m-dash-more" t-on-click="() => this.viewAll()">
+                    + <t t-esc="remaining"/> others
+                </button>
+            </t>
+        </WidgetFrame>
+    </t>
+
+    <!--
+        ⚠ THE SKELETON DRAWS THE USER'S REAL LAYOUT (§13.4).
+
+        Same grid, same t-foreach over the same `state.placements`, same
+        m-dash-card / m-dash-span-* shell that WidgetFrame renders. The number of
+        cards, their widths and order are known at first paint because the layout
+        travels in session_info, not the content RPC. Nothing moves on load.
+
+        ⚠ If you change the card shell in WidgetFrame, change it here too — these
+        are load-bearing duplicates.
+    -->
+    <t t-name="daf_uw_theme.HomeDashboardSkeleton">
+        <!--
+            The class is not decoration: under the phone breakpoint the zones are
+            re-ordered with flex `order` (dashboard.scss), and the skeleton draws
+            the same zones one level deeper. Without a container of its own to
+            order them in, the placeholder would keep the desktop order and the
+            page would visibly re-stack the moment content landed — the §13.4
+            jump this whole template exists to prevent.
+        -->
+        <div class="m-dash-skeleton" aria-hidden="true">
+            <!--
+                ⚠ THE CHROME IS DRAWN TOO, not just the grid.
+
+                The stats row and the shortcut bar sit ABOVE the widgets, so a
+                skeleton that omits them draws the first card where they will be
+                and then shoves the page down when content lands — the §13.4 jump,
+                one zone higher. Both are drawable before any fetch; they come
+                from session_info, not the content RPC.
+
+                Banners are deliberately NOT drawn: whether there are any is
+                unknowable before fetching, and reserving space for an
+                interruption that never comes leaves a hole.
+            -->
+            <div t-if="showStats" class="m-dash-stats">
+                <t t-foreach="state.stats" t-as="tile" t-key="tile.code">
+                    <div class="m-dash-stat">
+                        <div class="m-dash-stat-head">
+                            <span class="m-skel m-skel-icon"/>
+                            <span class="m-skel m-skel-title"/>
+                        </div>
+                        <span class="m-skel m-skel-stat-value"/>
+                    </div>
+                </t>
+            </div>
+
+            <div t-if="state.preferences.show_shortcuts !== false" class="m-dash-shortcuts">
+                <t t-foreach="[1, 2, 3]" t-as="slot" t-key="slot">
+                    <span class="m-skel m-skel-shortcut"/>
+                </t>
+            </div>
+
+            <div class="m-dash-grid">
+                <t t-foreach="state.placements" t-as="placement" t-key="placement.id">
+                    <section t-attf-class="m-dash-card m-dash-span-{{ placement.col_span }}">
+                        <header class="m-dash-card-header">
+                            <span class="m-skel m-skel-icon"/>
+                            <span class="m-skel m-skel-title"/>
+                        </header>
+                        <div class="m-dash-card-body">
+                            <t t-foreach="skeletonRows(placement)" t-as="row" t-key="row_index">
+                                <div class="m-skel-row">
+                                    <span class="m-skel m-skel-row-icon"/>
+                                    <span class="m-skel m-skel-row-body"/>
+                                </div>
+                            </t>
+                        </div>
+                    </section>
+                </t>
+            </div>
+        </div>
+    </t>
+
+</templates>

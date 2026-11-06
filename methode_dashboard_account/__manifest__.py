@@ -5,12 +5,12 @@
     'summary': "Invoice and receivable widgets for the Méthode home dashboard",
     'description': "Contributes the accounting widgets, stat tiles, insight "
                    "banners and shortcuts to the Methode home dashboard. "
-                   "Auto-installs when both methode_theme and account are "
+                   "Auto-installs when both daf_uw_theme and account are "
                    "present, and uninstalls with either of them.",
     'author': 'Méthode - Progiciel sur mesure',
     'website': 'https://methode.dev',
     'license': 'LGPL-3',
-    'depends': ['methode_theme', 'account'],
+    'depends': ['daf_uw_theme', 'account'],
     'data': [
         'data/dashboard_widget_type_data.xml',
     ],

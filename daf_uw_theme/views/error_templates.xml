@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    HTTP error pages — the Odoo-rendered 404.
+
+    This is the page Odoo itself serves for an unknown route (http_routing.404,
+    rendered through web.frontend_layout).  It is NOT nginx's 404, which never
+    reaches Odoo at all — nginx answers /web/database/* and its own static
+    misses directly, and that page lives in nginx/nginx.conf.template.  A demo
+    visitor who mistypes a URL lands here, so it is a brand surface.
+
+    Stock content (odoo/addons/http_routing/views/http_routing_template.xml:119)
+    is an English "We couldn't find the page you're looking for!" next to Odoo's
+    own purple 404 illustration, plus a "popular pages" block that lists exactly
+    one link because no website pages exist on this build.
+
+    ⚠ WHY THE COPY IS FRENCH IN THE SOURCE AND NOT IN i18n/fr.po.
+    The module convention is English source + fr.po, and that is correct for
+    every string this module renders through the ORM — but it only works if a
+    French language is ACTIVE.  On this build it is not: res_lang has en_US and
+    nothing else, and neither entrypoint.sh nor any provisioning module ever
+    installs fr_FR.  Odoo also resolves the language for an anonymous frontend
+    request from the website/default language, not from the visitor's browser,
+    so even loading fr_FR would not by itself make this page French for a
+    prospect.  Translating via fr.po would therefore have produced a msgstr
+    nothing ever reads, and the page would have stayed in English.
+
+    If fr_FR is ever installed and made the default, this text is already the
+    wanted output — nothing here needs undoing, but the en_US rendering of the
+    page becomes French too.  That is the deliberate trade.
+
+    ⚠ WHY THE LOGO IS static/src/img/brand/daf_uw_logo.svg AND NOT A NEW
+    ASSET.  It is the DAF Under Writing logo, and already the file the login
+    page, the empty states and the home dashboard serve — see
+    login_templates.xml, including why res.company.logo cannot hold an SVG.
+    Adding a second copy would give the mark two sources of truth for no
+    visual difference.
+-->
+<odoo>
+
+    <template id="error_404_brand" inherit_id="http_routing.404">
+        <!--
+            Anchored on the oe_structure's section rather than on the
+            oe_structure div itself: with the website module installed that div
+            is an editable drop zone whose id Odoo uses to key stored edits, so
+            replacing the div would take the zone away with it.  website is not
+            installed on this build, and this xpath keeps that from mattering.
+        -->
+        <xpath expr="//div[hasclass('oe_structure')]/section" position="replace">
+            <section class="m-error-page">
+                <div class="container">
+                    <div class="m-error-page__card text-center">
+                        <!--
+                            ⚠ The inline max-height is deliberate, and mirrors
+                            login_templates.xml.  daf_uw_logo.svg carries
+                            width="358" height="160", so if this element ever
+                            paints before web.assets_frontend is available it
+                            renders at full size and pushes the copy down.
+                            The sizing constraint travels with the element;
+                            refinements live in error_pages.scss.
+                        -->
+                        <img src="/daf_uw_theme/static/src/img/brand/daf_uw_logo.svg"
+                             alt="DAF Under Writing"
+                             class="m-error-page__logo"
+                             style="max-height:140px; max-width:100%; width:auto"/>
+
+                        <p class="m-error-page__code">Erreur 404</p>
+                        <h1 class="m-error-page__title">Cette page n’existe pas</h1>
+                        <p class="m-error-page__lead">
+                            L’adresse est peut-être incorrecte, ou la page a été
+                            déplacée ou supprimée.
+                        </p>
+
+                        <a href="/" class="btn btn-primary btn-lg m-error-page__action">
+                            Retour à l’accueil
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </xpath>
+    </template>
+
+</odoo>

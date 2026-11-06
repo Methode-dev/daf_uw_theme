@@ -1,0 +1,128 @@
+// ---------------------------------------------------------------------------
+// Forms — inputs, placeholders, labels (THEME_PLAN §6, asset 04)
+//
+// Measured from 04-form-inputs.png (2x export, halved):
+//   * input: white fill, 1px #191A22 border, radius 12px, height ~40px
+//   * placeholder: mid grey
+//   * submit: black plate (confirmed by the owner)
+//
+// ⚠ §4 and §6 both call these "pill inputs".  They are not — measured radius is
+//   12px on a 40px-tall input, i.e. a rounded rect.  A true pill would be 20px.
+//   Radius comes from $o-border-radius (10px) and is not restated here.
+//
+// ⚠ DENSITY IS A DELIBERATE DEPARTURE FROM THE ASSET.  Odoo ships
+//   $o-input-bg: transparent with 2px/4px padding because a backend form view
+//   carries 20-40 fields; the asset is a marketing contact form with four.
+//   Reproducing its 40px-tall generous inputs would multiply every form's
+//   height and break §8's 1280x800 budget outright.
+//   So: the brand's OUTLINE and RADIUS are adopted (§4 — "brand wins"), and
+//   Odoo's PADDING is kept.  Verify at 1280x800 in P7.
+// ---------------------------------------------------------------------------
+
+// Rest state uses --m-border-soft (#898989 — the measured border of asset 01's
+// button) rather than the full-strength #191A22 of the asset's inputs.  At
+// backend density, dozens of full-ink outlines read as noise; this keeps the
+// outlined character while letting focus be the strong signal.  Both greys are
+// measured brand values, so neither is invented.
+.o_form_view .o_field_widget {
+    .o_input,
+    input.o_input,
+    textarea.o_input,
+    .o_input_dropdown > input {
+        border: 1px solid var(--m-border-soft);
+        border-radius: var(--m-radius-control);
+        // Near-opaque glass: a field is content, so it sits on the thickest
+        // glass there is.  The BORDER stays --m-border-soft (#898989, 3.5:1):
+        // a field's edge must clear WCAG 1.4.11's 3:1, which a glass hairline
+        // (~1.3:1) does not — the one place the glass edge is not used.
+        background-color: var(--m-glass-bg-hover);
+        transition:
+            border-color var(--m-dur-fast) var(--m-ease-out),
+            box-shadow var(--m-dur-fast) var(--m-ease-out);
+
+        // HORIZONTAL padding only — deliberately.  The header note above keeps
+        // Odoo's vertical padding because backend forms carry 20-40 fields and
+        // any added height multiplies across all of them, blowing §8's 1280x800
+        // budget.  Horizontal padding costs nothing vertically.
+        //
+        // Needed because a rounded corner eats into the text's usable box: at
+        // Odoo's default padding the placeholder sat visually against the curve.
+        // 8px is one step on the 4px rhythm (§8).
+        padding-inline: var(--m-space-2);
+
+        &:hover { border-color: var(--m-ink-border); }
+
+        &:focus,
+        &:focus-visible {
+            border-color: var(--m-primary);
+            box-shadow: var(--m-focus-ring);
+            outline: none;
+        }
+    }
+
+    // ⚠ The monetary widget is TWO layers wearing one class, and the opaque
+    // fill above lands on the wrong one.  monetary_field.xml:7 renders an
+    // absolutely-positioned `.o_input` span holding the currency symbol (and an
+    // `opacity-0` ghost copy of the value that spaces it) OVER the real input
+    // that holds the digits.  Odoo can do that because $o-input-bg is
+    // `transparent`: both layers are the same box, one showing through the
+    // other.  Setting an opaque background turned the top layer into a white
+    // pane over a white field — the price the user typed was still there,
+    // painted over.  Same markup, same bug, in the properties widget's monetary
+    // value (property_value.xml:46).
+    //
+    // The overlay STAYS in the rule above: it has to keep the input's
+    // padding-inline and border WIDTH or the symbol drifts off the digits it is
+    // drawn next to (French locale puts it after them, hard against the last
+    // one).  So only the two paints it must not do are undone — `transparent`
+    // border rather than none, to keep the 1px the geometry depends on.
+    //
+    // (0,5,0) — deliberately above the two state rules below, which both reach
+    // .o_input at (0,4,0) and would otherwise repaint this layer: the required
+    // wash would apply twice, and an invalid field would draw two red boxes.
+    .o_input.position-absolute.pe-none {
+        background-color: transparent;
+        border-color: transparent;
+    }
+
+    // Required fields: re-expressed from 2000_theme's marker (§4) in brand
+    // colours.  Accent is legitimate here — it is a fill and a border, not text.
+    //
+    // The wash is the owner's ask: "a warning, but not an error".  --m-danger is
+    // reserved for .o_field_invalid below, so an empty required field must not
+    // borrow it — the field is incomplete, not wrong, and the two states have to
+    // stay tellable apart at a glance.  --m-accent-soft is the accent at 14%,
+    // which is the "≈15%" that was asked for and is already a token; a second
+    // near-identical alpha would be a duplicate, not a distinction.
+    //
+    // It composites over the form sheet rather than over white, since it is a
+    // translucent fill replacing the opaque `background-color: #FFFFFF` set
+    // above.  That is the intent — the wash is a tint on the field, not a new
+    // opaque surface — and the sheet is white, so it reads as on white.
+    //
+    // Beats the white above on specificity: (0,5,0) vs (0,4,0).
+    &.o_required_modifier .o_input {
+        background-color: var(--m-accent-soft);
+        border-color: white;
+        &:focus { border-color: var(--m-accent); }
+    }
+
+    // Validation. --m-danger is the derived semantic red (README), never the
+    // orange accent — §5.1 is explicit that danger must stay unambiguous.
+    &.o_field_invalid .o_input {
+        border-color: var(--m-danger);
+        &:focus { box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.22); }
+    }
+}
+
+::placeholder {
+    color: var(--m-text-secondary);
+    opacity: 1;   // Firefox dims placeholders by default; --m-text-secondary is
+                  // already the intended muted value, so don't fade it twice.
+}
+
+// Labels: 600 is the semibold of the brand assets' field labels.
+.o_form_view .o_form_label {
+    font-weight: 600;
+    color: var(--m-text);
+}
