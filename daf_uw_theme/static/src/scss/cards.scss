@@ -102,16 +102,41 @@
 // Theme Settings dialog, which is the whole point of D3 (§9.2).  Deleting it
 // would leave the setting present but inert.
 //
-// No border-radius here: Odoo gives the sheet a top/bottom-only border
-// (`1px 0 1px 0`), and rounding corners on a partial border looks broken.
-// The sheet: a glass pane, UNFROSTED on purpose — it contains many2one
-// autocompletes (position:fixed inside their field), and a backdrop-filter
-// here would make the sheet their containing block (guard-rail 3).  Nothing
-// scrolls under it anyway; the frost lives on the sticky statusbar above it.
-// Content weight keeps every field label ≥ 5.1:1 (guard-rail 1).
-.o_form_view .o_form_sheet {
-    @include m-glass(var(--m-glass-bg-strong));
-    border-color: var(--m-glass-border);
+// No "sheet of paper" (owner call): core draws the sheet as a bordered page on
+// a tinted background, which read as a box inside a box once the groups became
+// glass panes (form_view.scss).  The sheet itself has no border, shadow or fill
+// of its own; its INNER padding stays (the content's margin, not the page
+// effect).
+//
+// The sheet background, edge to edge with no padding, is a thin glass VEIL
+// over the client backdrop (css_tokens.scss): the brand-hue pools show through
+// as a soft gradient, as on the DAF dashboard, and the groups and lists float
+// on it as glass panes (owner call: "a great 2026 effect").  Plain white gave
+// the glass nothing behind it to be glass over.
+//   * --m-glass-bg (40% card colour) on purpose: it is the weight the token
+//     block proves --m-text-secondary still clears 4.5:1 on (4.58) at the
+//     backdrop's most tinted point (guard-rail 1) — and text outside the
+//     panes here is only section titles and links, in stronger colours.
+//   * A light from the top: the veil is brightest under the statusbar and
+//     clears by ~320px, the "plate of glass" read without a visible edge.
+//   * Card colour, not literal white, so Theme Settings still drives it (D3);
+//     reduced transparency / more contrast turn it solid through the tokens.
+.o_form_view:not(.o_base_settings_view) .o_form_sheet_bg {
+
+    padding: 0;
+}
+
+.o_form_view:not(.o_base_settings_view) .o_form_sheet {
+    background: none;
+    border: 0;
+    box-shadow: none;
+    // Core pulls the sheet into the background's padding on phones
+    // (negative margins); there is no padding to pull into any more.
+    margin-inline: 0;
+
+    @include media-breakpoint-up(md) {
+        margin-inline: auto;
+    }
 }
 
 // --- Display plate (asset 02) ----------------------------------------------

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+  <!--
+    The "open the list in a new tab" link of every x2many list in a form.
+    Logic in x2many_open_list.js, target in controllers/x2many_list.py, styles
+    in x2many_open_list.scss.
+
+    ⚠ First child of the field's root, OUTSIDE .o_x2m_control_panel: that panel
+    is `d-empty-none mt-1 mb-4`, so putting the link in it would make it
+    non-empty on every list and add 20px above each one.  The link is laid
+    over the header row's right end instead (the SCSS).
+  -->
+  <t t-inherit="web.X2ManyField" t-inherit-mode="extension">
+    <xpath expr="//div[hasclass('o_x2m_control_panel')]" position="before">
+      <a
+        t-if="mOpenListUrl"
+        class="o_x2m_open_list btn btn-link"
+        t-att-href="mOpenListUrl"
+        target="_blank"
+        rel="noopener"
+        t-att-title="mOpenListTitle"
+        t-att-aria-label="mOpenListTitle"
+      >
+        <i class="fa fa-external-link" role="img" />
+      </a>
+    </xpath>
+  </t>
+
+</templates>

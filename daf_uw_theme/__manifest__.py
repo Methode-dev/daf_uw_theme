@@ -1,6 +1,6 @@
 {
     'name': 'Méthode Theme',
-    'version': '19.0.1.2.0',
+    'version': '19.0.1.3.0',
     'category': 'Themes/Backend',
     'summary': 'Méthode brand identity for the Odoo backend',
     # Set explicitly, and keep it set.  Odoo's load_manifest() falls back to
@@ -125,6 +125,11 @@
             'daf_uw_theme/static/src/list/list_loading.js',
             'daf_uw_theme/static/src/list/list_loading.xml',
             'daf_uw_theme/static/src/list/list_loading.scss',
+            # "Open the list in a new tab" link on every x2many list in a form.
+            # JS + XML + SCSS are one change; target: controllers/x2many_list.py.
+            'daf_uw_theme/static/src/x2many/x2many_open_list.js',
+            'daf_uw_theme/static/src/x2many/x2many_open_list.xml',
+            'daf_uw_theme/static/src/x2many/x2many_open_list.scss',
             # Import / Export out of the cog, as buttons beside "New".  The cog
             # patch imports its keys from the buttons module.  ⚠ No dependency
             # on base_import: its cog entry is looked up at runtime.
@@ -138,6 +143,9 @@
             # Form groups: label above its input, every form (CSS only).  After
             # form_view.scss (listed above) so it can retune the same groups.
             'daf_uw_theme/static/src/scss/views/form_labels.scss',
+            # Bento boxes and sized fields for forms laid out in <div>s
+            # (owner rules, 2026-11-07).  After form_view.scss: same panes.
+            'daf_uw_theme/static/src/scss/views/form_bento.scss',
             # --- Simplified search bar (global UX) ----------------------------
             # [ASSETS:SEARCH]
             # Live search box + Filter… / Group by… typeaheads replace the stock

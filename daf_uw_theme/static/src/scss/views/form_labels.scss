@@ -204,3 +204,54 @@ $m-checkbox-cell: ".o_wrap_input:has(.o-checkbox):not(:has(.o_input, .o_field_ma
         cursor: pointer;
     }
 }
+
+// ---------------------------------------------------------------------------
+// Fields laid out in Bootstrap columns instead of an `.o_inner_group`.
+//
+// A `<group>` is one grid: every cell spans the whole column (above), so two
+// fields never sit side by side.  Forms that need a row of short fields — a
+// code, a sequence, a toggle — lay them out in `.row > .col-*` instead, and
+// mark the row `o_daf_fields`.  Core renders a bare `<label>` inline there, so
+// the stacked-label reading of this file is restated for those cells; without
+// it the label sits against its input and the input collapses to what is left.
+// ---------------------------------------------------------------------------
+.o_form_view:not(.o_base_settings_view) .o_daf_fields {
+    > [class*="col-"] {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+
+        > .o_form_label,
+        > label.o_form_label {
+            display: block;
+            width: 100%;
+            margin: 0 0 var(--m-space-1);
+            padding: 0;
+            font-size: $m-label-font-size;
+            font-weight: 500;
+            line-height: 1.25;
+            color: var(--m-text-secondary);
+        }
+
+        // The widget takes the column it was given: the layout decides the
+        // width now, not a per-widget cap (forms.scss).
+        > .o_field_widget {
+            width: 100%;
+            max-width: 100%;
+            margin-bottom: 0;
+        }
+
+        // A toggle and a radio are their own width: stretching them would put
+        // the hit area in the middle of an empty row.
+        > .o_field_widget:is(.o_field_boolean, .o_field_radio) {
+            width: auto;
+        }
+    }
+
+    // A radio with `horizontal` keeps its options on one line.
+    .o_field_radio.o_horizontal {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0 var(--m-space-4);
+    }
+}

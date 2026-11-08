@@ -237,6 +237,17 @@
     --m-space-5: 20px;
     --m-space-6: 24px;
     --m-space-8: 32px;
+
+    // --- Field widths (forms.scss) -------------------------------------------
+    // A form field is as wide as what it holds, not as wide as its column.
+    // Multiples of the 32px step of the scale above.
+
+    // --- List widths (views/list_view.scss) ----------------------------------
+    // A list is as wide as its columns, not as its container: per field
+    // column, plus one allowance for the handle / open / delete columns.
+    // In rem (owner call), so they follow the text size.
+    --m-list-col-width:     12rem;
+    --m-list-utility-width:  4rem;
 }
 
 // --- Global surfaces --------------------------------------------------------

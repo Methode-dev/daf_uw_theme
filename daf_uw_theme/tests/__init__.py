@@ -4,3 +4,4 @@ from . import test_dashboard_chrome
 from . import test_dashboard_edit
 from . import test_dashboard_general
 from . import test_appbar_image
+from . import test_x2many_list

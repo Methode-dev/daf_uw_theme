@@ -1,0 +1,28 @@
+// "Open the list in a new tab" link of x2many lists (x2many_open_list.js).
+//
+// Laid over the right end of the list's header row, so it costs no height.
+// The field becomes the positioning box; the link sits above the sticky
+// header (z 1, list_view.scss) and the last header cell gets room for it, so
+// a right-aligned column title never slides under the icon.
+.o_field_x2many:has(> .o_x2m_open_list) {
+    position: relative;
+
+    .o_list_table > thead > tr > th:last-child {
+        padding-right: calc(var(--m-space-6) + var(--m-space-2));
+    }
+}
+
+.o_x2m_open_list {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 2;
+    padding: var(--m-space-1) var(--m-space-2);
+    color: var(--m-text-secondary);
+    line-height: 1.5;
+
+    &:hover,
+    &:focus-visible {
+        color: var(--m-primary-dark);
+    }
+}

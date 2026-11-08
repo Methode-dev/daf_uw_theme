@@ -1,0 +1,157 @@
+// ---------------------------------------------------------------------------
+// Bento layout for forms (owner rules, 2026-11-07).
+//
+// THE RULES, as the owner set them for every page with fields or boxes:
+//   1. a box in the rightmost column ends on the sheet's inner right edge;
+//   2. a field of fixed (or nearly fixed) length — code, sequence, zip, SIREN,
+//      ORIAS, amount, date — gets a size that fits its content;
+//   3. small fields side by side get slightly more room between them;
+//   4. long free text (descriptions, help, notes) keeps its length;
+//   5. fields line up inside a box the way boxes line up on the page;
+//   6. a box made of one field (one table, one text) is not full width;
+//   7. boxes of fewer than 3 fields sit side by side, not one per row.
+//
+// THE MARKUP (plain <div>s in the view, no widget):
+//
+//   <div class="o_daf_bento">                       stack of rows
+//     <div class="o_daf_bento_row">                 one row of boxes
+//       <div class="o_daf_box o_daf_w_7">           a box, weight 7
+//         <separator string="General"/>             optional title
+//         <div class="o_daf_grid">                  its fields
+//           <div class="o_daf_f o_daf_f_sm">        one field, sized
+//             <label for="code"/><field name="code"/>
+//
+// WHY A FLEX ROW WITH WEIGHTS, NOT A 12-COLUMN GRID: a box hidden by `groups`
+// or `invisible` is not rendered at all (Odoo 17+), and in a grid its
+// neighbours would keep their span and leave a hole on the right — rule 1.
+// With `flex: <weight> 1 0` the remaining boxes share the whole row, whatever
+// is missing.  Weights read like columns out of 12 (`o_daf_w_7` + `o_daf_w_5`)
+// but only their ratio matters.  Rows stretch their boxes to one height.
+//
+// FIELD SIZES (rule 2) are layout classes in the view, not caps per widget
+// type in the theme: the owner withdrew those caps on 2026-11-07 (a char
+// field is not always short).  The view knows what the field holds:
+//   o_daf_f_xs  ~7 characters: sequence, zip code, a toggle, a day count
+//   o_daf_f_sm  ~14: code, SIREN, ORIAS, amount, date
+//   o_daf_f_md  ~22: phone, plate, a short selection
+//   (none)      fills what the row leaves: names, e-mail, many2one, tags
+//   o_daf_f_full  the whole row: long free text (rule 4)
+// A row with one filling field always reaches the box's edge (rule 5); a box
+// holding only fixed fields should be given a small weight instead.
+// Below lg everything stacks, and fixed fields keep their size.
+// ---------------------------------------------------------------------------
+
+.o_form_view .o_daf_bento {
+  display: flex;
+  flex-direction: column;
+  gap: var(--m-space-4);
+  margin-bottom: var(--m-space-4);
+}
+
+.o_form_view .o_daf_bento_row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--m-space-4);
+
+  @include media-breakpoint-up(lg) {
+    flex-direction: row;
+    align-items: stretch;
+
+    @for $n from 1 through 12 {
+      > .o_daf_w_#{$n} {
+        flex: $n 1 0;
+      }
+    }
+  }
+}
+
+// The box: the same glass pane as a form group (form_view.scss), so a form
+// mixing <group>s and boxes reads as one surface.  glass_glint.js lists it.
+.o_form_view:not(.o_base_settings_view) .o_daf_box {
+  @include m-glass(var(--m-glass-bg-strong));
+  border: 1px solid var(--m-glass-border);
+  border-radius: var(--m-radius-card);
+  --m-glint-alpha: 0.5;
+  transition: background-image var(--m-dur-base) var(--m-ease-out);
+  display: flex;
+  flex-direction: column;
+  // Same as a grid's row gap: a box may stack several grids, one per line of
+  // fields that must break where the view says (an address line).
+  gap: var(--m-space-4);
+  min-width: 0;
+  padding: var(--m-space-4);
+
+  &:hover {
+    background-image: var(--m-glass-glint), var(--m-glass-sheen);
+  }
+
+  // The title opens the box: core's separator margins (mt-4 mb-3, which
+  // are !important utilities) would leave a band above it.
+  > .o_horizontal_separator {
+    margin: 0 !important;
+  }
+
+  > p.text-muted {
+    margin: 0;
+  }
+
+  // A list in a box is not a second pane inside it: the box is its
+  // surface, as in a notebook page (form_view.scss).
+  .o_field_x2many .o_list_renderer {
+    &,
+    &:hover {
+      border: 0;
+      border-radius: 0;
+      background: none;
+      box-shadow: none;
+    }
+  }
+
+  // A box holding a list or a text grows with the row (the rows stretch
+  // their boxes to one height); its last child takes the extra height.
+  > :last-child {
+    flex: 1 1 auto;
+  }
+}
+
+// --- Fields inside a box (rules 2, 3, 5) -------------------------------------
+.o_form_view .o_daf_grid {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  // Rule 3: a wider gutter between fields than between a label and its
+  // input, so small fields side by side read as separate fields.
+  column-gap: var(--m-space-6);
+  row-gap: var(--m-space-4);
+  // The grid may be the box's growing last child (above): its lines stay
+  // packed at the top instead of spreading over the extra height.
+  align-content: flex-start;
+}
+
+.o_form_view .o_daf_f {
+  display: flex;
+  flex-direction: column;
+  gap: var(--m-space-1);
+  flex: 1 1 12rem;
+  min-width: 0;
+
+  > .o_field_widget:not(.o_field_boolean_toggle):not(.o_field_boolean) {
+    width: 100%;
+  }
+
+  &.o_daf_f_xs {
+    flex: 0 0 7rem;
+  }
+
+  &.o_daf_f_sm {
+    flex: 0 0 10rem;
+  }
+
+  &.o_daf_f_md {
+    flex: 0 0 14rem;
+  }
+
+  &.o_daf_f_full {
+    flex: 1 1 100%;
+  }
+}

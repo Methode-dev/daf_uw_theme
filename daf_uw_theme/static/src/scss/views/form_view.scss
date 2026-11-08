@@ -11,33 +11,41 @@
     --Notebook__link-border-color: var(--m-border-soft);
 }
 
-// --- Horizontal notebook: a glass segmented control --------------------------
-// The urbanist tab (an ink-outlined white tab "opening into" the sheet) relied
-// on the tab and the sheet being the SAME opaque white.  On a translucent sheet
-// that seam shows, so the strip becomes a recessed track with the active page
-// as a raised pill — the liquid-glass segmented control.
+// --- Horizontal notebook: one card, tabs along its top edge ----------------
+// The segmented control (a pill track floating above the page) read as a lone
+// button: nothing tied the active pill to the list under it (owner feedback,
+// 2026-11-07).  The notebook is now ONE glass card — the same pane as the
+// groups and lists below — with the tabs as its top strip, a hairline between
+// strip and page, and the active tab marked by an accent bar sitting on that
+// hairline.  Tab and page share the card, so they read as one thing.
 //
-// Colour hierarchy is the theme's, not new: inactive pages are --m-text-
-// secondary (5.38:1), the active page is --m-primary-dark on solid card colour
-// (6.37:1) — the same "selected" language as the app sidebar and the settings
-// tabs.  Invalid pages keep core's danger colouring (core uses !important).
+// Colour hierarchy is the theme's: inactive tabs are --m-text-secondary
+// (5.38:1), the active one --m-primary-dark (6.37:1) — the "selected" language
+// of the app sidebar and the settings tabs.  Invalid pages keep core's danger
+// colouring (core uses !important).
 //
-// Vertical notebooks (settings-style) keep core's list look: a pill track
-// there would fight their full-height sidebar.
+// The card is painted on the notebook itself, no ::before and no
+// backdrop-filter: it must not become a stacking context, or an autocomplete
+// opened in a page would paint under the next pane (guard-rail 3, as for the
+// groups below).
+//
+// Vertical notebooks (settings-style) keep core's list look.
+.o_form_view:not(.o_base_settings_view) .o_notebook.horizontal {
+    @include m-glass(var(--m-glass-bg-strong));
+    border: 1px solid var(--m-glass-border);
+    border-radius: var(--m-radius-card);
+}
+
 .o_notebook.horizontal > .o_notebook_headers {
-    // Room for the pill's elevation, which overflow-y: hidden (core) would clip.
-    padding-block: var(--m-space-1);
+    // Core bleeds the strip past the sheet padding (--Notebook-margin-x); in
+    // the card it would run its hairline out of the card's edges.
+    margin-inline: 0;
+    padding-inline: var(--m-space-4);
+    border-bottom: 1px solid var(--m-glass-hairline);
 
     > .nav-tabs {
-        display: inline-flex;
-        gap: 2px;
-        padding: 3px;
+        gap: var(--m-space-5);
         border: 0;
-        border-radius: calc(var(--m-radius-control) + 3px);
-        background-color: rgba(17, 24, 39, 0.05);
-        box-shadow:
-            inset 0 1px 2px rgba(20, 45, 95, 0.12),
-            inset 0 0 0 1px rgba(255, 255, 255, 0.45);
     }
 
     .nav-item {
@@ -45,47 +53,46 @@
     }
 
     .nav-link {
-        margin-bottom: 0;   // Bootstrap's -1px tuck under the old strip border
-        padding: var(--m-space-1) var(--m-space-3);
-        border-radius: var(--m-radius-control);
+        margin-bottom: 0;   // Bootstrap's -1px tuck under the strip border
+        padding: var(--m-space-3) 0;
+        border-radius: 0;
+        background: none;
         color: var(--m-text-secondary);
         font-weight: 600;
         white-space: nowrap;
+        // The bar is an inset shadow, not a border: it costs no height, so
+        // switching tabs never moves the page by a pixel.
+        box-shadow: inset 0 -3px 0 transparent;
         transition:
-            background-color var(--m-dur-fast) var(--m-ease-out),
             color var(--m-dur-fast) var(--m-ease-out),
             box-shadow var(--m-dur-fast) var(--m-ease-out);
 
-        // Every state core gives a border colour (notebook.scss) — the pill
-        // has no border at all.
+        // Every state core gives a border colour (notebook.scss).
         &, &:hover, &:focus, &:active,
         &.active, &.active:hover, &.active:focus, &.active:active {
             border: 0;
+            background: none;
         }
 
         &:hover {
-            background-color: var(--m-glass-bg-hover);
-            background-image: var(--m-glass-glint), var(--m-glass-sheen);
-            box-shadow: var(--m-glass-shadow-1);
             color: var(--m-text);
+            box-shadow: inset 0 -3px 0 var(--m-accent-border);
         }
 
         &.active {
-            background-color: var(--m-bg-card);
-            background-image: var(--m-glass-sheen);
             color: var(--m-primary-dark);
-            box-shadow: var(--m-glass-shadow-1);
+            box-shadow: inset 0 -3px 0 var(--m-accent);
         }
 
         &:focus-visible {
             outline: 2px solid var(--m-primary);
-            outline-offset: -2px;
+            outline-offset: 2px;
         }
     }
 
-    // core paints the strip $o-view-background-color; the track is the surface.
+    // Sides only: core's .tab-pane already pads the page top and bottom.
     + .o_notebook_content {
-        padding-top: var(--m-space-3);
+        padding-inline: var(--m-space-4);
     }
 }
 
@@ -93,10 +100,129 @@
     background-color: transparent;
 }
 
-// --- Groups ----------------------------------------------------------------
+// A list in a page is not a second pane inside the card: the card is its
+// surface.  (0,6,0) beats the pane rule of x2many lists below.
+.o_form_view:not(.o_base_settings_view) .o_notebook.horizontal .o_field_x2many .o_list_renderer {
+    &, &:hover {
+        border: 0;
+        border-radius: 0;
+        background: none;
+        box-shadow: none;
+    }
+}
+
+// Core bleeds a list that opens a page past the page's padding and up under
+// the tab strip (form_controller.scss, --Notebook-margin-x and a negative
+// margin-top), made for its flat full-width strip.  In the card, that pushed
+// the list 16px past the card's padding on each side — off the tabs' left
+// edge, and under the "open the list" link on the right, which is anchored to
+// the FIELD's edge (x2many/x2many_open_list.scss).  Core's selectors, with
+// `.horizontal` and `.o_notebook_content` added so these win.
+.o_form_view .o_notebook.horizontal > .o_notebook_content.tab-content > .tab-pane {
+    > :first-child:not(.o_group) .o_field_x2many.o_field_x2many_list .o_list_renderer,
+    > :first-child.o_invisible_modifier .o_field_x2many.o_field_x2many_list .o_list_renderer {
+        --ListRenderer-margin-x: 0;
+        margin-top: 0;
+    }
+}
+
+// --- Section titles ----------------------------------------------------------
+// `<separator string>` and `<group string>` titles.  Core stamps `small`
+// (.875em, 13px here) on them, which next to 14px field text made the title
+// smaller than what it heads (owner call: "a bit bigger").  15px keeps them a
+// caption, not a heading, at uppercase + bold.  (0,2,0) beats `.small`.
 .o_form_view .o_horizontal_separator {
+    font-size: 0.9375rem;
     font-weight: 600;
+    letter-spacing: 0.02em;
     color: var(--m-text);
+}
+
+// --- Groups: liquid-glass boxes (owner call) -----------------------------------
+// Every inner group (the label/field stacks of form_labels.scss) is a glass
+// pane on the plain sheet (cards.scss).  The pane is painted on the group
+// itself, never on a ::before: a pseudo-element layer needs the group to be a
+// stacking context, and a many2one autocomplete opened in one group would then
+// paint UNDER the next group (guard-rail 3).  No backdrop-filter for the same
+// reason, and nothing scrolls under a group anyway.
+// Settings forms and the sale/invoice totals table keep core's layout (as in
+// form_labels.scss).
+//
+// Liquid glass, in the theme's own vocabulary (css_tokens.scss): a translucent
+// content-weight body (labels ≥ 5.1:1, guard-rail 1), the diagonal sheen, the
+// bright rim and light edge, a blue-tinted shadow, and the glint — a light that
+// follows the pointer (static/src/js/glass_glint.js lists .o_inner_group).  The
+// glint is dimmed (--m-glint-alpha) because a group is a work surface, not a
+// button; it does not lift on hover either, for the same reason.
+.o_form_view:not(.o_base_settings_view) .o_inner_group:not(.oe_subtotal_footer),
+.o_form_view:not(.o_base_settings_view) .o_field_x2many .o_list_renderer {
+    @include m-glass(var(--m-glass-bg-strong));
+    border: 1px solid var(--m-glass-border);
+    border-radius: var(--m-radius-card);
+    --m-glint-alpha: 0.5;
+    transition: background-image var(--m-dur-base) var(--m-ease-out);
+
+    &:hover {
+        background-image: var(--m-glass-glint), var(--m-glass-sheen);
+    }
+}
+
+.o_form_view:not(.o_base_settings_view) .o_inner_group:not(.oe_subtotal_footer) {
+    padding: var(--m-space-4);
+
+    // A group whose fields are all invisible renders no cells: no empty pane.
+    &:not(:has(> *)) {
+        display: none;
+    }
+
+    // The `<group string>` title opens the pane; core's mt-4 would leave an
+    // empty band at its top.  Core wraps that title in a `g-col-sm-2` cell
+    // (form_group.xml), hence the two shapes.  (Bootstrap spacing utilities
+    // are !important.)
+    > .o_horizontal_separator:first-child,
+    > :first-child > .o_horizontal_separator {
+        margin-top: 0 !important;
+    }
+}
+
+// x2many lists in a form are glass panes too (rule above).  Core paints their
+// table, header and footer the opaque sheet colour (form_controller.scss,
+// list_renderer.scss), which on the veil read as white slabs; they turn
+// transparent so the pane is the surface.  Stripes, the edited row and the
+// hover keep core's own (translucent) tints.  The renderer is already
+// `table-responsive` (overflow auto), which clips the rows to the radius.
+.o_form_view:not(.o_base_settings_view) .o_field_x2many .o_list_renderer {
+    --ListRenderer-thead-bg-color: transparent;
+    --ListRenderer-tfoot-bg-color: transparent;
+
+    .o_list_table {
+        --table-bg: transparent;
+    }
+}
+
+// Side-by-side groups: a real gap between the panes.  Core spaces the columns
+// with Bootstrap gutters (padding inside each column), which would now sit
+// INSIDE the panes; so the gutters go and the row gets a gap.  From lg up the
+// columns share their line equally (flex 1 1 0) instead of their 50% / 33%
+// widths, which plus a gap would overflow and wrap.  An outer `<group string>`
+// also holds its title: that one takes a whole line, the groups the next.
+// Below lg every child is already 100% wide (Bootstrap), so the panes stack
+// and the gap is the space between them.
+.o_form_view:not(.o_base_settings_view) .o_group.row:has(> .o_inner_group) {
+    margin-inline: 0;
+    gap: var(--m-space-4);
+
+    @include media-breakpoint-up(lg) {
+        > .o_inner_group[class*="col-lg-"] {
+            flex: 1 1 0;
+            width: auto;
+            min-width: 0;
+        }
+
+        > :not(.o_inner_group) {
+            flex: 0 0 100%;
+        }
+    }
 }
 
 .o_form_view .oe_button_box .oe_stat_button:hover {
@@ -157,9 +283,10 @@
 // what QA flagged at 1920+ (the long, empty right side makes the left edges
 // the only alignment cue).
 //
-// Inset = the sheet's left border + its horizontal padding, mirroring core's
+// Inset = the sheet's horizontal padding, mirroring core's
 // --formView-sheet-padding-x per breakpoint (form_controller.scss: spacer 3,
-// spacer 4 from lg, spacer 3 again from xxl) and its md+ border width.
+// spacer 4 from lg, spacer 3 again from xxl).  The sheet has no border any
+// more (cards.scss), so core's md+ border width is no longer added.
 // ⚠ Mirrored, not read: those custom properties are declared on .o_form_sheet,
 // a SIBLING branch, so they do not inherit down to the chatter.  If core
 // changes the sheet padding, change these three lines.
@@ -167,13 +294,13 @@
 // chatter already lines up; nothing to do there.
 .o_form_view .o_form_renderer > .o-mail-Form-chatter:not(.o-aside) {
     @include media-breakpoint-up(md) {
-        padding-left: calc(#{map-get($spacers, 3)} + #{$border-width});
+        padding-left: map-get($spacers, 3);
     }
     @include media-breakpoint-up(lg) {
-        padding-left: calc(#{map-get($spacers, 4)} + #{$border-width});
+        padding-left: map-get($spacers, 4);
     }
     @include media-breakpoint-up(xxl) {
-        padding-left: calc(#{map-get($spacers, 3)} + #{$border-width});
+        padding-left: map-get($spacers, 3);
     }
 }
 
@@ -198,6 +325,100 @@
             -webkit-backdrop-filter: var(--m-glass-filter);
             backdrop-filter: var(--m-glass-filter);
             pointer-events: none;
+        }
+    }
+}
+
+// --- A form opened in a dialog keeps its horizontal padding -------------------
+// Core zeroes it: `.modal .modal-dialog .o_form_sheet` sets
+// --formView-sheet-padding-x and every breakpoint variant to 0, so a form shown
+// as a dialog — the question wizard of daf_product, any "Add a line" form —
+// runs its fields into the dialog's edges.  The owner asked for the padding
+// back (2026-11-07).
+//
+// Restated, not unset: a custom property has no "revert" that falls back to
+// core's own chain, so the four values are the ones core gives a sheet outside
+// a modal (form_controller.scss: spacer 3, spacer 4 from lg, spacer 3 from
+// xxl).  The xxl variant is included even though it is off-screen on a laptop:
+// leaving it at 0 would drop the padding again above 1400px.
+.modal .modal-dialog .o_form_sheet {
+    --formView-sheet-padding-x: #{map-get($spacers, 3)};
+    --formView-sheet-padding-x-md: #{map-get($spacers, 3)};
+    --formView-sheet-padding-x-lg: #{map-get($spacers, 4)};
+    --formView-sheet-padding-x-xxl: #{map-get($spacers, 3)};
+}
+
+// --- Right edges line up with the sheet's content edge (owner rule) ----------
+// Owner rule (2026-11-07), for every form, bento or multi-box layout: a box in
+// the rightmost column ends on the sheet's inner right padding, never short of
+// it.  Measured on the product form at 1440px, four things stopped early:
+//
+// 1. the title block: core caps `.oe_title` at 75% to leave room for a
+//    floated avatar.  `flow-root` keeps it clear of that float, so the cap
+//    has no reason left;
+// 2. x2many lists: list_view.scss caps a list at its columns' width (owner
+//    call for standalone lists).  Inside a form the list is one of the boxes
+//    and takes the full width, like the separator above it;
+// 3. monetary inputs: core keeps a hidden copy of the currency symbol AFTER
+//    the input to reserve its width, 12px short of the column.  The visible
+//    symbol is drawn by the overlay span, inside the input box, so the input
+//    can take the whole width;
+// 4. many2one inputs: the "open the record" arrow sits beside the input, 24px
+//    short of the column.  It now sits inside the input's right end, and the
+//    dropdown caret moves left of it.
+//
+// And the sheet itself fills the page.  cards.scss centres it with
+// `margin-inline: auto` inside a column flexbox, which sizes it to its
+// content: its right edge, and so every box's, moved from record to record.
+// `contain: inline-size` on x2many lists is the other half: without it, a
+// list's unwrapped cells (a long help text) become the sheet's minimum width
+// and push the form past the window — the reason for the cap in (2).  The list
+// scrolls inside its own box instead.
+.o_form_view:not(.o_base_settings_view) .o_form_sheet_bg > .o_form_sheet {
+    width: 100%;
+}
+
+.o_form_view .o_form_sheet {
+    .oe_title {
+        max-width: none;
+        display: flow-root;
+    }
+
+    // Same `:has()` as the cap, so this rule wins on specificity, not order.
+    .o_field_x2many:has(> .o_list_renderer > .o_list_table > thead > tr > th[data-name]),
+    .o_field_x2many > .o_list_renderer:has(> .o_list_table > thead > tr > th[data-name]) {
+        max-width: none;
+    }
+
+    .o_field_x2many {
+        contain: inline-size;
+    }
+
+    .o_field_monetary > div > span.opacity-0:last-child {
+        display: none;
+    }
+
+    .o_field_many2one_selection:has(> .o_external_button) {
+        position: relative;
+
+        > .o_input_dropdown {
+            flex: 1 1 auto;
+
+            .o-autocomplete--input {
+                padding-right: calc(#{map-get($spacers, 3)} + 24px);
+            }
+
+            .o_dropdown_button {
+                right: 24px;
+            }
+        }
+
+        > .o_external_button {
+            position: absolute;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            z-index: 1;
         }
     }
 }

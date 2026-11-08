@@ -97,3 +97,34 @@
     background-image: var(--m-glass-sheen);
     background-attachment: local;
 }
+
+// --- Width: as wide as the columns, not as the page (owner call) -------------
+// Core stretches every list to 100% of its container, so three columns on a
+// 1600px screen were three 500px columns.  The renderer is now capped at
+// (field columns x --m-list-col-width) + --m-list-utility-width, in rem.
+//
+// ⚠ Done on the RENDERER, not the table or its cells, on purpose: Odoo's own
+// column-width algorithm (web/.../list/column_width_hook.js) sizes the columns
+// to fill `table.parentNode.clientWidth` — this box.  Capping the box lets that
+// algorithm work unchanged (min widths, numeric ranges, freezing, resizing),
+// just inside a narrower box.  Forcing widths on cells would fight it.
+//
+// The count: one rule per column count, later rules winning, so --m-list-cols
+// ends up the number of field columns (header cells with a data-name: the
+// handle counts, the selector / open / delete columns do not).  Lists with
+// more than 12 columns keep 12, which is wider than any screen: no cap.
+//
+// In a form, the x2many FIELD gets the same cap, not only its renderer: the
+// field also holds the "open the list in a new tab" link (x2many/), which is
+// anchored to the field's right edge and must stay on the table's.
+@for $n from 1 through 12 {
+    .o_list_renderer:has(> .o_list_table > thead > tr > th:nth-child(#{$n} of [data-name])),
+    .o_field_x2many:has(> .o_list_renderer > .o_list_table > thead > tr > th:nth-child(#{$n} of [data-name])) {
+        --m-list-cols: #{$n};
+    }
+}
+
+.o_list_renderer:has(> .o_list_table > thead > tr > th[data-name]),
+.o_field_x2many:has(> .o_list_renderer > .o_list_table > thead > tr > th[data-name]) {
+    max-width: calc(var(--m-list-cols) * var(--m-list-col-width) + var(--m-list-utility-width));
+}

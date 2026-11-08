@@ -542,6 +542,12 @@ msgid "One line, shown in the add-widget picker."
 msgstr "Une ligne, affichée dans le sélecteur d'ajout de widget."
 
 #. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/x2many/x2many_open_list.js:0
+msgid "Open the list in a new tab"
+msgstr "Ouvrir la liste dans un nouvel onglet"
+
+#. module: daf_uw_theme
 #: model:ir.model.fields,help:daf_uw_theme.field_methode_dashboard_widget__position
 msgid "Order within the grid."
 msgstr "Ordre dans la grille."

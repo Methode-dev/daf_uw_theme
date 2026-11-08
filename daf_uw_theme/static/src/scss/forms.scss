@@ -115,6 +115,17 @@
     }
 }
 
+// Widths.  A field fills the cell it is given: the layout decides how wide
+// that cell is (Bootstrap columns in the view), not a per-widget cap.
+//
+// There used to be a cap per widget type here — 192px for a number, 448px for
+// a char — because form_labels.scss makes every cell of a group span the whole
+// column, so a 4-digit amount sat in a 300px box.  The owner withdrew that
+// idea on 2026-11-07 ("my suggestion to have a fixed rem width size for layout
+// was a bad idea"): a capped field inside a narrow column reads as stripped,
+// and the two caps fought each other.  Forms lay their fields out in columns
+// now and the field takes the column.
+
 ::placeholder {
     color: var(--m-text-secondary);
     opacity: 1;   // Firefox dims placeholders by default; --m-text-secondary is

@@ -35,6 +35,11 @@ const GLASS_SELECTOR = [
     ".m-dash-card",
     ".m-dash-stat",
     ".m-dash-shortcut",
+    // Form groups and x2many lists (views/form_view.scss).
+    ".o_form_view .o_inner_group",
+    ".o_form_view .o_field_x2many .o_list_renderer",
+    // Bento boxes (views/form_bento.scss).
+    ".o_form_view .o_daf_box",
 ].join(",");
 
 let pending = null;
