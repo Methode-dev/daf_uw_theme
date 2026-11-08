@@ -34,9 +34,9 @@
 // bundle's :root gives:
 //
 //     --font-sans-serif: "Nunito", …     ← ours
-//     --primary:      #714B67            ← Odoo purple, not our black
+//     --primary:      #714B67            ← Odoo purple, not our logo blue
 //     --link-color:   #714B67            ← purple, not $m-accent-text
-//     --border-radius: 0.375rem          ← 6px, not our 10px
+//     --border-radius: 0.375rem          ← 6px, not our 8px
 //     --body-bg:      white              ← not #FDFAF6
 //
 // The reason: $o-brand-primary, $o-main-link-color and $o-border-radius are
@@ -62,23 +62,24 @@
 // website page ever looks wrong, start here.
 :root {
     --link-color: #{$m-accent-text};
-    --link-color-rgb: 154, 101, 16;
-    // Bootstrap darkens link hovers by 20% of the base; matched by hand since
-    // the runtime token cannot call the SCSS function.
-    --link-hover-color: #7B510D;
-    --link-hover-color-rgb: 123, 81, 13;
+    --link-color-rgb: #{red($m-accent-text)}, #{green($m-accent-text)}, #{blue($m-accent-text)};
+    // Bootstrap darkens link hovers by 20% of the base; the runtime token
+    // cannot call shade-color() itself, so it is computed here.
+    --link-hover-color: #{shade-color($m-accent-text, 20%)};
+    --link-hover-color-rgb: #{red(shade-color($m-accent-text, 20%))}, #{green(shade-color($m-accent-text, 20%))}, #{blue(shade-color($m-accent-text, 20%))};
 
-    // Black, matching $o-brand-primary in the backend (§6.2) — the login
-    // button, focus rings and checkboxes all resolve through this.
-    --primary: #{$m-text};
-    --primary-rgb: 0, 0, 0;
-    --focus-ring-color: rgba(0, 0, 0, 0.25);
+    // The logo blue, matching $o-brand-primary in the backend — the login
+    // button, focus rings and checkboxes all resolve through this. Derived
+    // from the brand variables so a palette change cannot leave it behind
+    // again (it stayed black and brown after the logo-blue rebrand).
+    --primary: #{$m-primary};
+    --primary-rgb: #{red($m-primary)}, #{green($m-primary)}, #{blue($m-primary)};
+    --focus-ring-color: #{rgba($m-primary, 0.22)};
 
-    // The measured brand radii (§6.1), same three values brand_variables.scss
-    // feeds to the backend through $o-border-radius.
-    --border-radius: 10px;
-    --border-radius-sm: 6px;
-    --border-radius-lg: 14px;
+    // Same three radii brand_variables.scss feeds to the backend.
+    --border-radius: #{$o-border-radius};
+    --border-radius-sm: #{$o-border-radius-sm};
+    --border-radius-lg: #{$o-border-radius-lg};
 
     --body-bg: var(--m-bg-primary, #F4F7FE);
 }
