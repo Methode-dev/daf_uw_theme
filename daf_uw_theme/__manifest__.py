@@ -1,6 +1,6 @@
 {
     'name': 'Méthode Theme',
-    'version': '19.0.1.3.0',
+    'version': '19.0.1.4.0',
     'category': 'Themes/Backend',
     'summary': 'Méthode brand identity for the Odoo backend',
     # Set explicitly, and keep it set.  Odoo's load_manifest() falls back to
@@ -102,6 +102,11 @@
             # Chatter always below the form, full width.  JS + the rule at the
             # bottom of form_view.scss are one change; keep them together.
             'daf_uw_theme/static/src/views/form_chatter.js',
+            # Forms open read-only: Edit, then Save / Cancel, instead of core's
+            # always-editable form and its cloud / ✕ icons.  JS + XML are one
+            # change; see form_edit_toggle.js's header for where it applies.
+            'daf_uw_theme/static/src/views/form_edit_toggle.js',
+            'daf_uw_theme/static/src/views/form_edit_toggle.xml',
             # Notebook pages animate on leave and on enter (every web.Notebook).
             # JS + SCSS are one change; the leave duration is mirrored in both.
             'daf_uw_theme/static/src/notebook/notebook_transition.js',

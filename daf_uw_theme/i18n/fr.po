@@ -892,3 +892,27 @@ msgstr "rien à échéance"
 #: code:addons/daf_uw_theme/static/src/dashboard/dashboard.xml:0
 msgid "others"
 msgstr "autres"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/views/form_edit_toggle.xml:0
+msgid "Cancel"
+msgstr "Annuler"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/views/form_edit_toggle.xml:0
+msgid "Edit"
+msgstr "Modifier"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/views/form_edit_toggle.xml:0
+msgid "Save"
+msgstr "Enregistrer"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/views/form_edit_toggle.xml:0
+msgid "Unable to save. Correct the issue or cancel your changes"
+msgstr "Enregistrement impossible. Corrigez le problème ou annulez vos modifications"
