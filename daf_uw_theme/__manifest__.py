@@ -79,6 +79,11 @@
             # muk_web_appsbar's, mounted on web.WebClient).
             'daf_uw_theme/static/src/navbar/navbar.js',
             'daf_uw_theme/static/src/navbar/navbar.xml',
+            # Page transitions between actions (open record, breadcrumb back,
+            # menu / app switch, doAction redirects) + dropdown open motion.
+            # JS + SCSS are one change; the durations are mirrored in both.
+            'daf_uw_theme/static/src/webclient/action_transition.js',
+            'daf_uw_theme/static/src/webclient/action_transition.scss',
             # muk_web_appsbar's sidebar in the navbar's material.  Overrides
             # only — MuK is vendored and its sheet is left untouched.
             'daf_uw_theme/static/src/scss/appsbar.scss',
