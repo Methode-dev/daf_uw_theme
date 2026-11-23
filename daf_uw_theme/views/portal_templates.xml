@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- Portal chrome (QA4, WP4): the DAF mark in the header instead of the
+         company's own logo, which is Odoo's placeholder until someone sets
+         one. The look is static/src/scss/portal.scss. -->
+    <template
+        id="portal_frontend_layout_brand"
+        name="Portal header: DAF mark"
+        inherit_id="portal.frontend_layout"
+    >
+        <xpath expr="//a[hasclass('navbar-brand')]/img" position="attributes">
+            <attribute
+                name="t-att-src"
+            >'/daf_uw_theme/static/src/img/brand/daf_uw_logo.svg'</attribute>
+        </xpath>
+    </template>
+</odoo>

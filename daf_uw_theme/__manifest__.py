@@ -21,7 +21,8 @@
     # so it sits beside the two-row navbar below without touching it.
     # mail: static/src/views/form_chatter.js extends mail's FormRenderer patch
     # (it calls super.mailLayout), so mail's assets must load first.
-    'depends': ['web', 'http_routing', 'mail', 'aura_backend_theme', 'muk_web_appsbar'],
+    # portal: views/portal_templates.xml inherits portal.frontend_layout (QA4).
+    'depends': ['web', 'http_routing', 'portal', 'mail', 'aura_backend_theme', 'muk_web_appsbar'],
     # The module was assets-only until the login rebrand (§3.3 / §15.2 B9).
     'data': [
         'views/login_templates.xml',
@@ -32,6 +33,8 @@
         # The Odoo-rendered 404 (NOT nginx's — see the file header).  Frontend
         # QWeb, same brand surface as the login page.
         'views/error_templates.xml',
+        # Portal header: the DAF mark (QA4).
+        'views/portal_templates.xml',
         # The animated DAF Under Writing mark ("Assemble"), t-called by the
         # boot loader below. Listed first so the one copy is registered before
         # anything calls it.
@@ -194,6 +197,8 @@
             # login.scss — that sheet is what re-declares --body-bg, --primary
             # and the radii for the whole frontend, and this one builds on them.
             'daf_uw_theme/static/src/scss/error_pages.scss',
+            # Portal chrome (QA4): /my and the pages on portal.frontend_layout.
+            'daf_uw_theme/static/src/scss/portal.scss',
         ],
     },
     'installable': True,
