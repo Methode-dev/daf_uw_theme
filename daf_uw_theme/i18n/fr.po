@@ -1047,3 +1047,27 @@ msgstr "Bientôt disponible."
 #: code:addons/daf_uw_theme/static/src/appsbar/role_menu_layout.js:0
 msgid "Signatures"
 msgstr "Signatures"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/appsbar/role_menu_layout.js:0
+msgid "Administration"
+msgstr "Administration"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/appsbar/role_menu_layout.js:0
+msgid "Settings"
+msgstr "Paramètres"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/appsbar/role_menu_layout.js:0
+msgid "Apps"
+msgstr "Applications"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/appsbar/role_menu_layout.js:0
+msgid "Job Queue"
+msgstr "Job Queue"

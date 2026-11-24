@@ -6,7 +6,7 @@
  * template (role_menu.xml); it does not edit it.
  */
 
-import { useState } from "@odoo/owl";
+import { onWillStart, useState } from "@odoo/owl";
 import { browser } from "@web/core/browser/browser";
 import { _t } from "@web/core/l10n/translation";
 import { useBus, useService } from "@web/core/utils/hooks";
@@ -17,6 +17,7 @@ import {
     firstScreen,
     getRoleSections,
     itemKey,
+    loadRoleFlags,
     roleMenuState,
     setActiveRoleItem,
 } from "./role_menu_layout";
@@ -28,6 +29,7 @@ patch(AppsBar.prototype, {
         this.actionService = useService("action");
         this.notification = useService("notification");
         this.roleState = useState(roleMenuState);
+        onWillStart(loadRoleFlags);
         // The active entry follows the screen on display.
         useBus(this.env.bus, "ACTION_MANAGER:UI-UPDATED", () => this.render());
     },

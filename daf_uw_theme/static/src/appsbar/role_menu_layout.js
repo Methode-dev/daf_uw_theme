@@ -18,6 +18,7 @@
 import { reactive } from "@odoo/owl";
 import { browser } from "@web/core/browser/browser";
 import { _t } from "@web/core/l10n/translation";
+import { user } from "@web/core/user";
 
 // A menu that only exists for DAF staff / for brokers: what tells them apart.
 const STAFF_ROOT = "daf_base.menu_daf_root";
@@ -27,6 +28,9 @@ const tbd = (label) => ({ label, tbd: true });
 // `sections`: the menu whose sub-menus the top navbar lists, when it is not the
 // entry's own (the price grids sit in "Configuration" and share its menu).
 const menu = (label, xmlid, sections) => ({ label, xmlid, sections });
+// Odoo's own apps: for the DAF Super Admin only (and only when the menu is
+// theirs to open).
+const admin = (label, xmlid) => ({ label, xmlid, superAdmin: true });
 
 export const LAYOUTS = [
     {
@@ -35,6 +39,7 @@ export const LAYOUTS = [
             {
                 heading: _t("Dashboard"),
                 items: [
+                    menu(_t("Home"), "daf_base.menu_daf_dashboard"),
                     tbd(_t("Statistics")),
                     tbd(_t("Announcements")),
                     tbd(_t("Service status")),
@@ -73,6 +78,14 @@ export const LAYOUTS = [
             {
                 items: [menu(_t("Signatures"), "sign_methode.menu_sign_root")],
             },
+            {
+                heading: _t("Administration"),
+                items: [
+                    admin(_t("Settings"), "base.menu_administration"),
+                    admin(_t("Apps"), "base.menu_management"),
+                    admin(_t("Job Queue"), "queue_job.menu_queue_job_root"),
+                ],
+            },
         ],
     },
     {
@@ -104,7 +117,12 @@ function readStored() {
 }
 
 /** The open entry's key, shared by the sidebar and the navbar. */
-export const roleMenuState = reactive({ activeKey: readStored() });
+export const roleMenuState = reactive({ activeKey: readStored(), superAdmin: false });
+
+/** What only the server knows about the user; call once, before rendering. */
+export async function loadRoleFlags() {
+    roleMenuState.superAdmin = await user.hasGroup("daf_base.group_daf_admin");
+}
 
 export function itemKey(item) {
     return item.xmlid || item.label.toString();
@@ -138,6 +156,9 @@ export function getRoleSections(menuService) {
             const target = item.xmlid ? menus.get(item.xmlid) : null;
             if (item.xmlid && !target) {
                 continue; // the user cannot reach that screen
+            }
+            if (item.superAdmin && !roleMenuState.superAdmin) {
+                continue;
             }
             // The menu the top navbar draws its sub-menus from.
             const sectionsMenu = (item.sections && menus.get(item.sections)) || target;
