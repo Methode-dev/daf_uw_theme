@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+  <!--
+    The form's Edit / Save / Cancel buttons (behaviour: form_edit_toggle.js).
+
+    Core's indicator (two icon buttons, shown only once the record is dirty) is
+    kept as-is under `t-if`, so any form where the toggle does not apply still
+    gets it.  With the toggle:
+      read-only        -> [✎ Edit]
+      editing / new    -> [Save] [Cancel]  (+ core's invalid-field warning)
+
+    ⚠ The stock classes o_form_button_save / o_form_button_cancel and their
+      hotkeys (alt+s / alt+j) are kept on Save / Cancel: tours and muscle memory
+      target them.  Edit takes alt+a, the key Odoo used for it before 17.
+    ⚠ Save stays enabled while the record is clean: clicking it just returns to
+      read-only, which is what a user who opened Edit by mistake expects.
+  -->
+  <t t-name="daf_uw_theme.FormStatusIndicator" t-inherit="web.FormStatusIndicator" t-inherit-mode="extension">
+    <xpath expr="//div[hasclass('o_form_status_indicator')]" position="attributes">
+      <attribute name="t-if">!env.mFormEditToggle</attribute>
+    </xpath>
+    <xpath expr="//div[hasclass('o_form_status_indicator')]" position="after">
+      <div t-else="" class="o_form_status_indicator m-form-edit-toggle d-flex align-items-center gap-1 me-auto">
+        <t t-if="props.model.root.isInEdition">
+          <button
+            type="button"
+            class="o_form_button_save btn btn-primary btn-sm"
+            data-hotkey="s"
+            t-on-click.stop="save"
+            t-ref="save">
+            <i class="fa fa-check me-1" aria-hidden="true"/>Save
+          </button>
+          <button
+            type="button"
+            class="o_form_button_cancel btn btn-secondary btn-sm"
+            data-hotkey="j"
+            t-on-click.stop="discard">
+            Cancel
+          </button>
+          <span
+            t-if="!props.model.root.isNew and indicatorMode === 'invalid'"
+            class="text-danger small ms-1"
+            data-tooltip="Unable to save. Correct the issue or cancel your changes">
+            <i class="fa fa-warning"/>
+          </span>
+        </t>
+        <button
+          t-else=""
+          type="button"
+          class="o_form_button_edit btn btn-secondary btn-sm"
+          data-hotkey="a"
+          t-on-click.stop="mEdit">
+          <i class="fa fa-pencil me-1" aria-hidden="true"/>Edit
+        </button>
+      </div>
+    </xpath>
+  </t>
+
+</templates>

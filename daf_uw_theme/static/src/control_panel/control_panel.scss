@@ -67,10 +67,10 @@
         }
     }
 
-    // The save/discard indicator now lives INSIDE the title row (re-slotted
-    // in breadcrumbs.xml so it wraps with the title).  That row is core's
-    // `text-truncate` flex box: the record name must be what gives way, never
-    // the two icon buttons.
+    // The Edit / Save / Cancel indicator now lives INSIDE the title row
+    // (re-slotted in breadcrumbs.xml so it wraps with the title; buttons in
+    // views/form_edit_toggle.xml).  That row is core's `text-truncate` flex
+    // box: the record name must be what gives way, never the buttons.
     .o_breadcrumb .o_form_status_indicator {
         flex-shrink: 0;
     }

@@ -422,3 +422,16 @@
         }
     }
 }
+
+// --- Badges in an .o_row keep their own width in edit mode -----------------------
+// Core (web/views/form/form_controller.scss, under .o_form_editable) gives
+// EVERY direct `div` child of an .o_row `flex: 1 1 auto; width: 0 !important`
+// so fields share the row.  A status badge written as <div class="badge"> (e.g.
+// the client form's "Verified" / "Not verified" next to the e-mail) is caught by
+// it and stretches to half the row the moment the form enters edit mode.  Now
+// that forms open read-only (views/form_edit_toggle.js), that jump is visible
+// on every Edit click.  A badge is a label, never an input: it keeps its width.
+.o_form_view .o_form_editable .o_row > .badge {
+    flex: 0 0 auto;
+    width: auto !important;
+}

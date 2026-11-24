@@ -1,6 +1,6 @@
 {
     'name': 'Méthode Theme',
-    'version': '19.0.1.3.0',
+    'version': '19.0.1.4.0',
     'category': 'Themes/Backend',
     'summary': 'Méthode brand identity for the Odoo backend',
     # Set explicitly, and keep it set.  Odoo's load_manifest() falls back to
@@ -21,7 +21,8 @@
     # so it sits beside the two-row navbar below without touching it.
     # mail: static/src/views/form_chatter.js extends mail's FormRenderer patch
     # (it calls super.mailLayout), so mail's assets must load first.
-    'depends': ['web', 'http_routing', 'mail', 'aura_backend_theme', 'muk_web_appsbar'],
+    # portal: views/portal_templates.xml inherits portal.frontend_layout (QA4).
+    'depends': ['web', 'http_routing', 'portal', 'mail', 'aura_backend_theme', 'muk_web_appsbar'],
     # The module was assets-only until the login rebrand (§3.3 / §15.2 B9).
     'data': [
         'views/login_templates.xml',
@@ -32,6 +33,8 @@
         # The Odoo-rendered 404 (NOT nginx's — see the file header).  Frontend
         # QWeb, same brand surface as the login page.
         'views/error_templates.xml',
+        # Portal header: the DAF mark (QA4).
+        'views/portal_templates.xml',
         # The animated DAF Under Writing mark ("Assemble"), t-called by the
         # boot loader below. Listed first so the one copy is registered before
         # anything calls it.
@@ -107,6 +110,14 @@
             # Chatter always below the form, full width.  JS + the rule at the
             # bottom of form_view.scss are one change; keep them together.
             'daf_uw_theme/static/src/views/form_chatter.js',
+            # Forms open read-only: Edit, then Save / Cancel, instead of core's
+            # always-editable form and its cloud / ✕ icons.  JS + XML are one
+            # change; see form_edit_toggle.js's header for where it applies.
+            'daf_uw_theme/static/src/views/form_edit_toggle.js',
+            'daf_uw_theme/static/src/views/form_edit_toggle.xml',
+            # One tracked change reads "Change [Field] Old → New" (every chatter).
+            # XML only: it extends the <li> mail's message_patch.xml renders.
+            'daf_uw_theme/static/src/chatter/tracking_value.xml',
             # Notebook pages animate on leave and on enter (every web.Notebook).
             # JS + SCSS are one change; the leave duration is mirrored in both.
             'daf_uw_theme/static/src/notebook/notebook_transition.js',
@@ -194,6 +205,8 @@
             # login.scss — that sheet is what re-declares --body-bg, --primary
             # and the radii for the whole frontend, and this one builds on them.
             'daf_uw_theme/static/src/scss/error_pages.scss',
+            # Portal chrome (QA4): /my and the pages on portal.frontend_layout.
+            'daf_uw_theme/static/src/scss/portal.scss',
         ],
     },
     'installable': True,

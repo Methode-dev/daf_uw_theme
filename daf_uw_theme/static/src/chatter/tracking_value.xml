@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+  <!--
+    One tracked change in the chatter, read as a sentence:
+
+      Change [Name] Old value → New value
+
+    Core shows "Old value → New value (Name)": the field, the one thing that
+    says what changed, comes last and in brackets.  This extends the <li> that
+    mail's message_patch.xml renders; the old / new values and their classes
+    are core's, only the order and the lead-in are ours.  Applies to every
+    tracked change of every model, as the chatter is shared.
+  -->
+  <t t-inherit="mail.Message" t-inherit-mode="extension">
+    <xpath expr="//li[hasclass('o-mail-Message-tracking')]" position="replace">
+      <li class="o-mail-Message-tracking" role="group">
+        <span class="o-mail-Message-trackingLead fst-italic text-muted me-1">Change</span>
+        <span class="o-mail-Message-trackingField me-2 fst-italic text-muted">[<t t-out="props.messageSearch?.highlight(trackingValue.fieldInfo.changedField) ?? trackingValue.fieldInfo.changedField"/>]</span>
+        <span class="o-mail-Message-trackingOld text-muted fw-bold" t-out="formatTrackingOrNone(trackingValue.fieldInfo, trackingValue.oldValue)"/>
+        <t t-if="!trackingValue.fieldInfo.isPropertyField">
+          <i class="o-mail-Message-trackingSeparator fa fa-long-arrow-right mx-2 text-600"/>
+          <span class="o-mail-Message-trackingNew fw-bold text-info" t-out="formatTrackingOrNone(trackingValue.fieldInfo, trackingValue.newValue)"/>
+        </t>
+      </li>
+    </xpath>
+  </t>
+
+</templates>
