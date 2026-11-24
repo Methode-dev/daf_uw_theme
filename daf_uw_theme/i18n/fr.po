@@ -961,14 +961,8 @@ msgstr "Gestion des utilisateurs"
 #. module: daf_uw_theme
 #. odoo-javascript
 #: code:addons/daf_uw_theme/static/src/appsbar/role_menu_layout.js:0
-msgid "Admins"
-msgstr "Admins"
-
-#. module: daf_uw_theme
-#. odoo-javascript
-#: code:addons/daf_uw_theme/static/src/appsbar/role_menu_layout.js:0
-msgid "Users"
-msgstr "Utilisateurs"
+msgid "Admin"
+msgstr "Admin"
 
 #. module: daf_uw_theme
 #. odoo-javascript

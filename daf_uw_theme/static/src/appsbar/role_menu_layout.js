@@ -48,9 +48,10 @@ export const LAYOUTS = [
             {
                 heading: _t("User management"),
                 items: [
-                    // The DAF staff list (visible to the User Manager role).
-                    menu(_t("Admins"), "daf_base.menu_daf_staff"),
-                    tbd(_t("Users")),
+                    // The DAF staff list: the User Manager role and the Super
+                    // Admin only (spec 270, AC-270-20), so it is left out for
+                    // the others like any menu they cannot open.
+                    menu(_t("Admin"), "daf_base.menu_daf_staff"),
                     menu(_t("Brokers"), "daf_base.menu_daf_brokers"),
                     menu(_t("Clients"), "daf_base.menu_daf_client"),
                 ],
