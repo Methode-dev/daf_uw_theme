@@ -922,3 +922,8 @@ msgstr "Enregistrement impossible. Corrigez le problème ou annulez vos modifica
 #: code:addons/daf_uw_theme/static/src/chatter/tracking_value.xml:0
 msgid "Change"
 msgstr "Modification"
+
+#. module: mail
+#: model:ir.model.fields.selection,name:mail.selection__res_users__notification_type__inbox
+msgid "In Odoo"
+msgstr "Dans la plateforme DAF Underwriting"

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The notification choice "In Odoo" reads "Dans la plateforme DAF
+    Underwriting" in French (QA).  See ir_model_fields_selection.py for why it
+    is set here and not only in the .po.
+
+    NOT noupdate, so it also runs on module updates; setting the same value
+    again is harmless.
+-->
+<odoo>
+    <function model="ir.model.fields.selection" name="_daf_seed_mail_labels" />
+</odoo>

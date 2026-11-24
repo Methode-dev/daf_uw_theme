@@ -61,6 +61,20 @@ patch(NavBar.prototype, {
         });
     },
 
+    /**
+     * No section row on the desktop navbar: the app's menu is listed in the
+     * sidebar instead (appsbar/appsbar_sections.js).  Returning [] makes the
+     * stock template skip .o_menu_sections altogether, and adapt() already
+     * returns early when that row is absent.  Phones keep the stock list: the
+     * burger menu reads the same getter.
+     */
+    get currentAppSections() {
+        return this.ui.isSmall ? super.currentAppSections : [];
+    },
+
+    // The stock class declares this dummy setter; a patched getter needs it too.
+    set currentAppSections(_) {},
+
     get companyName() {
         return user.activeCompany?.name || "";
     },
