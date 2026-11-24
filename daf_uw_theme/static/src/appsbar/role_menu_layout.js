@@ -24,7 +24,9 @@ const STAFF_ROOT = "daf_base.menu_daf_root";
 const BROKER_ROOT = "daf_policy.menu_daf_client_broker";
 
 const tbd = (label) => ({ label, tbd: true });
-const menu = (label, xmlid) => ({ label, xmlid });
+// `sections`: the menu whose sub-menus the top navbar lists, when it is not the
+// entry's own (the price grids sit in "Configuration" and share its menu).
+const menu = (label, xmlid, sections) => ({ label, xmlid, sections });
 
 export const LAYOUTS = [
     {
@@ -60,7 +62,11 @@ export const LAYOUTS = [
             {
                 heading: _t("Product management"),
                 items: [
-                    menu(_t("Price grids"), "daf_pricing.menu_daf_price_grid"),
+                    menu(
+                        _t("Price grids"),
+                        "daf_pricing.menu_daf_price_grid",
+                        "daf_base.menu_daf_configuration"
+                    ),
                     menu(_t("Products"), "daf_product.menu_daf_product"),
                 ],
             },
@@ -133,7 +139,9 @@ export function getRoleSections(menuService) {
             if (item.xmlid && !target) {
                 continue; // the user cannot reach that screen
             }
-            items.push({ ...item, menu: target });
+            // The menu the top navbar draws its sub-menus from.
+            const sectionsMenu = (item.sections && menus.get(item.sections)) || target;
+            items.push({ ...item, menu: target, sectionsMenu });
         }
         if (items.length) {
             sections.push({ heading: section.heading, items });
@@ -178,15 +186,16 @@ export function activeRoleItem(menuService, actionService) {
         return null;
     }
     const actionId = actionService.currentController?.action?.id;
+    const owns = (item) => belongsTo(menuService, item.sectionsMenu, actionId);
     const clicked = items.find((item) => itemKey(item) === roleMenuState.activeKey);
-    if (clicked && (!actionId || belongsTo(menuService, clicked.menu, actionId))) {
+    if (clicked && (!actionId || owns(clicked))) {
         return clicked;
     }
     // Not clicked, or left for a screen that is not its own: an entry that IS
     // that screen first ("Devis" before the "Portfolio" it sits in).
     return (
         items.find((item) => item.menu.actionID === actionId) ||
-        items.find((item) => belongsTo(menuService, item.menu, actionId)) ||
+        items.find(owns) ||
         null
     );
 }

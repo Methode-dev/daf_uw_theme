@@ -38,8 +38,8 @@ patch(NavBar.prototype, {
 
     get currentAppSections() {
         const item = this.roleActiveItem;
-        if (item?.menu) {
-            return this.menuService.getMenuAsTree(item.menu.id).childrenTree || [];
+        if (item?.sectionsMenu) {
+            return this.menuService.getMenuAsTree(item.sectionsMenu.id).childrenTree || [];
         }
         return super.currentAppSections;
     },
