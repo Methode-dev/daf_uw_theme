@@ -930,109 +930,109 @@ msgstr "Dans la plateforme DAF Underwriting"
 
 #. module: daf_uw_theme
 #. odoo-javascript
-#: code:addons/daf_uw_theme/static/src/appsbar/role_menu.js:0
+#: code:addons/daf_uw_theme/static/src/appsbar/role_menu_layout.js:0
 msgid "Dashboard"
 msgstr "Dashboard"
 
 #. module: daf_uw_theme
 #. odoo-javascript
-#: code:addons/daf_uw_theme/static/src/appsbar/role_menu.js:0
+#: code:addons/daf_uw_theme/static/src/appsbar/role_menu_layout.js:0
 msgid "Statistics"
 msgstr "Statistiques"
 
 #. module: daf_uw_theme
 #. odoo-javascript
-#: code:addons/daf_uw_theme/static/src/appsbar/role_menu.js:0
+#: code:addons/daf_uw_theme/static/src/appsbar/role_menu_layout.js:0
 msgid "Announcements"
 msgstr "Annonces"
 
 #. module: daf_uw_theme
 #. odoo-javascript
-#: code:addons/daf_uw_theme/static/src/appsbar/role_menu.js:0
+#: code:addons/daf_uw_theme/static/src/appsbar/role_menu_layout.js:0
 msgid "Service status"
 msgstr "État des services"
 
 #. module: daf_uw_theme
 #. odoo-javascript
-#: code:addons/daf_uw_theme/static/src/appsbar/role_menu.js:0
+#: code:addons/daf_uw_theme/static/src/appsbar/role_menu_layout.js:0
 msgid "User management"
 msgstr "Gestion des utilisateurs"
 
 #. module: daf_uw_theme
 #. odoo-javascript
-#: code:addons/daf_uw_theme/static/src/appsbar/role_menu.js:0
+#: code:addons/daf_uw_theme/static/src/appsbar/role_menu_layout.js:0
 msgid "Admins"
 msgstr "Admins"
 
 #. module: daf_uw_theme
 #. odoo-javascript
-#: code:addons/daf_uw_theme/static/src/appsbar/role_menu.js:0
+#: code:addons/daf_uw_theme/static/src/appsbar/role_menu_layout.js:0
 msgid "Users"
 msgstr "Utilisateurs"
 
 #. module: daf_uw_theme
 #. odoo-javascript
-#: code:addons/daf_uw_theme/static/src/appsbar/role_menu.js:0
+#: code:addons/daf_uw_theme/static/src/appsbar/role_menu_layout.js:0
 msgid "Brokers"
 msgstr "Courtiers"
 
 #. module: daf_uw_theme
 #. odoo-javascript
-#: code:addons/daf_uw_theme/static/src/appsbar/role_menu.js:0
+#: code:addons/daf_uw_theme/static/src/appsbar/role_menu_layout.js:0
 msgid "Clients"
 msgstr "Clients"
 
 #. module: daf_uw_theme
 #. odoo-javascript
-#: code:addons/daf_uw_theme/static/src/appsbar/role_menu.js:0
+#: code:addons/daf_uw_theme/static/src/appsbar/role_menu_layout.js:0
 msgid "Financial management"
 msgstr "Gestion financière"
 
 #. module: daf_uw_theme
 #. odoo-javascript
-#: code:addons/daf_uw_theme/static/src/appsbar/role_menu.js:0
+#: code:addons/daf_uw_theme/static/src/appsbar/role_menu_layout.js:0
 msgid "Contracts"
 msgstr "Contrats"
 
 #. module: daf_uw_theme
 #. odoo-javascript
-#: code:addons/daf_uw_theme/static/src/appsbar/role_menu.js:0
+#: code:addons/daf_uw_theme/static/src/appsbar/role_menu_layout.js:0
 msgid "Quotes"
 msgstr "Devis"
 
 #. module: daf_uw_theme
 #. odoo-javascript
-#: code:addons/daf_uw_theme/static/src/appsbar/role_menu.js:0
+#: code:addons/daf_uw_theme/static/src/appsbar/role_menu_layout.js:0
 msgid "Portfolio"
 msgstr "Portefeuille"
 
 #. module: daf_uw_theme
 #. odoo-javascript
-#: code:addons/daf_uw_theme/static/src/appsbar/role_menu.js:0
+#: code:addons/daf_uw_theme/static/src/appsbar/role_menu_layout.js:0
 msgid "Billing"
 msgstr "Facturation"
 
 #. module: daf_uw_theme
 #. odoo-javascript
-#: code:addons/daf_uw_theme/static/src/appsbar/role_menu.js:0
+#: code:addons/daf_uw_theme/static/src/appsbar/role_menu_layout.js:0
 msgid "Product management"
 msgstr "Gestion des produits"
 
 #. module: daf_uw_theme
 #. odoo-javascript
-#: code:addons/daf_uw_theme/static/src/appsbar/role_menu.js:0
+#: code:addons/daf_uw_theme/static/src/appsbar/role_menu_layout.js:0
 msgid "Price grids"
 msgstr "Grilles tarifaires"
 
 #. module: daf_uw_theme
 #. odoo-javascript
-#: code:addons/daf_uw_theme/static/src/appsbar/role_menu.js:0
+#: code:addons/daf_uw_theme/static/src/appsbar/role_menu_layout.js:0
 msgid "Products"
 msgstr "Produits"
 
 #. module: daf_uw_theme
 #. odoo-javascript
-#: code:addons/daf_uw_theme/static/src/appsbar/role_menu.js:0
+#: code:addons/daf_uw_theme/static/src/appsbar/role_menu_layout.js:0
 msgid "Home"
 msgstr "Accueil"
 
@@ -1041,3 +1041,9 @@ msgstr "Accueil"
 #: code:addons/daf_uw_theme/static/src/appsbar/role_menu.js:0
 msgid "Coming soon."
 msgstr "Bientôt disponible."
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/appsbar/role_menu_layout.js:0
+msgid "Signatures"
+msgstr "Signatures"

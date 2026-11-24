@@ -1,6 +1,23 @@
 // The role menu of the sidebar (see role_menu.js).  Large sidebar only: the
 // icon-only mode keeps MuK's list of apps, and phones use the burger menu.
 
+// MuK's 146px cut "Gestion des utilisateurs" and the like.  Same variable, same
+// selector, later in the bundle; from lg up only, so MuK's icon-only width at
+// md (appsbar.scss, media-breakpoint-only(md)) is left alone.
+@include media-breakpoint-up(lg) {
+    .mk_sidebar_type_large {
+        --mk-sidebar-width: 224px;
+    }
+}
+
+// The footer logo grows with the bar and ran off the window: keep it small.
+.mk_apps_sidebar .mk_apps_sidebar_logo img {
+    width: auto;
+    max-width: 100%;
+    max-height: 3.5rem;
+    object-fit: contain;
+}
+
 .mk_apps_sidebar_panel .mk_apps_sidebar .mk_apps_sidebar_menu.m-stock-apps {
     display: none;
 }

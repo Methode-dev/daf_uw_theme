@@ -85,7 +85,9 @@
             'daf_uw_theme/static/src/navbar/navbar.xml',
             # The sidebar lists what a person does, by role (staff / broker), not the
             # installed apps.  JS + XML + SCSS are one change; see role_menu.js.
+            'daf_uw_theme/static/src/appsbar/role_menu_layout.js',
             'daf_uw_theme/static/src/appsbar/role_menu.js',
+            'daf_uw_theme/static/src/appsbar/role_menu_navbar.js',
             'daf_uw_theme/static/src/appsbar/role_menu.xml',
             'daf_uw_theme/static/src/appsbar/role_menu.scss',
             # User menu: drop "My Odoo.com Account".
