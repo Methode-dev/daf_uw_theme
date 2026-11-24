@@ -110,6 +110,9 @@
             # change; see form_edit_toggle.js's header for where it applies.
             'daf_uw_theme/static/src/views/form_edit_toggle.js',
             'daf_uw_theme/static/src/views/form_edit_toggle.xml',
+            # One tracked change reads "Change [Field] Old → New" (every chatter).
+            # XML only: it extends the <li> mail's message_patch.xml renders.
+            'daf_uw_theme/static/src/chatter/tracking_value.xml',
             # Notebook pages animate on leave and on enter (every web.Notebook).
             # JS + SCSS are one change; the leave duration is mirrored in both.
             'daf_uw_theme/static/src/notebook/notebook_transition.js',
