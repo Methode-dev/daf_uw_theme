@@ -83,12 +83,11 @@
             # muk_web_appsbar's, mounted on web.WebClient).
             'daf_uw_theme/static/src/navbar/navbar.js',
             'daf_uw_theme/static/src/navbar/navbar.xml',
-            # The current app's menu, listed under the app in the sidebar (it
-            # replaces the navbar's .o_menu_sections row).  JS + XML + SCSS are
-            # one change; see appsbar_sections.js.
-            'daf_uw_theme/static/src/appsbar/appsbar_sections.js',
-            'daf_uw_theme/static/src/appsbar/appsbar_sections.xml',
-            'daf_uw_theme/static/src/appsbar/appsbar_sections.scss',
+            # The sidebar lists what a person does, by role (staff / broker), not the
+            # installed apps.  JS + XML + SCSS are one change; see role_menu.js.
+            'daf_uw_theme/static/src/appsbar/role_menu.js',
+            'daf_uw_theme/static/src/appsbar/role_menu.xml',
+            'daf_uw_theme/static/src/appsbar/role_menu.scss',
             # User menu: drop "My Odoo.com Account".
             'daf_uw_theme/static/src/user_menu/user_menu_items.js',
             # muk_web_appsbar's sidebar in the navbar's material.  Overrides

@@ -1,0 +1,84 @@
+// The role menu of the sidebar (see role_menu.js).  Large sidebar only: the
+// icon-only mode keeps MuK's list of apps, and phones use the burger menu.
+
+.mk_apps_sidebar_panel .mk_apps_sidebar .mk_apps_sidebar_menu.m-stock-apps {
+    display: none;
+}
+
+.mk_apps_sidebar .m-role-menu {
+    display: flex;
+    flex-direction: column;
+    gap: var(--m-space-3);
+    padding: var(--m-space-2);
+
+    .m-role-heading {
+        margin: 0;
+        padding: var(--m-space-1) var(--m-space-2);
+        color: var(--m-text-secondary);
+        font-size: 0.8125rem;
+        font-weight: 600;
+        // The bar is narrow: a long heading wraps rather than being cut.
+        overflow-wrap: anywhere;
+        white-space: normal;
+    }
+
+    .m-role-list {
+        margin: 0;
+        padding: 0;
+    }
+
+    .m-role-link {
+        display: block;
+        padding: var(--m-space-1) var(--m-space-2);
+        border-radius: var(--m-radius-control);
+        color: var(--m-text);
+        font-weight: 500;
+        text-decoration: none;
+
+        &:hover {
+            background-color: var(--m-glass-bg-strong);
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--m-accent-border);
+            outline-offset: -2px;
+        }
+
+        // The selected entry: the same raised glass pill as the stock sidebar.
+        &.m-role-active {
+            background-color: var(--m-glass-bg-hover);
+            background-image: var(--m-glass-sheen);
+            box-shadow: var(--m-glass-shadow-1);
+            color: var(--m-primary-dark);
+            font-weight: 600;
+        }
+
+        // Not built yet: on screen, quieter, and says so when clicked.
+        &.m-role-tbd {
+            color: var(--m-text-secondary);
+        }
+    }
+}
+
+// Icon-only: MuK's icons come back, the text menu would not fit.
+.mk_sidebar_type_small {
+    .mk_apps_sidebar_panel .mk_apps_sidebar .mk_apps_sidebar_menu.m-stock-apps {
+        display: flex;
+    }
+
+    .mk_apps_sidebar .m-role-menu {
+        display: none;
+    }
+}
+
+@include media-breakpoint-only(md) {
+    .mk_sidebar_type_large {
+        .mk_apps_sidebar_panel .mk_apps_sidebar .mk_apps_sidebar_menu.m-stock-apps {
+            display: flex;
+        }
+
+        .mk_apps_sidebar .m-role-menu {
+            display: none;
+        }
+    }
+}

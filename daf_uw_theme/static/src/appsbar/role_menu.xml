@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+  <t t-name="daf_uw_theme.AppsBar" t-inherit="muk_web_appsbar.AppsBar" t-inherit-mode="extension">
+    <!-- MuK's list of apps stays (the icon-only mode and anybody with no
+         layout use it); role_menu.scss hides it while a layout shows. -->
+    <xpath expr="//ul[hasclass('mk_apps_sidebar_menu')]" position="attributes">
+      <attribute name="t-att-class">roleSections.length ? 'm-stock-apps' : ''</attribute>
+    </xpath>
+    <xpath expr="//ul[hasclass('mk_apps_sidebar_menu')]" position="after">
+      <nav t-if="roleSections.length" class="m-role-menu">
+        <t t-foreach="roleSections" t-as="section" t-key="section_index">
+          <section class="m-role-section">
+            <h2 t-if="section.heading" class="m-role-heading" t-out="section.heading"/>
+            <ul class="m-role-list list-unstyled">
+              <t t-foreach="section.items" t-as="item" t-key="item.label">
+                <li>
+                  <a
+                    href="#"
+                    class="m-role-link"
+                    t-att-class="{ 'm-role-active': isRoleItemActive(item), 'm-role-tbd': item.tbd }"
+                    t-att-aria-current="isRoleItemActive(item) ? 'page' : false"
+                    t-att-data-menu-xmlid="item.xmlid"
+                    t-on-click.prevent="() => this.onRoleItemClick(item)"
+                    t-out="item.label"
+                  />
+                </li>
+              </t>
+            </ul>
+          </section>
+        </t>
+      </nav>
+    </xpath>
+  </t>
+
+</templates>
