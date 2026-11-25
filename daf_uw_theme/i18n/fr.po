@@ -916,3 +916,9 @@ msgstr "Enregistrer"
 #: code:addons/daf_uw_theme/static/src/views/form_edit_toggle.xml:0
 msgid "Unable to save. Correct the issue or cancel your changes"
 msgstr "Enregistrement impossible. Corrigez le problème ou annulez vos modifications"
+
+#. module: daf_uw_theme
+#. odoo-javascript
+#: code:addons/daf_uw_theme/static/src/chatter/tracking_value.xml:0
+msgid "Change"
+msgstr "Modification"
