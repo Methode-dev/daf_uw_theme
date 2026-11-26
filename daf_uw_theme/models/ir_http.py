@@ -39,13 +39,23 @@ class IrHttp(models.AbstractModel):
     # ------------------------------------------------------------------
     def _m_list_actions(self):
         """The window actions with a list view the current user may open, by
-        model: a model they cannot read is left out, and so is an action
-        restricted to groups they are not in.  The actions behind a menu
-        they can see come first, so the link lands where the menus do.
+        model, the one of their first visible menu first: a model they
+        cannot read is left out, and so is an action restricted to groups
+        they are not in.
 
-        sudo: ``ir.actions.act_window`` is readable by administrators only in
-        Odoo 19; this reads the actions to filter them by the user's own
-        groups and access rights, and returns ids, never action contents.
+        Users other than administrators only get the actions behind a menu
+        they can see: the link lands on a list they could reach from their
+        menus, never on a technical list (e.g. base's attachments) that an
+        unrestricted action would open.
+
+        ⚠ ``ir.ui.menu.search`` does NOT filter on visibility in Odoo 19 (a
+        broker's search returns staff menus too), and ``_visible_menu_ids``
+        checks a menu's own groups only: a menu counts when it and all its
+        ancestors are visible.
+
+        sudo: ``ir.actions.act_window`` and the menus' action reference are
+        readable by administrators only; this reads them to filter by the
+        user's own groups, menus and access rights, and returns ids only.
         """
         user = self.env.user
         actions = self.env['ir.actions.act_window'].sudo().search(
@@ -66,24 +76,41 @@ class IrHttp(models.AbstractModel):
             if action.group_ids and not (action.group_ids & groups):
                 continue
             allowed.setdefault(model, []).append(action.id)
-        # Menus are searched as the user: only the visible ones come back.
-        menus = self.env['ir.ui.menu'].search([
+        Menu = self.env['ir.ui.menu']
+        visible = Menu._visible_menu_ids()
+        menus = Menu.sudo().search([
+            ('id', 'in', list(visible)),
             ('action', 'in', [
                 f'ir.actions.act_window,{action_id}'
                 for ids in allowed.values() for action_id in ids
             ]),
-        ])
+        ]).filtered(
+            # ⚠ _visible_menu_ids checks each menu's own groups, not its
+            # parents': base's Technical > Attachments has none and would
+            # pass for a broker. Reachable = every ancestor visible too.
+            lambda menu: all(
+                int(menu_id) in visible
+                for menu_id in menu.parent_path.strip('/').split('/')
+            )
+        )
+        by_menu = {}
         for menu in menus:
             action = menu.action
-            ids = allowed[action.res_model]
-            ids.remove(action.id)
-            ids.insert(0, action.id)
-        return allowed
+            ids = by_menu.setdefault(action.res_model, [])
+            if action.id not in ids:
+                ids.append(action.id)
+        if not user.has_group('base.group_system'):
+            return by_menu
+        return {
+            model: by_menu.get(model, [])
+            + [i for i in ids if i not in by_menu.get(model, [])]
+            for model, ids in allowed.items()
+        }
 
     def _m_list_link_models(self):
         """The models whose x2many lists show the link: every model for an
         administrator (the default list is their fallback), else the models
-        with a window action the user may open."""
+        of their visible menus' list actions."""
         if self.env.user.has_group('base.group_system'):
             return True
         return sorted(self._m_list_actions())

@@ -81,6 +81,52 @@ class TestX2ManyListLinkAccess(HttpCase):
                 "view_mode": "list,form",
             }
         )
+        cls.open_menu = cls.env["ir.ui.menu"].create(
+            {
+                "name": "Partenaires test",
+                "action": f"ir.actions.act_window,{cls.open_action.id}",
+            }
+        )
+        # Same model, an action behind a menu of a group the user lacks:
+        # created after, so a search that ignored visibility would pick it.
+        cls.hidden_action = Action.create(
+            {
+                "name": "Partenaires admin",
+                "res_model": "res.partner",
+                "view_mode": "list,form",
+            }
+        )
+        cls.env["ir.ui.menu"].create(
+            {
+                "name": "Partenaires admin",
+                "action": f"ir.actions.act_window,{cls.hidden_action.id}",
+                "group_ids": [(6, 0, [cls.env.ref("base.group_system").id])],
+                "sequence": 0,
+            }
+        )
+        # An unrestricted action whose only menu sits under an administrator
+        # menu (as base's Technical > Attachments): not a list the user
+        # reaches, though the menu itself has no group.
+        cls.menuless_action = Action.create(
+            {
+                "name": "Devises test",
+                "res_model": "res.currency",
+                "view_mode": "list,form",
+            }
+        )
+        admin_parent = cls.env["ir.ui.menu"].create(
+            {
+                "name": "Technique test",
+                "group_ids": [(6, 0, [cls.env.ref("base.group_system").id])],
+            }
+        )
+        cls.env["ir.ui.menu"].create(
+            {
+                "name": "Devises test",
+                "parent_id": admin_parent.id,
+                "action": f"ir.actions.act_window,{cls.menuless_action.id}",
+            }
+        )
         cls.admin_action = Action.create(
             {
                 "name": "Banques test",
@@ -113,9 +159,31 @@ class TestX2ManyListLinkAccess(HttpCase):
         self.assertEqual(self._status("res.bank").status_code, 404)
 
     def test_allowed_action(self):
+        """The visible menu's action, never the one behind a hidden menu."""
         response = self._status("res.partner")
         self.assertEqual(response.status_code, 303)
-        target = self.env["ir.http"].with_user(self.user)._m_list_link_target(
-            "res.partner"
+        self.assertEqual(
+            urlsplit(response.headers["Location"]).path,
+            f"/odoo/action-{self.open_action.id}",
         )
-        self.assertEqual(urlsplit(response.headers["Location"]).path, target)
+
+    def test_action_without_menu_is_not_a_link(self):
+        """An unrestricted action no reachable menu of the user leads to
+        (e.g. base's attachments, under Settings) is not a list they reach:
+        no link, 404."""
+        models = self.env["ir.http"].with_user(self.user)._m_list_link_models()
+        visible = self.env["ir.ui.menu"].with_user(self.user)._visible_menu_ids()
+        currency_menus = (
+            self.env["ir.ui.menu"]
+            .search([("id", "in", list(visible)), ("action", "like", "act_window")])
+            .filtered(
+                lambda m: m.action.res_model == "res.currency"
+                and all(
+                    int(i) in visible for i in m.parent_path.strip("/").split("/")
+                )
+            )
+        )
+        if currency_menus:
+            self.skipTest("a reachable res.currency menu exists in this database")
+        self.assertNotIn("res.currency", models)
+        self.assertEqual(self._status("res.currency").status_code, 404)
