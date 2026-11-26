@@ -353,6 +353,23 @@
             pointer-events: none;
         }
     }
+
+    // Edge to edge in the page (2026-11-26). Since the sheet is centred, the
+    // bar's frost stopped at the sheet's edges and floated as a pale box with
+    // a band of page on each side. The layer now runs past both edges and the
+    // renderer clips it to the content area: one toolbar across the page,
+    // its stage widget and buttons still on the sheet's edges.
+    // `overflow-x: clip`, not `hidden`: clip makes no scroll container, so
+    // the bar stays sticky to .o_content. Dialogs are not under the action
+    // manager and keep the sheet-wide bar.
+    .o_action_manager .o_form_view .o_form_renderer {
+        overflow-x: clip;
+
+        .o_form_statusbar::before {
+            left: -100vw;
+            right: -100vw;
+        }
+    }
 }
 
 // --- A form opened in a dialog keeps its horizontal padding -------------------
