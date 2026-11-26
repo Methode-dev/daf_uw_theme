@@ -54,3 +54,68 @@ class TestX2ManyListLink(HttpCase):
             "/daf_uw_theme/list/no.such.model", allow_redirects=False
         )
         self.assertEqual(response.status_code, 404)
+
+
+@tagged("post_install", "-at_install")
+class TestX2ManyListLinkAccess(HttpCase):
+    """The link is drawn, and leads somewhere, only when the user may open
+    the list: a plain internal user gets no link and a 404 for a model they
+    cannot read or whose only action is restricted to other groups."""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.user = cls.env["res.users"].create(
+            {
+                "name": "Utilisateur Test Liste",
+                "login": "liste-test@example.test",
+                "password": "liste-test-pw",
+                "group_ids": [(6, 0, [cls.env.ref("base.group_user").id])],
+            }
+        )
+        Action = cls.env["ir.actions.act_window"]
+        cls.open_action = Action.create(
+            {
+                "name": "Partenaires test",
+                "res_model": "res.partner",
+                "view_mode": "list,form",
+            }
+        )
+        cls.admin_action = Action.create(
+            {
+                "name": "Banques test",
+                "res_model": "res.bank",
+                "view_mode": "list,form",
+                "group_ids": [(6, 0, [cls.env.ref("base.group_system").id])],
+            }
+        )
+
+    def _status(self, model):
+        self.authenticate("liste-test@example.test", "liste-test-pw")
+        response = self.url_open(f"/daf_uw_theme/list/{model}", allow_redirects=False)
+        return response
+
+    def test_models_in_session(self):
+        models = self.env["ir.http"].with_user(self.user)._m_list_link_models()
+        self.assertIn("res.partner", models)
+        self.assertNotIn("ir.config_parameter", models)
+        self.assertIs(self.env["ir.http"]._m_list_link_models(), True)
+
+    def test_unreadable_model_is_not_found(self):
+        self.assertEqual(self._status("ir.config_parameter").status_code, 404)
+
+    def test_action_of_other_groups_is_not_found(self):
+        """res.bank: readable by every user, but its only list actions here
+        need the administrator group (or another group the user lacks)."""
+        models = self.env["ir.http"].with_user(self.user)._m_list_link_models()
+        if "res.bank" in models:
+            self.skipTest("an open res.bank action exists in this database")
+        self.assertEqual(self._status("res.bank").status_code, 404)
+
+    def test_allowed_action(self):
+        response = self._status("res.partner")
+        self.assertEqual(response.status_code, 303)
+        target = self.env["ir.http"].with_user(self.user)._m_list_link_target(
+            "res.partner"
+        )
+        self.assertEqual(urlsplit(response.headers["Location"]).path, target)

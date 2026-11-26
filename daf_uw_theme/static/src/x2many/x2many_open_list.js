@@ -10,8 +10,13 @@
  * no popup blocker, middle-click works, and nothing is fetched while the form
  * loads.  Kanban-mode x2manys (mobile) are left alone: "list view" there
  * would not match what the user is looking at.
+ *
+ * Only drawn when the user may open that list: session_info carries the
+ * models they can (`m_list_link_models`, ir_http.py; `true` for an
+ * administrator), so a broker never meets a link that ends on an error.
  */
 import { _t } from "@web/core/l10n/translation";
+import { session } from "@web/session";
 import { patch } from "@web/core/utils/patch";
 import { X2ManyField } from "@web/views/fields/x2many/x2many_field";
 
@@ -21,7 +26,11 @@ patch(X2ManyField.prototype, {
             return null;
         }
         const relation = this.props.record.fields[this.props.name].relation;
-        return relation ? `/daf_uw_theme/list/${encodeURIComponent(relation)}` : null;
+        const allowed = session.m_list_link_models;
+        if (!relation || !(allowed === true || allowed?.includes(relation))) {
+            return null;
+        }
+        return `/daf_uw_theme/list/${encodeURIComponent(relation)}`;
     },
 
     get mOpenListTitle() {
